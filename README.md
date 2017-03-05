@@ -1,5 +1,4 @@
 # Zbirka konceptnih kartic
---------------------------
 Projektno delo: spletni vmesnik do baze podatkov s konceptnimi karticami, ki omogoča pregled, iskanje in dodajanje konceptnih kartic.
 
 Opis

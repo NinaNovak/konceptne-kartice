@@ -8,4 +8,7 @@ Baza podatkov vsebuje zbirko konceptnih kartic za učenje programskih jezikov in
 
 Spletna stran ponuja brskanje in iskanje po konceptnih karticah ter dodajanje novih konceptnih kartic v bazo.
 
+ER diagram za bazo podatkov
+---------------------------
+
 ![ER diagram](ER_diagram.png)

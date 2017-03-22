@@ -17,13 +17,10 @@
   <input type="file" name="upload" value="Naloži datoteko" />
   <h3>Orodje / programski jezik, ki ga uči kartica</h3>
     %for orod in orodja:
-      <input type="checkbox" name="orodje" value={{orod['ime_orodja']}}>{{orod['ime_orodja']}}
-	  <!-- <input value="{{orod['id']}}" name="orodje" type="hidden"><br> -->
+      <input type="checkbox" name="orodje" value={{orod['id']}}>{{orod['ime_orodja']}}
     %end
 	   <!-- Dodatni checkbox za novo orodje -->
-	   <input type="checkbox" name="orodje" value="novo_orodje_chbox" class="oznaci">
-	      Drugo: <input type="text" name="novo" class="novo_orodje" />
-	<br><br>
+	   <input type="checkbox" class="oznaci">Drugo:<input type="text" name="novo" class="novo_orodje" /><br><br>
 	(Možno je obkljukati več možnosti.)
   <h3>Ključne besede, po katerih se kartica lahko najde</h3><input type="text" name="kljucne" placeholder="Ključne besede ločite z vejico" /><br><br>
   <input type="submit" value="Vnesi kartico v bazo" />

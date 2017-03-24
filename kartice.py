@@ -33,6 +33,7 @@ def upload():
 
 @route('/nalozi_novo_kartico', method='POST')
 def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
+    ''''''
     #1. shrani datoteko na disk
     nalozena_datoteka = request.files.get('upload')
     modeli.shrani_pdf_v_blob(nalozena_datoteka)
@@ -54,54 +55,82 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
         return 'Datoteka s tem imenom že obstaja.'
     #return "Datoteka je bila uspešno shranjena v mapo '{0}'.".format(save_path)
 
-    #2. dobi: ime kartice; orodje, ki ga kartica uči; ključne besede;
+    #2. dodaj kartico v bazo
+    #dobi ime kartice
     ime_kartice = request.forms.get('ime_kartice')
-
-    # dodaj kartico, dobi njen id
+    #dodaj kartico, dobi njen id
     modeli.dodaj_kartico(ime_kartice, nalozena_datoteka.filename)
     id_kartice = modeli.id_zadnje_dodane_kartice()
 
-    #3. dobi kljucne
+    #3. kljucne besede
+    #dobi ~niz kljucnih, naredi ~seznam kljucnih
     kljucne_skupaj = request.forms.get('kljucne')
     kljucne = locevanje_kljucnih_besed(kljucne_skupaj)
+    #preveri ponavljanje vnesenih besed
+    sez = []
+    for beseda in kljucne:
+        if beseda not in sez:
+            sez.append(beseda)
+    kljucne = sez  #shranimo nov seznam, v katerem preverjeno ni ponavljanja
+    #dodaj kljucne v bazo, povezi kartico s temi kljucnimi
+    modeli.kartica_ima_kljucne(id_kartice, kljucne)
 
-    #4. dobi orodja
-    #so primeri, ko kartica uči več kot 1 orodje, zato je orodje tipa seznam:
-    orodje = request.forms.getlist('orodje')
-    print(orodje)
-
-    #uporabnik vnese orodje, ki ga še ni v bazi:
+    #4. orodje ali programski jezik
+    #dobi seznam orodij, ki jih uci kartica:
+    sez_id_orodij = request.forms.getlist('orodje')
+    #vnesi v povezovalno tabelo:
+    modeli.kartica_uci_programsko_orodje_jezik(id_kartice, sez_id_orodij)
+    
+    #novo orodje (če uporabnik izpolni polje 'Drugo'):
     novo_orodje = request.forms.get('novo')
     if novo_orodje != '':
-        #če tega orodja res ni v bazi: ga dodaj v bazo
-
-        #spomnimo se:
-        #~~ modeli.nastej_orodja()[0][0], modeli.nastej_orodja()[5][1])
-        #~~ 1. stolpec 1. vrstice       , 2. stolpec 6. vrstice
-
-        #seznam vrstic iz tabele programsko_orodje_ali_jezik[ime_orodja, id]
+        #vseeno preveri, ali tega orodja ni v bazi:
         vrstica = modeli.nastej_orodja()
+        for orodje1 in vrstica:
 
-        for orodje in vrstica:
+            #1. Ce je ze v bazi in
+            #2. ce ga se ni v povezovalni tabeli,
+            #3. ga dodaj v povezovalno tabelo.
+            orodje_niz = orodje1[0]
+            print('orodje1[0]: '+str(orodje1[0]))
+            print('tip orodje1[0]: '+str(type(orodje1[0])))
             if vrstica[0] == novo_orodje:  #orodje ze obstaja
-                id_novega_orodja = vrstica[1]  #PREVERITI, ALI ZE V SEZNAMU orodje?
+                #PREVERITI, ALI ZE V SEZNAMU orodje?
+                id_novega_orodja = vrstica[1]
                 modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
                                                            id_novega_orodja)
 
                 #treba je samo vnesti povezavo kartica<--->to_orodje v tabelo
                 #kartica_uci_programsko_orodje_jezik
-                
-            else:  #ime novega orodja se razlikuje od vseh obstojecih
+
+            #1. Orodja ni v bazi,
+            #2. zato ga dodaj v tabelo orodja in
+            #3. v povezovalno tabelo.
+            else:  #orodje se ne obstaja
                 modeli.dodaj_orodje(novo_orodje)
                 id_novega_orodja = modeli.id_zadnjega_dodanega_orodja()
                 
-                #rabimo, da tudi novo orodje pripisemo ravno dodani kartici:
-                orodje.append(novo_orodje)    
-    # v glavnem, zdaj imamo seznam orodij od te kartice
-    # vnesemo v tabelo kartica_uci_programsko_orodje_jezik
-    modeli.kartica_uci_programsko_orodje_jezik(id_kartice, orodje)
-        
-    return 'Dodajanje nove kartice je bilo uspešno.'
+                #vnesi v povezovalno tabelo
+                print('imamo ukaz \'orodje.append(novo_orodje)\'.')
+                print('tip orodje: '+str(type(orodje)))
+                print('tip novo_orodje: '+str(type(novo_orodje)))
+                modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
+                                                           id_novega_orodja)
+
+    #pripravimo orodja in ključne besede za izpis uporabniku
+    niz_orodje = ''
+    for o in orodje:
+        niz_orodje += o
+        niz_orodje += ', '
+    niz_orodje = niz_orodje[:-2]
+    niz_kljucne = ''
+    return 'Dodajanje nove kartice je bilo uspešno.\n\n' +\
+           'Vnešeni podatki:\n\n' +\
+           'Ime kartice: {0}\n'.format(ime_kartice) +\
+           'Ime datoteke: {0}\n'.format(nalozena_datoteka) +\
+           'Orodja/programski jeziki, ki jih uči kartica: {0}\n'.format(orodje) +\
+           'Ključne besede za iskanje konceptne kartice: {0}\n'.format(kljucne) +\
+           'Hvala!\n'
 
 ##############################################################################
 # 

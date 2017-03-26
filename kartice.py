@@ -34,7 +34,9 @@ def upload():
 @route('/nalozi_novo_kartico', method='POST')
 def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
     ''''''
+    ##########################################################################
     #1. shrani datoteko na disk
+    ##########################################################################
     nalozena_datoteka = request.files.get('upload')
     modeli.shrani_pdf_v_blob(nalozena_datoteka)
     name, ext = os.path.splitext(nalozena_datoteka.filename)
@@ -55,14 +57,18 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
         return 'Datoteka s tem imenom že obstaja.'
     #return "Datoteka je bila uspešno shranjena v mapo '{0}'.".format(save_path)
 
+    ##########################################################################
     #2. dodaj kartico v bazo
+    ##########################################################################
     #dobi ime kartice
     ime_kartice = request.forms.get('ime_kartice')
     #dodaj kartico, dobi njen id
     modeli.dodaj_kartico(ime_kartice, nalozena_datoteka.filename)
-    id_kartice = modeli.id_zadnje_dodane_kartice()
+    id_kartice = modeli.id_zadnje_dodane_kartice()[0]
 
+    ##########################################################################
     #3. kljucne besede
+    ##########################################################################
     #dobi ~niz kljucnih, naredi ~seznam kljucnih
     kljucne_skupaj = request.forms.get('kljucne')
     kljucne = locevanje_kljucnih_besed(kljucne_skupaj)
@@ -74,63 +80,64 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
     kljucne = sez  #shranimo nov seznam, v katerem preverjeno ni ponavljanja
     #dodaj kljucne v bazo, povezi kartico s temi kljucnimi
     modeli.kartica_ima_kljucne(id_kartice, kljucne)
-
-    #4. orodje ali programski jezik
-    #dobi seznam orodij, ki jih uci kartica:
-    sez_id_orodij = request.forms.getlist('orodje')
-    #vnesi v povezovalno tabelo:
-    modeli.kartica_uci_programsko_orodje_jezik(id_kartice, sez_id_orodij)
     
-    #novo orodje (če uporabnik izpolni polje 'Drugo'):
+    ##########################################################################
+    #4. orodje ali programski jezik
+    ##########################################################################
+    #dobi seznam orodij, ki jih uci kartica:
+    sez_orodij = request.forms.getlist('orodje')
+    print(str(sez_orodij))
+    #vnesi v povezovalno tabelo:
+    modeli.kartica_uci_programsko_orodje_jezik(id_kartice, sez_orodij)
+    
+    #novo orodje:
     novo_orodje = request.forms.get('novo')
+    #ali je uporabnik vnesel novo orodje:
     if novo_orodje != '':
-        #vseeno preveri, ali tega orodja ni v bazi:
-        vrstica = modeli.nastej_orodja()
-        for orodje1 in vrstica:
-
-            #1. Ce je ze v bazi in
-            #2. ce ga se ni v povezovalni tabeli,
-            #3. ga dodaj v povezovalno tabelo.
-            orodje_niz = orodje1[0]
-            print('orodje1[0]: '+str(orodje1[0]))
-            print('tip orodje1[0]: '+str(type(orodje1[0])))
-            if vrstica[0] == novo_orodje:  #orodje ze obstaja
-                #PREVERITI, ALI ZE V SEZNAMU orodje?
-                id_novega_orodja = vrstica[1]
+        #najprej preveri, ali tega orodja ni v bazi:
+        orodja = modeli.nastej_orodja()
+        #orodja ni v bazi
+        if novo_orodje not in orodja[1]:
+            modeli.dodaj_orodje(novo_orodje)
+            id_novega = modeli.id_zadnjega_dodanega_orodja()
+            modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
+                                                       [id_novega])
+        #orodje je v bazi
+        else:
+            #uporabnik ga ni odkljukal
+            if id_orodja not in sez_orodij:
                 modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
-                                                           id_novega_orodja)
-
-                #treba je samo vnesti povezavo kartica<--->to_orodje v tabelo
-                #kartica_uci_programsko_orodje_jezik
-
-            #1. Orodja ni v bazi,
-            #2. zato ga dodaj v tabelo orodja in
-            #3. v povezovalno tabelo.
-            else:  #orodje se ne obstaja
-                modeli.dodaj_orodje(novo_orodje)
-                id_novega_orodja = modeli.id_zadnjega_dodanega_orodja()
-                
-                #vnesi v povezovalno tabelo
-                print('imamo ukaz \'orodje.append(novo_orodje)\'.')
-                print('tip orodje: '+str(type(orodje)))
-                print('tip novo_orodje: '+str(type(novo_orodje)))
-                modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
-                                                           id_novega_orodja)
-
+                                                           [id_orodja])
+            
+    ##########################################################################
     #pripravimo orodja in ključne besede za izpis uporabniku
+    ##########################################################################
     niz_orodje = ''
-    for o in orodje:
-        niz_orodje += o
+    #sez_orodij hrani id-je izbranih orodij, mi potrebujemo imena
+    for id_orodja in sez_orodij:
+        ime = modeli.vrni_ime_orodja(id_orodja)
+        niz_orodje += ime
         niz_orodje += ', '
-    niz_orodje = niz_orodje[:-2]
+    if novo_orodje != '':
+        niz_orodje += novo_orodje
+    else:
+        niz_orodje = niz_orodje[:-2]
+        
     niz_kljucne = ''
-    return 'Dodajanje nove kartice je bilo uspešno.\n\n' +\
-           'Vnešeni podatki:\n\n' +\
-           'Ime kartice: {0}\n'.format(ime_kartice) +\
-           'Ime datoteke: {0}\n'.format(nalozena_datoteka) +\
-           'Orodja/programski jeziki, ki jih uči kartica: {0}\n'.format(orodje) +\
-           'Ključne besede za iskanje konceptne kartice: {0}\n'.format(kljucne) +\
-           'Hvala!\n'
+    for k in kljucne:
+        niz_kljucne += k
+        niz_kljucne += ', '
+    niz_kljucne = niz_kljucne[:-2]
+    
+    return 'Dodajanje nove kartice je bilo uspešno.<br><br>' +\
+           '<b>Vnešeni podatki</b><br><br>' +\
+           'Ime kartice: <b>{0}</b><br>'.format(ime_kartice) +\
+           'Ime datoteke: <b>{0}</b><br>'.format(nalozena_datoteka.filename) +\
+           'Orodja/programski jeziki, ' +\
+           'ki jih uči kartica: <b>{0}</b><br>'.format(niz_orodje) +\
+           'Ključne besede za iskanje ' +\
+           'konceptne kartice: <b>{0}</b><br>'.format(niz_kljucne) +\
+           'Hvala!'
 
 ##############################################################################
 # 

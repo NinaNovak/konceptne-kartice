@@ -17,7 +17,7 @@
   <input type="file" name="upload" value="Naloži datoteko" />
   <h3>Orodje / programski jezik, ki ga uči kartica</h3>
     %for orod in orodja:
-      <input type="checkbox" name="orodje" value={{orod['id']}}>{{orod['ime_orodja']}}
+       <input type="checkbox" name="orodje" value={{orod[0]}}>{{orod[1]}}
     %end
 	   <!-- Dodatni checkbox za novo orodje -->
 	   <input type="checkbox" class="oznaci">Drugo:<input type="text" name="novo" class="novo_orodje" /><br><br>

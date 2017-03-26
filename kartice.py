@@ -44,7 +44,7 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
         return 'Nedovoljena vrsta datoteke.\nDovoljena vrsta datoteke je PDF.'
     save_path = os.getcwd() + '/pdfkartice'
     ##kot za pdf naredi tudi za docx in ostale wordove koncnice
-    ##zato, da se konceptno kartico lahko popravi/spremeni
+    ##zato, da se konceptno kartico lahko popravlja/spreminja
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     file_path = "{path}/{file}".format(path=save_path,
@@ -86,7 +86,6 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
     ##########################################################################
     #dobi seznam orodij, ki jih uci kartica:
     sez_orodij = request.forms.getlist('orodje')
-    print(str(sez_orodij))
     #vnesi v povezovalno tabelo:
     modeli.kartica_uci_programsko_orodje_jezik(id_kartice, sez_orodij)
     

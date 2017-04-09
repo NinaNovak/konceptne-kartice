@@ -18,7 +18,7 @@
   <h3>Orodje / programski jezik, ki ga uči kartica</h3>
   Najprej so našteta imena orodij, ki se začnejo z veliko začetnico,
   nato pa še imena, ki se začnejo z malo začetnico.<br><br>
-  Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolnimo polje 'Drugo'.<br><br><!-- Kaj če 2 novi orodji? -->
+  Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolniti polje 'Drugo'.<br><br><!-- Kaj če 2 novi orodji? -->
     %for orod in orodja:
        <input type="checkbox" name="orodje" value={{orod[0]}}>{{orod[1]}}
     %end

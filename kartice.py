@@ -17,14 +17,41 @@ def shranjevanje_datoteke_na_disk(dat, ime_mape):
     '''Datoteko, dobljeno z request.files.get(dat), shrani v mapo ime_mape.
 
     Mapa ime_mape je v isti mapi kot ta .py datoteka.
-    Če mapa ime_mape ne obstaja, je ustvajena.
+    Če mapa ime_mape ne obstaja, je ustvarjena.
 
     Datoteke dat je tipa bottle.FileUpload:
     >>> type(dat)
     <class 'bottle.FileUpload'>
 
     '''
+@route('/dashboard')
+def dash():
+    return template('dash',
+                    orodja=modeli.nastej_orodja())
     
+@get('/popravi_kartico/<id_kartice>')
+def popravljanje(id_kartice):
+    return template('popravi',
+                    kartica=modeli.vrni_kartico(id_kartice))
+
+@route('/kartica/<id_kartice>')
+def pokazi_pdf(id_kartice):
+    pass
+
+def seznam_vseh_kljucnih():
+    '''Vrni seznam vseh kljucnih besed v bazi.'''
+    vse = modeli.vrni_vse_kljucne()
+    sez = []
+    for kljucna in vse:
+        kljucna = kljucna['beseda']
+        sez.append(kljucna)
+    return sez
+
+@route('/vse')
+def vse():
+    return template('vse',
+                    kljucne=seznam_vseh_kljucnih(),
+                    kartice=modeli.vrni_tabelo_konceptnih())
 
 @route('/nalozi_novo_kartico')
 def upload():
@@ -109,7 +136,7 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
                                                            [id_orodja])
             
     ##########################################################################
-    #pripravimo orodja in ključne besede za izpis uporabniku
+    #5. pripravimo orodja in ključne besede za izpis uporabniku
     ##########################################################################
     niz_orodje = ''
     #sez_orodij hrani id-je izbranih orodij, mi potrebujemo imena

@@ -16,6 +16,6 @@ ER diagram za bazo podatkov
 Izgled spletnega vmesnika
 ---------------------------
 
-Predviden izgled spletne strani.
+Predviden izgled spletne strani - skica z Bootstrapovo predlogo "dashboard".
 
 ![izgled_spletnega_vmesnika](predviden_koncni_izgled.png)

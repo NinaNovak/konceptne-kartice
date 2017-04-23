@@ -12,3 +12,10 @@ ER diagram za bazo podatkov
 ---------------------------
 
 ![ER diagram](ER_diagram.png)
+
+Izgled spletnega vmesnika
+---------------------------
+
+Predviden izgled spletne strani.
+
+![izgled_spletnega_vmesnika](predviden_koncni_izgled.png)

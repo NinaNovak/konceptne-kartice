@@ -24,6 +24,15 @@ def shranjevanje_datoteke_na_disk(dat, ime_mape):
     <class 'bottle.FileUpload'>
 
     '''
+
+@route('/static/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='/')
+
+@route('/<filename:path>')
+def send_static(filename):
+    return static_file(filename, root='static/')
+
 @route('/dashboard')
 def dash():
     return template('dash',
@@ -38,19 +47,21 @@ def popravljanje(id_kartice):
 def pokazi_pdf(id_kartice):
     pass
 
-def seznam_vseh_kljucnih():
-    '''Vrni seznam vseh kljucnih besed v bazi.'''
-    vse = modeli.vrni_vse_kljucne()
-    sez = []
-    for kljucna in vse:
-        kljucna = kljucna['beseda']
-        sez.append(kljucna)
-    return sez
+def kljucne_niz():
+    '''Dobi objekt=seznam kljucnih, vrne objekt=niz kljucnih.'''
+    kljucne = modeli.vrni_vse_kljucne_besede()
+    niz = '"'
+    for k in kljucne:
+        klj = str(k)
+        niz += klj
+        niz += '", "'
+    niz = niz[:-3]
+    return niz
 
 @route('/vse')
 def vse():
     return template('vse',
-                    kljucne=seznam_vseh_kljucnih(),
+                    kljucne=kljucne_niz(),
                     kartice=modeli.vrni_tabelo_konceptnih())
 
 @route('/nalozi_novo_kartico')

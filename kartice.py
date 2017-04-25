@@ -25,13 +25,13 @@ def shranjevanje_datoteke_na_disk(dat, ime_mape):
 
     '''
 
-@route('/static/<filepath:path>')
-def server_static(filepath):
-    return static_file(filepath, root='/')
+##@route('/static/<filepath:path>')
+##def server_static(filepath):
+##    return static_file(filepath, root='/')
 
 @route('/<filename:path>')
 def send_static(filename):
-    return static_file(filename, root='static/')
+    return static_file(filename, root='views/')
 
 @route('/dashboard')
 def dash():

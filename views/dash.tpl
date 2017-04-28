@@ -58,7 +58,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dodaj kartico</a></li>
+            <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
+			<li><a href="#">Popravi obstoječo</a></li>
 			<li><a href="#">Jeziki</a></li>
             <li><a href="#">Ključne besede</a></li>
 			<li><a href="#">O strani</a></li>

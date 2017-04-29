@@ -36,7 +36,9 @@ def send_static(filename):
 @route('/dashboard')
 def dash():
     return template('dash',
-                    orodja=modeli.nastej_orodja())
+                    orodja=modeli.nastej_orodja(),
+                    kartice=modeli.vrni_tabelo_konceptnih(),
+                    kljucne_niz=kljucne_niz())  #?
     
 @get('/popravi_kartico/<id_kartice>')
 def popravljanje(id_kartice):
@@ -47,16 +49,26 @@ def popravljanje(id_kartice):
 def pokazi_pdf(id_kartice):
     pass
 
-def kljucne_niz():
+def kljucne_niz(kart='vse'):
     '''Dobi objekt=seznam kljucnih, vrne objekt=niz kljucnih.'''
-    kljucne = modeli.vrni_vse_kljucne_besede()
-    niz = '"'
+    if kart == 'vse':
+        kljucne = modeli.vrni_vse_kljucne_besede()
+    else:
+        kljucne = modeli.vrni_sez_kljucnih_za_eno_kartico(kart)
+    niz = ''
     for k in kljucne:
         klj = str(k)
         niz += klj
-        niz += '", "'
-    niz = niz[:-3]
+        niz += ', '
+    niz = niz[:-2]
     return niz
+
+#seznam vseh kartic:
+# id kartice
+# seznam vseh kljucnih
+# seznam vseh orodij
+# ogled kartice (id)
+# uredi kartico (id)
 
 @route('/vse')
 def vse():
@@ -67,6 +79,11 @@ def vse():
 @route('/nalozi_novo_kartico')
 def upload():
     return template('upload',
+                    orodja=modeli.nastej_orodja())
+
+@route('/o_strani')
+def o_strani():
+    return template('o_strani',
                     orodja=modeli.nastej_orodja())
 
 @route('/nalozi_novo_kartico', method='POST')

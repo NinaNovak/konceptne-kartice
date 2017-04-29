@@ -9,7 +9,8 @@ con.row_factory = sqlite3.Row
 
 def vrni_tabelo_konceptnih():
     '''Vrne tabelo...'''
-    sql = '''SELECT naslov_kartice AS naslov,
+    sql = '''SELECT konceptna_kartica.id as ID,
+                    naslov_kartice AS naslov,
                     kljucna_beseda.beseda AS kljucne,
                     programsko_orodje_ali_jezik.ime_orodja AS orodja
              FROM konceptna_kartica JOIN

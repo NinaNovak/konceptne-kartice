@@ -27,7 +27,7 @@
 	     {{kartica['naslov']}}
 		 </td>
 		 <td>
-		 {{kartica['kljucne']}}
+		 {{kljucne}}
 		 </td>
 		 <td>
 	     {{kartica['orodja']}}

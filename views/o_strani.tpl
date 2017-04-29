@@ -29,7 +29,7 @@
     <link type="text/css" href="ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link type="text/css" href="dashboard.css" rel="stylesheet">
+    <link type="text/css" href="o_strani.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -62,7 +62,7 @@
 			<li><a href="#">Popravi obstoječo</a></li>
 			<li><a href="#">Jeziki</a></li>
             <li><a href="#">Ključne besede</a></li>
-			<li><a href="/o_strani">O strani</a></li>
+			<li><a href="#">O strani</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Išči...">
@@ -71,78 +71,16 @@
       </div>
     </nav>
 
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-		  % for orodje in orodja:
-		    <li><a href="/{{orodje[1]}}">{{orodje[1]}}</a></li>
-	      % end
-          </ul>
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Brskaj</h1>
+    <div class="container">
 
-          <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="testna_slika_glas_ljudstva.png" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Glas ljudstva</h4>
-              <span class="text-muted">Največkrat ogledana kartica</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Tvoja ključna beseda</h4>
-              <span class="text-muted">Seznam kartic na isto temo</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="testna_slika_najbolj_priljubljen_jezik.png" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Najbolj priljubljen jezik</h4>
-              <span class="text-muted">Največkrat iskani jezik ali orodje</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="testna_slika_klik_na_sreco.png" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Klik na srečo</h4>
-              <span class="text-muted">Izberi naključno kartico</span>
-            </div>
-          </div>
-
-          <h2 class="sub-header">Seznam konceptnih kartic</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Naslov</th>
-				  <th>Jezik</th>
-                  <th>Ključne besede</th>
-                  <th>Predogled</th>
-                </tr>
-              </thead>
-              <tbody>
-					 % for kartica in kartice:
-					 <tr><td>
-					 {{kartica['ID']}}
-					 </td>
-					 <td>
-					 {{kartica['naslov']}}
-					 </td>
-					 <td>
-					 {{kartica['orodja']}}
-					 </td>
-					 <td>
-					 {{kartica['kljucne']}}
-					 </td>
-					 <td>
-					 Predogled
-					 </td></tr>
-					 % end
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="starter-template">
+        <h1>O strani</h1>
+        <p class="lead">Ta stran je arhiv konceptnih kartic, ki jih lahko natisnemo in uporabljamo kot učni pripomoček. Stran omogoča dodajanje in popravljanje konceptnih kartic.<br><br>
+		
+		Konceptne kartice so odličen pripomoček pri učenju, tako za usvajanje nove snovi kot pri ponavljanju, dobro pa se lahko izkažejo tudi pri preverjanju znanja tipa kviz.</p>
       </div>
-    </div>
 
+    </div><!-- /.container -->
    
   </body>
 </html>

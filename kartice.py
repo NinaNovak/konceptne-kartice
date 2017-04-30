@@ -81,11 +81,6 @@ def upload():
     return template('upload',
                     orodja=modeli.nastej_orodja())
 
-@route('/o_strani')
-def o_strani():
-    return template('o_strani',
-                    orodja=modeli.nastej_orodja())
-
 @route('/nalozi_novo_kartico', method='POST')
 def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
     ''''''
@@ -196,5 +191,14 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
 ##############################################################################
 # 
 ##############################################################################
+
+@route('/o_strani')
+def o_strani():
+    return template('o_strani',
+                    orodja=modeli.nastej_orodja())
+
+@route('/vpis')
+def vpis_ali_registracija():
+    return template('vpis')
 
 run(debug=True)

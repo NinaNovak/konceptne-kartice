@@ -58,10 +58,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
-			<li><a href="#">Popravi obstoječo</a></li>
 			<li><a href="#">Jeziki</a></li>
             <li><a href="#">Ključne besede</a></li>
+            <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
+			<li><a href="/vpis">Vpis/Registracija</a></li>
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
           <form class="navbar-form navbar-right">
@@ -116,6 +116,7 @@
 				  <th>Jezik</th>
                   <th>Ključne besede</th>
                   <th>Predogled</th>
+				  <th>Popravi</th>
                 </tr>
               </thead>
               <tbody>
@@ -134,6 +135,9 @@
 					 </td>
 					 <td>
 					 Predogled
+					 </td>
+					 <td>
+					 Popravi
 					 </td></tr>
 					 % end
               </tbody>

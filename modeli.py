@@ -1,7 +1,7 @@
 import sqlite3
 
-con = sqlite3.connect('konceptnekartice.db')
-con.row_factory = sqlite3.Row
+conn = sqlite3.connect('konceptnekartice.db')
+conn.row_factory = sqlite3.Row
 
 ##########################################################################
 # kompletna tabela konceptnih kartic
@@ -14,27 +14,27 @@ def vrni_tabelo_konceptnih():
                     kljucna_beseda.beseda AS kljucne,
                     programsko_orodje_ali_jezik.ime_orodja AS orodja
              FROM konceptna_kartica JOIN
-                  kartica_vsebuje_kljucno_besedo ON
+                  povezovalna_tabela_konceptna_kartica_x_kljucna_beseda ON
                   konceptna_kartica.id =
-                  kartica_vsebuje_kljucno_besedo.id_kartice JOIN
+                  povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kartice JOIN
                   kljucna_beseda ON
                   kljucna_beseda.id =
-                  kartica_vsebuje_kljucno_besedo.id_besede JOIN
-                  kartica_uci_programsko_orodje_jezik ON
+                  povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_besede JOIN
+                  povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON
                   konceptna_kartica.id =
-                  kartica_uci_programsko_orodje_jezik.id_kartice JOIN
+                  povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_kartice JOIN
                   programsko_orodje_ali_jezik ON
-                  kartica_uci_programsko_orodje_jezik.id_orodja =
+                  povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_orodja =
                   programsko_orodje_ali_jezik.id
           '''
-    return list(con.execute(sql))
+    return list(conn.execute(sql))
 
 def vrni_vse_kljucne():
     '''Vrne tabelo...'''
     sql = '''SELECT *
              FROM kljucna_beseda
           '''
-    return list(con.execute(sql))
+    return list(conn.execute(sql))
 
 ##########################################################################
 # konceptne kartice
@@ -51,7 +51,7 @@ def id_zadnje_dodane_kartice():
     sql0 = '''
         SELECT MAX(id) as trenutna_kartica FROM konceptna_kartica
         '''
-    id_kartice = con.execute(sql0).fetchone()
+    id_kartice = conn.execute(sql0).fetchone()
     return id_kartice
 
 def dodaj_kartico(naslov_kartice, ime_datoteke):
@@ -62,8 +62,8 @@ def dodaj_kartico(naslov_kartice, ime_datoteke):
         INSERT INTO konceptna_kartica (naslov_kartice, ime_datoteke)
         VALUES (?, ?)
         '''
-    con.execute(sql, [naslov_kartice, ime_datoteke])
-    con.commit()
+    conn.execute(sql, [naslov_kartice, ime_datoteke])
+    conn.commit()
 
 def vrni_kartico(): pass
 
@@ -84,7 +84,7 @@ def shrani_pdf_v_blob(pdf_datoteka):
 
 def id_kljucne_besede(beseda):
     sql = '''SELECT id FROM kljucna_beseda WHERE beseda = ?'''
-    id_besede = con.execute(sql, [beseda]).fetchone()
+    id_besede = conn.execute(sql, [beseda]).fetchone()
     id_besede = id_besede[0]
     return id_besede
 
@@ -92,7 +92,7 @@ def vrni_vse_kljucne_besede():
     '''Vrne seznam vseh kljucnih besed v bazi.'''
     
     sql = '''SELECT beseda FROM kljucna_beseda'''
-    vse_vrstice = list(con.execute(sql))
+    vse_vrstice = list(conn.execute(sql))
     vse_besede = []
     for b in vse_vrstice:
         vse_besede.append(b[0])
@@ -104,8 +104,8 @@ def dodaj_kljucno_besedo(beseda):
         INSERT INTO kljucna_beseda (beseda)
         VALUES (?)
         '''
-    con.execute(sql, [beseda])
-    con.commit()
+    conn.execute(sql, [beseda])
+    conn.commit()
 
 def id_zadnje_kljucne_besede():
     #id zadnje kartice je bil z autoincrement ustvarjen ravnokar;
@@ -113,14 +113,14 @@ def id_zadnje_kljucne_besede():
     sql = '''
         SELECT MAX(id) as id_zadnje FROM kljucna_beseda
         '''
-    id_kljucne = con.execute(sql).fetchone()
+    id_kljucne = conn.execute(sql).fetchone()
     return id_kljucne
 
 def kartica_ima_kljucne(id_kartice, seznam_besed):
     ''''''
     vse = vrni_vse_kljucne_besede()  #vse kljucne v bazi
     sez_idjev = []  #seznam id-jev kljucnih besed
-    sql = '''INSERT INTO kartica_vsebuje_kljucno_besedo (id_kartice, id_besede)
+    sql = '''INSERT INTO povezovalna_tabela_konceptna_kartica_x_kljucna_beseda (id_kartice, id_besede)
             VALUES (?, ?)'''
     for beseda in seznam_besed:        
         #ce besede ni v bazi, jo dodamo
@@ -132,17 +132,17 @@ def kartica_ima_kljucne(id_kartice, seznam_besed):
         else:
             id_besede = id_kljucne_besede(beseda)
             sez_idjev.append(id_besede)
-    #izpolnimo tabelo kartica_vsebuje_kljucno_besedo
+    #izpolnimo tabelo povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
     for id_kljucne in sez_idjev:
-        con.execute(sql, [id_kartice, id_kljucne])
-    con.commit()
+        conn.execute(sql, [id_kartice, id_kljucne])
+    conn.commit()
 
 def vrni_sez_kljucnih_za_eno_kartico(id_kartice):
     '''Za vse.tpl. Vrne seznam ključnih besed za id_kartice.'''
     sql = '''SELECT id_besede
-        FROM kartica_vsebuje_kljucno_besedo
+        FROM povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
         WHERE id_kartice = ?'''
-    seznam = list(con.execute(sql, [id_kartice]))
+    seznam = list(conn.execute(sql, [id_kartice]))
     sez = []  #seznam id-jev besed ~ nizov, ne id-jev besed ~ objektov
     for b in seznam:
         sez.append(b[0])
@@ -152,7 +152,7 @@ def vrni_sez_kljucnih_za_eno_kartico(id_kartice):
                 WHERE id = ?'''
     seznam_besed = []
     for id_besede in sez:
-        beseda = con.execute(sql_beseda, [id_besede]).fetchone()[0]
+        beseda = conn.execute(sql_beseda, [id_besede]).fetchone()[0]
         seznam_besed.append(beseda)
     return seznam_besed
 
@@ -167,7 +167,7 @@ def nastej_orodja():
         FROM programsko_orodje_ali_jezik
         ORDER BY ime_orodja ASC
         '''
-    seznam_vrstic = list(con.execute(sql))
+    seznam_vrstic = list(conn.execute(sql))
     seznam_dvojic = []
     for v in seznam_vrstic:
         seznam_dvojic.append((v[0], v[1]))    
@@ -178,7 +178,7 @@ def vrni_ime_orodja(id_orodja):
     sql = '''SELECT ime_orodja
         FROM programsko_orodje_ali_jezik
         WHERE id = ?'''
-    ime = con.execute(sql, [id_orodja]).fetchone()
+    ime = conn.execute(sql, [id_orodja]).fetchone()
     ime = ime[0]
     return ime
 
@@ -188,8 +188,8 @@ def dodaj_orodje(novo):
         INSERT INTO programsko_orodje_ali_jezik (ime_orodja)
         VALUES (?)
         '''
-    con.execute(sql, [novo])
-    con.commit()
+    conn.execute(sql, [novo])
+    conn.commit()
 
 def id_zadnjega_dodanega_orodja():
     #Ker je bil ta id z autoincrement ustvarjen ravnokar,
@@ -197,16 +197,16 @@ def id_zadnjega_dodanega_orodja():
     sql = '''
         SELECT MAX(id) as id_zadnjega FROM programsko_orodje_ali_jezik
         '''
-    id_zadnjega = con.execute(sql).fetchone()
+    id_zadnjega = conn.execute(sql).fetchone()
     return id_zadnjega
 
 def kartica_uci_programsko_orodje_jezik(id_kartice, sez_id_orodij):
-    '''Izpolni povezovalno tabelo kartica_uci_programsko_orodje_jezik.'''
+    '''Izpolni povezovalno tabelo povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.'''
     for id_orodja in sez_id_orodij:
         sql = '''
-            INSERT INTO kartica_uci_programsko_orodje_jezik
+            INSERT INTO povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik
                         (id_kartice, id_orodja)
             VALUES (?, ?)
             '''
-        con.execute(sql, [id_kartice, id_orodja])
-    con.commit()
+        conn.execute(sql, [id_kartice, id_orodja])
+    conn.commit()

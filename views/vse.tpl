@@ -27,7 +27,7 @@
 	     {{kartica['naslov']}}
 		 </td>
 		 <td>
-		 {{kljucne}}
+		 {{kartica['kljucne']}}
 		 </td>
 		 <td>
 	     {{kartica['orodja']}}
@@ -127,16 +127,19 @@
   </script>
   <script>
   $( function() {
-    var myObj = { {{kljucne}} };
-	var myJSON = JSON.stringify(myObj);
-      return val.split( /,\s*/ );
+    var kljucneNaVoljo = [
+      "ActionScript",
+      "AppleScript",
+      "Scheme"
+    ];
     function split( val ) {
+      return val.split( /,\s*/ );
     }
     function extractLast( term ) {
       return split( term ).pop();
     }
  
-    $( "#kljucne" )
+    $( "{{kartica['kljucne']}}" )
       // don't navigate away from the field on tab when selecting an item
       .on( "keydown", function( event ) {
         if ( event.keyCode === $.ui.keyCode.TAB &&

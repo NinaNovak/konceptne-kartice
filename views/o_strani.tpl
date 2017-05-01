@@ -77,7 +77,7 @@
         <h1>O strani</h1>
         <p class="lead">Ta stran je arhiv konceptnih kartic, ki jih lahko natisnemo in uporabljamo kot učni pripomoček. Stran omogoča dodajanje in popravljanje konceptnih kartic.<br><br>
 		
-		Konceptne kartice so odličen pripomoček pri učenju, tako za usvajanje nove snovi kot pri ponavljanju, dobro pa se lahko izkažejo tudi pri preverjanju znanja tipa kviz.</p>
+		Konceptne kartice so odličen pripomoček pri učenju, tako za usvajanje nove snovi kot pri ponavljanju, dobro pa se izkažejo tudi pri preverjanju znanja tipa kviz.</p>
       </div>
 
     </div><!-- /.container -->

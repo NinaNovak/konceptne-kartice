@@ -37,17 +37,17 @@ def send_static(filename):
 def dash():
     return template('dash',
                     orodja=modeli.nastej_orodja(),
-                    kartice=modeli.vrni_tabelo_konceptnih(),
-                    kljucne_niz=kljucne_niz())  #?
+                    kartice=modeli.vrni_tabelo_konceptnih())
     
 @get('/popravi_kartico/<id_kartice>')
 def popravljanje(id_kartice):
     return template('popravi',
                     kartica=modeli.vrni_kartico(id_kartice))
 
-@route('/kartica/<id_kartice>')
+@route('/ogled_kartice/<id_kartice>')
 def pokazi_pdf(id_kartice):
-    pass
+    return template('pdf')#,
+                    #kartica=modeli.vrni_kartico(id_kartice))
 
 def kljucne_niz(kart='vse'):
     '''Dobi objekt=seznam kljucnih, vrne objekt=niz kljucnih.'''
@@ -73,7 +73,6 @@ def kljucne_niz(kart='vse'):
 @route('/vse')
 def vse():
     return template('vse',
-                    kljucne=kljucne_niz(),
                     kartice=modeli.vrni_tabelo_konceptnih())
 
 @route('/nalozi_novo_kartico')

@@ -115,7 +115,7 @@
                   <th>Naslov</th>
 				  <th>Jezik</th>
                   <th>Ključne besede</th>
-                  <th>Predogled</th>
+                  <th>Ogled</th>
 				  <th>Popravi</th>
                 </tr>
               </thead>
@@ -134,7 +134,7 @@
 					 {{kartica['kljucne']}}
 					 </td>
 					 <td>
-					 Predogled
+					 <a href="/ogled_kartice/{{kartica['ID']}}">Ogled</a>
 					 </td>
 					 <td>
 					 Popravi

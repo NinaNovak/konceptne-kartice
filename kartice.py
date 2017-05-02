@@ -41,13 +41,24 @@ def dash():
     
 @get('/popravi_kartico/<id_kartice>')
 def popravljanje(id_kartice):
-    return template('popravi',
+    return template('popravi_obstojeco',
                     kartica=modeli.vrni_kartico(id_kartice))
 
-@route('/ogled_kartice/<id_kartice>')
+@post('/test/<ime>')
+def test(ime):
+    return "lala"
+
+@route('/person/<who>')
+def homepage(who):
+    """Generate the home page for a person"""
+
+    return "<p>This is the home page for " + who + ".</p>"
+
+@get('/ogled_kartice/<id_kartice>')
 def pokazi_pdf(id_kartice):
-    return template('pdf')#,
-                    #kartica=modeli.vrni_kartico(id_kartice))
+    return "<p>This is the home page for " + id_kartice + " lala.</p>"
+    #return template('pdf')#,
+#                    kartica=modeli.vrni_kartico(id_kartice))
 
 def kljucne_niz(kart='vse'):
     '''Dobi objekt=seznam kljucnih, vrne objekt=niz kljucnih.'''
@@ -196,7 +207,7 @@ def o_strani():
     return template('o_strani',
                     orodja=modeli.nastej_orodja())
 
-@route('/vpis')
+@route('/vpis') #stran?
 def vpis_ali_registracija():
     return template('vpis')
 

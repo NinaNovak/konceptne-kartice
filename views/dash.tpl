@@ -61,7 +61,6 @@
 			<li><a href="#">Jeziki</a></li>
             <li><a href="#">Ključne besede</a></li>
             <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
-			<li><a href="/vpis">Vpis/Registracija</a></li>
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
           <form class="navbar-form navbar-right">
@@ -81,63 +80,32 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Brskaj</h1>
+          
 
-          <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="testna_slika_glas_ljudstva.png" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Glas ljudstva</h4>
-              <span class="text-muted">Največkrat ogledana kartica</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Tvoja ključna beseda</h4>
-              <span class="text-muted">Seznam kartic na isto temo</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="testna_slika_najbolj_priljubljen_jezik.png" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Najbolj priljubljen jezik</h4>
-              <span class="text-muted">Največkrat iskani jezik ali orodje</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="testna_slika_klik_na_sreco.png" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Klik na srečo</h4>
-              <span class="text-muted">Izberi naključno kartico</span>
-            </div>
-          </div>
-
-          <h2 class="sub-header">Seznam konceptnih kartic</h2>
+          <h2 class="sub-header">Seznam vseh konceptnih kartic</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Naslov</th>
-				  <th>Jezik</th>
+                  <th>Jezik</th>
+				  <th>Naslov</th>
                   <th>Ključne besede</th>
                   <th>Ogled</th>
-				  <th>Popravi</th>
                 </tr>
               </thead>
               <tbody>
 					 % for kartica in kartice:
 					 <tr><td>
-					 {{kartica['ID']}}
+					 <i>{{kartica['orodja']}}</i>
 					 </td>
 					 <td>
-					 {{kartica['naslov']}}
-					 </td>
-					 <td>
-					 {{kartica['orodja']}}
+					 <b>{{kartica['naslov']}}</b>
 					 </td>
 					 <td>
 					 {{kartica['kljucne']}}
 					 </td>
 					 <td>
-					 <a href="/ogled_kartice/{{kartica['ID']}}">Ogled</a>
-					 </td>
-					 <td>
-					 Popravi
+					 <a href="/ogled_kartice/{{kartica['ID']}}">Ogled kartice</a>
 					 </td></tr>
 					 % end
               </tbody>

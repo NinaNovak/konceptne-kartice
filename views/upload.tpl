@@ -27,7 +27,7 @@
 	   
   <h3>Ključne besede, po katerih se kartica lahko najde</h3><input type="text" name="kljucne" placeholder="Ključne besede ločite z vejico" /><br><br>
   <input type="submit" value="Vnesi kartico v bazo" />
-</form>
+</form>a
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

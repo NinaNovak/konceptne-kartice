@@ -24,10 +24,14 @@
     %end
 	   <!-- Dodatni checkbox za novo orodje -->
 	   <input type="checkbox" class="oznaci">Drugo:<input type="text" name="novo" class="novo_orodje" /><br>
-	   
-  <h3>Ključne besede, po katerih se kartica lahko najde</h3><input type="text" name="kljucne" placeholder="Ključne besede ločite z vejico" /><br><br>
+  <h3>Ključne besede, po katerih se kartica lahko najde</h3>
+  <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosim, ločite ključne besede z vejicami.">
+  <input type="text" name="kljucne" placeholder="Ključne besede ločite z vejico" />
+  </a>
+  <br>
+  <br>
   <input type="submit" value="Vnesi kartico v bazo" />
-</form>a
+</form>
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -45,5 +49,11 @@
             }
         });
     </script>
+	<!-- Spodaj: za pop-over okence -->
+	<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+});
+</script>
   </body>
 </html>

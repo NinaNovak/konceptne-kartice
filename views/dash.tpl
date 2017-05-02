@@ -63,9 +63,9 @@
             <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Išči...">
-          </form>
+		    <form class="navbar-form navbar-right">
+              <input type="text" class="form-control" placeholder="Išči...">
+            </form>
         </div>
       </div>
     </nav>
@@ -114,7 +114,6 @@
         </div>
       </div>
     </div>
-
    
   </body>
 </html>

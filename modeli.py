@@ -8,21 +8,36 @@ conn.row_factory = sqlite3.Row
 ##########################################################################
 
 def vrni_tabelo_konceptnih():
-    '''Vrne tabelo...'''
+    '''Vrne tabelo vseh kartic:
+
+        njihove ID-je, naslove, kljucne besede in
+        programska orodja oziroma jezike, ki jih kartica uci.
+
+        '''
     sql = '''SELECT konceptna_kartica.id AS ID,
        naslov_kartice AS naslov,
        replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
        replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja
-  FROM konceptna_kartica
+       FROM konceptna_kartica
        JOIN
-       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda ON konceptna_kartica.id = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+       ON
+       konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
        JOIN
-       kljucna_beseda ON kljucna_beseda.id = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+       kljucna_beseda
+       ON
+       kljucna_beseda.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
        JOIN
-       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
        JOIN
-       programsko_orodje_ali_jezik ON povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika = programsko_orodje_ali_jezik.id
-group by konceptna_kartica.id
+       programsko_orodje_ali_jezik
+       ON
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
+       = programsko_orodje_ali_jezik.id
+       GROUP BY konceptna_kartica.id
           '''
     return list(conn.execute(sql))
 

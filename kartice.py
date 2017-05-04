@@ -4,9 +4,8 @@ import modeli
 import re
 
 ##############################################################################
-# NALAGANJE NOVE KARTICE
+# POMOŽNE FUNKCIJE
 ##############################################################################
-
 def locevanje_kljucnih_besed(niz):
     '''Iz niza z vejico ločenih besed naredi seznam posameznih besed.'''
     locimo = niz.split(',')  #razbijemo na posamezne besede
@@ -43,7 +42,9 @@ def popravljanje(id_kartice):
 @route('/<filename:path>')
 def send_static(filename):
     return static_file(filename, root='views/')
-
+##############################################################################
+# PRVA STRAN
+##############################################################################
 @route('/dashboard')
 def dash():
     id_jezika = request.query.id_jezika
@@ -62,7 +63,6 @@ def dash():
 @post('/dashboard')
 def iskanje():
     niz_iskanje = request.forms.get('iskanje')
-    print(niz_iskanje)
     seznam_besed = re.findall(r"[\w']+", niz_iskanje)
     try:
         kartice = modeli.vrni_konceptne_rezultat_iskanja(seznam_besed)
@@ -97,42 +97,33 @@ def kljucne_niz(kart='vse'):
     niz = niz[:-2]
     return niz
 
-#seznam vseh kartic:
-# id kartice
-# seznam vseh kljucnih
-# seznam vseh orodij
-# ogled kartice (id)
-# uredi kartico (id)
+##ne rabimo
+##@route('/<ime_orodja>')
+##def konceptne_za_jezik(ime_orodja):
+##    return template('eno_orodje',
+##                    orodja=modeli.nastej_orodja(),
+##                    kartice=modeli.vrni_konceptne_po_jezikih(ime_orodja)
+##                    )
 
-@route('/vse')
-def vse():
-    return template('vse',
-                    kartice=modeli.vrni_tabelo_konceptnih())
-
-@route('/<ime_orodja>')
-def konceptne_za_jezik(ime_orodja):
-    return template('eno_orodje',
-                    orodja=modeli.nastej_orodja(),
-                    kartice=modeli.vrni_konceptne_po_jezikih(ime_orodja)
-                    )
-
+##############################################################################
+# NALAGANJE NOVE KARTICE
+##############################################################################
 @route('/nalozi_novo_kartico')
 def upload():
     return template('upload',
                     orodja=modeli.nastej_orodja())
 
 @route('/nalozi_novo_kartico', method='POST')
-def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
+def do_upload():  #ni transakcija?
     ''''''
     ##########################################################################
     #1. shrani datoteko na disk
     ##########################################################################
     nalozena_datoteka = request.files.get('upload')
-    modeli.shrani_pdf_v_blob(nalozena_datoteka)
     name, ext = os.path.splitext(nalozena_datoteka.filename)
     if ext != '.pdf':
         return 'Nedovoljena vrsta datoteke.\nDovoljena vrsta datoteke je PDF.'
-    save_path = os.getcwd() + '/pdfkartice'
+    save_path = os.getcwd() + '/kartice'
     ##kot za pdf naredi tudi za docx in ostale wordove koncnice
     ##zato, da se konceptno kartico lahko popravlja/spreminja
     if not os.path.exists(save_path):
@@ -175,9 +166,9 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
     #4. orodje ali programski jezik
     ##########################################################################
     #dobi seznam orodij, ki jih uci kartica:
-    sez_orodij = request.forms.getlist('orodje')
+    sez_ID_orodij = request.forms.getlist('orodje')
     #vnesi v povezovalno tabelo:
-    modeli.kartica_uci_programsko_orodje_jezik(id_kartice, sez_orodij)
+    modeli.kartica_uci_programsko_orodje_jezik(id_kartice, sez_ID_orodij)
     
     #novo orodje:
     novo_orodje = request.forms.get('novo')
@@ -185,16 +176,22 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
     if novo_orodje != '':
         #najprej preveri, ali tega orodja ni v bazi:
         orodja = modeli.nastej_orodja()
+        seznam_imen_orodij = []
+        for o in orodja:#o...each row
+            seznam_imen_orodij.append(o[1])
         #orodja ni v bazi
-        if novo_orodje not in orodja[1]:
+        if novo_orodje not in seznam_imen_orodij:
             modeli.dodaj_orodje(novo_orodje)
             id_novega = modeli.id_zadnjega_dodanega_orodja()
             modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
                                                        [id_novega])
         #orodje je v bazi
         else:
+            #poiscemo ID orodja
+            pos = seznam_imen_vseh_orodij.index(novo_orodje)
+            id_orodja = orodja[pos][0]
             #uporabnik ga ni odkljukal
-            if id_orodja not in sez_orodij:
+            if id_orodja not in sez_ID_orodij:
                 modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
                                                            [id_orodja])
             
@@ -202,8 +199,8 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
     #5. pripravimo orodja in ključne besede za izpis uporabniku
     ##########################################################################
     niz_orodje = ''
-    #sez_orodij hrani id-je izbranih orodij, mi potrebujemo imena
-    for id_orodja in sez_orodij:
+    #sez_ID_orodij hrani id-je izbranih orodij, mi potrebujemo imena
+    for id_orodja in sez_ID_orodij:
         ime = modeli.vrni_ime_orodja(id_orodja)
         niz_orodje += ime
         niz_orodje += ', '

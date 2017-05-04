@@ -51,19 +51,21 @@ def vrni_konceptne_rezultat_iskanja(sez_iskalnih_besed):
         #za prazen iskalni niz vrnemo vse konceptne kartice
         return vrni_tabelo_konceptnih()
 
-    za_vsako_naslednjo_kljucno = ' ' + '''OR    naslov_kartice_in_vse_kljucne_in_vsi_jeziki LIKE '% ' || ? || ' %'  --naslednja iskalna beseda''' + ' '
+    #string se mora obvezno koncati z \n
+    za_vsako_naslednjo_kljucno = ' ' + '''OR    naslov_kartice_in_vse_kljucne_in_vsi_jeziki LIKE '% ' || ? || ' %'  --naslednja iskalna beseda''' + '\n '
 
     if st_iskalnih_besed == 1:  #2. robni primer
         za_vsako_naslednjo_kljucno = ''
 
     sql = '''
 
-SELECT id_konceptne, naslov, kljucne, orodja FROM   
+SELECT id_konceptne, naslov, kljucne, orodja, dat FROM   
 (
     SELECT konceptna_kartica.id AS id_konceptne,
        naslov_kartice AS naslov,
        replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
        replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja,
+       ime_datoteke AS dat,
             ' ' || naslov_kartice
            || ' ' || replace(group_concat(distinct beseda), ",", " ")
            || ' ' || replace(group_concat(distinct ime_orodja), ",", " ")
@@ -90,13 +92,13 @@ WHERE naslov_kartice_in_vse_kljucne_in_vsi_jeziki LIKE '% ' || ? || ' %'  --prva
     return list(conn.execute(sql, sez_iskalnih_besed))
 ##############################################################################
 def vrni_konceptne_po_jezikih(jezik):
-    print(jezik)
     '''Vrne tabelo kartic za izbrani jezik'''
     
     sql = '''SELECT konceptna_kartica.id AS ID,
        naslov_kartice AS naslov,
        replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
-       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja
+       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja,
+       ime_datoteke AS dat
 FROM konceptna_kartica
        JOIN povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
        ON konceptna_kartica.id

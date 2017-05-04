@@ -3,69 +3,11 @@ import sqlite3
 conn = sqlite3.connect('konceptnekartice.db')
 conn.row_factory = sqlite3.Row
 
-##########################################################################
+##############################################################################
 # kompletna tabela konceptnih kartic
-##########################################################################
-
-def vrni_tabelo_konceptnih_izjema():
-    sql = '''SELECT konceptna_kartica.id AS id_konceptne,
-       naslov_kartice AS naslov,
-       replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
-       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja
-       FROM konceptna_kartica
-       JOIN
-       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
-       ON
-       konceptna_kartica.id
-       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
-       JOIN
-       kljucna_beseda
-       ON
-       kljucna_beseda.id
-       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
-       JOIN
-       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id
-       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
-       JOIN
-       programsko_orodje_ali_jezik
-       ON
-       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
-       = programsko_orodje_ali_jezik.id
-       GROUP BY konceptna_kartica.id
-       HAVING id_konceptne = '-1'
-          '''
-    return list(conn.execute(sql))
-
-def vrni_konceptne_po_jezikih(jezik):
-    print(jezik)
-    '''Vrne tabelo kartic za izbrani jezik'''
-    
-    sql = '''SELECT konceptna_kartica.id AS ID,
-       naslov_kartice AS naslov,
-       replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
-       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja
-FROM konceptna_kartica
-       JOIN povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
-       ON konceptna_kartica.id
-       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
-       JOIN kljucna_beseda
-       ON kljucna_beseda.id
-       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
-       JOIN povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik
-       ON konceptna_kartica.id
-       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
-       JOIN programsko_orodje_ali_jezik
-       ON povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
-       = programsko_orodje_ali_jezik.id
-GROUP BY konceptna_kartica.id
-HAVING ' ' || replace(group_concat(distinct programsko_orodje_ali_jezik.id), ",", " ") || ' ' LIKE '% ' || ? || ' %'
-              
-       '''
-    
-    return list(conn.execute(sql, [jezik]))
-
+##############################################################################
 def vrni_tabelo_konceptnih():
-    '''Vrne tabelo vseh kartic:
+    '''Vrne tabelo VSEH kartic:
 
         njihove ID-je, naslove, kljucne besede in
         programska orodja oziroma jezike, ki jih kartica uci.
@@ -75,7 +17,8 @@ def vrni_tabelo_konceptnih():
     sql = '''SELECT konceptna_kartica.id AS id_konceptne,
        naslov_kartice AS naslov,
        replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
-       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja
+       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja,
+       ime_datoteke AS dat
        FROM konceptna_kartica
        JOIN
        povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
@@ -98,7 +41,7 @@ def vrni_tabelo_konceptnih():
        GROUP BY konceptna_kartica.id
           '''
     return list(conn.execute(sql))
-
+##############################################################################
 def vrni_konceptne_rezultat_iskanja(sez_iskalnih_besed):
     """Vrne rezultat za polje IŠČI."""
 
@@ -144,27 +87,67 @@ SELECT id_konceptne, naslov, kljucne, orodja FROM
 WHERE naslov_kartice_in_vse_kljucne_in_vsi_jeziki LIKE '% ' || ? || ' %'  --prva iskalna beseda
 
     ''' + za_vsako_naslednjo_kljucno * (len(sez_iskalnih_besed) - 1)
-
-    print('\n\n\n\n\n\n\n')
-    print(sql)
-    print('\n\n\n\n\n\n\n')
-    print(sez_iskalnih_besed)
-    print('\n\n\n\n\n\n\n')
-    
-
     return list(conn.execute(sql, sez_iskalnih_besed))
-
-def vrni_vse_kljucne():
-    '''Vrne tabelo...'''
-    sql = '''SELECT *
-             FROM kljucna_beseda
+##############################################################################
+def vrni_konceptne_po_jezikih(jezik):
+    print(jezik)
+    '''Vrne tabelo kartic za izbrani jezik'''
+    
+    sql = '''SELECT konceptna_kartica.id AS ID,
+       naslov_kartice AS naslov,
+       replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
+       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja
+FROM konceptna_kartica
+       JOIN povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+       ON konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+       JOIN kljucna_beseda
+       ON kljucna_beseda.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+       JOIN povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik
+       ON konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+       JOIN programsko_orodje_ali_jezik
+       ON povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
+       = programsko_orodje_ali_jezik.id
+GROUP BY konceptna_kartica.id
+HAVING ' ' || replace(group_concat(distinct programsko_orodje_ali_jezik.id), ",", " ") || ' ' LIKE '% ' || ? || ' %'
+              
+       '''
+    
+    return list(conn.execute(sql, [jezik]))
+##############################################################################
+def vrni_tabelo_konceptnih_izjema():
+    sql = '''SELECT konceptna_kartica.id AS id_konceptne,
+       naslov_kartice AS naslov,
+       replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
+       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja
+       FROM konceptna_kartica
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+       ON
+       konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+       JOIN
+       kljucna_beseda
+       ON
+       kljucna_beseda.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+       JOIN
+       programsko_orodje_ali_jezik
+       ON
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
+       = programsko_orodje_ali_jezik.id
+       GROUP BY konceptna_kartica.id
+       HAVING id_konceptne = '-1'
           '''
     return list(conn.execute(sql))
-
-##########################################################################
-# konceptne kartice
-##########################################################################
-
+##############################################################################
+# konceptne kartice - razno
+##############################################################################
 def vrni_kartico(id_kartice):
     sql = '''SELECT '''
 
@@ -189,21 +172,15 @@ def dodaj_kartico(naslov_kartice, ime_datoteke):
         '''
     conn.execute(sql, [naslov_kartice, ime_datoteke])
     conn.commit()
-
-##########################################################################
-# ?
-##########################################################################
-
-def shrani_pdf_v_blob(pdf_datoteka):
-    '''Shrani pdf v bazo kot BLOB.'''
-    sql = '''
-        INSERT INTO konceptna_kartica
-
-        '''
-
-##########################################################################
+##############################################################################
 # kljucne besede
-##########################################################################
+##############################################################################
+def vrni_vse_kljucne():
+    '''Vrne tabelo...'''
+    sql = '''SELECT *
+             FROM kljucna_beseda
+          '''
+    return list(conn.execute(sql))
 
 def id_kljucne_besede(beseda):
     sql = '''SELECT id FROM kljucna_beseda WHERE beseda = ?'''
@@ -278,11 +255,9 @@ def vrni_sez_kljucnih_za_eno_kartico(id_kartice):
         beseda = conn.execute(sql_beseda, [id_besede]).fetchone()[0]
         seznam_besed.append(beseda)
     return seznam_besed
-
-##########################################################################
+##############################################################################
 # programsko orodje/jezik
-##########################################################################
-
+##############################################################################
 def nastej_orodja():
     '''Vrne vsa orodja (id, ime_orodja) iz baze podatkov.'''
     sql = '''
@@ -333,3 +308,6 @@ def kartica_uci_programsko_orodje_jezik(id_kartice, sez_id_orodij):
             '''
         conn.execute(sql, [id_kartice, id_orodja])
     conn.commit()
+##############################################################################
+# THE END
+##############################################################################

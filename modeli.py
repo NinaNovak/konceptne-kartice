@@ -298,7 +298,7 @@ def id_zadnjega_dodanega_orodja():
         SELECT MAX(id) as id_zadnjega FROM programsko_orodje_ali_jezik
         '''
     id_zadnjega = conn.execute(sql).fetchone()
-    return id_zadnjega
+    return id_zadnjega[0]
 
 def kartica_uci_programsko_orodje_jezik(id_kartice, sez_id_orodij):
     '''Izpolni povezovalno tabelo povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.'''

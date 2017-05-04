@@ -1,6 +1,7 @@
 from bottle import *
 import os
 import modeli
+import re
 
 ##############################################################################
 # NALAGANJE NOVE KARTICE
@@ -38,7 +39,16 @@ def dash():
     return template('dash',
                     orodja=modeli.nastej_orodja(),
                     kartice=modeli.vrni_tabelo_konceptnih())
-    
+
+#UPORABNIK IŠČE
+@post('/dashboard')
+def iskanje():
+    niz_iskanje = request.forms.get('iskanje')
+    seznam_besed = re.findall(r"[\w']+", niz_iskanje)
+    return template('dash',
+                    orodja=modeli.nastej_orodja(),
+                    kartice=modeli.vrni_konceptne_rezultat_iskanja(seznam_besed))
+
 @get('/popravi_kartico/<id_kartice>')
 def popravljanje(id_kartice):
     return template('popravi_obstojeco',
@@ -201,9 +211,5 @@ def do_upload():  #(kako narediti, da bo ta funkcija transakcija?)
 def o_strani():
     return template('o_strani',
                     orodja=modeli.nastej_orodja())
-
-@route('/vpis') #stran?
-def vpis_ali_registracija():
-    return template('vpis')
 
 run(debug=True)

@@ -13,6 +13,7 @@
 
 <form action="/nalozi_novo_kartico" method="post" enctype="multipart/form-data">
   <h3>Nalaganje nove kartice</h3>
+  Prosimo, da namesto črk "čšž" pri vnašanju imena kartice, ključnih besed in morebitnih novih orodij uporabite črke "csz".</br>Primer: znacka namesto značka.</br></br>
   Ime kartice: <input type="text" name="ime_kartice" /><br><br>
   <input type="file" name="upload" value="Naloži datoteko" />
   <h3>Orodje / programski jezik, ki ga uči kartica</h3>

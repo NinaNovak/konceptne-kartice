@@ -7,6 +7,201 @@ conn.row_factory = sqlite3.Row
 # kompletna tabela konceptnih kartic
 ##########################################################################
 
+def vrni_konceptne_po_jezikih(jezik):
+    '''Vrne tabelo kartic za izbrani jezik'''
+    
+    sql = '''SELECT konceptna_kartica.id AS ID,
+       naslov_kartice AS naslov,
+       replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
+       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja
+       FROM konceptna_kartica
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+       ON
+       konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+       JOIN
+       kljucna_beseda
+       ON
+       kljucna_beseda.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+       JOIN
+       programsko_orodje_ali_jezik
+       ON
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
+       = programsko_orodje_ali_jezik.id
+       GROUP BY konceptna_kartica.id
+       HAVING programsko_orodje_ali_jezik.ime_orodja = ?
+       
+       '''
+    
+    return list(conn.execute(sql, [jezik]))
+
+
+def vrni_konceptne_rezultat_iskanja2(sez_iskalnih_besed):
+    """
+
+    """
+
+    #novi_sez = sez_iskalnih_besed * 4  #(* 4) zato, ker bomo vsako iskalno
+                                       #besedo iskali v 4 stolpcih:
+                                       #naslov_kartice, ime_datoteke,
+                                       #(kljucna) beseda in ime_orodja
+    
+    st_iskalnih_besed = len(sez_iskalnih_besed)  #vsako od uporabnikovih
+                                                 #iskalnih besed bomo
+                                                 #primerjali z vsakim od 4
+                                                 #stolpcev, ki lahko vsebujejo
+                                                 #zadetek
+    novi_sez = []
+    stevec = st_iskalnih_besed
+    while stevec > 0:
+        novi_sez.append(sez_iskalnih_besed[stevec - 1])
+        novi_sez.append(sez_iskalnih_besed[stevec - 1])
+        novi_sez.append(sez_iskalnih_besed[stevec - 1])
+        novi_sez.append(sez_iskalnih_besed[stevec - 1])  #ker so 4 stolpci...
+        stevec -= 1        
+    
+    primerjave = st_iskalnih_besed * '''
+
+    naslov_kartice  LIKE '%' || ? || '%'
+    OR ime_datoteke LIKE '%' || ? || '%'
+    OR beseda       LIKE '%' || ? || '%'
+    OR ime_orodja   LIKE '%' || ? || '%'
+    OR 
+
+    '''
+    primerjave = primerjave.strip()
+    primerjave = primerjave[:-2]  #zadnji 'OR' je odveč
+    
+    sql = '''
+
+    SELECT *
+    
+    FROM konceptna_kartica
+    JOIN povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+    ON konceptna_kartica.id
+    = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+    JOIN kljucna_beseda
+    ON kljucna_beseda.id
+    = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+    JOIN povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik
+    ON povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+    = konceptna_kartica.id
+    JOIN programsko_orodje_ali_jezik
+    ON programsko_orodje_ali_jezik.id
+    = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
+    WHERE
+
+    ''' + primerjave
+    print(sql)
+    print(novi_sez)
+
+    return list(conn.execute(sql, novi_sez))
+    #testni klic: vrni_konceptne_rezultat_iskanja(['001', 'plot'])
+
+def vrni_konceptne_rezultat_iskanja(sez_iskalnih_besed):
+    
+    sql = '''
+
+    SELECT konceptna_kartica.id AS ID,
+       naslov_kartice AS naslov,
+       replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
+       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja
+       FROM konceptna_kartica
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+       ON
+       konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+       JOIN
+       kljucna_beseda
+       ON
+       kljucna_beseda.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+       JOIN
+       programsko_orodje_ali_jezik
+       ON
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
+       = programsko_orodje_ali_jezik.id
+       
+WHERE konceptna_kartica.id IN
+-------------------------------------------------------------------------
+(SELECT id_konceptne FROM   
+--------------------------------------------------------------------------
+    (SELECT konceptna_kartica.id AS id_konceptne,
+
+              ' '
+           || naslov_kartice
+           || ' '
+           || replace(group_concat(distinct beseda), ",", " ")
+           || ' '
+           || replace(group_concat(distinct ime_orodja), ",", " ")
+           || ' '
+
+    AS naslov_kartice_in_vse_kljucne_in_vsi_jeziki
+
+    FROM konceptna_kartica
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+       ON
+       konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+       JOIN
+       kljucna_beseda
+       ON
+       kljucna_beseda.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+       JOIN
+       programsko_orodje_ali_jezik
+       ON
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
+       = programsko_orodje_ali_jezik.id
+
+    GROUP BY konceptna_kartica.id
+    
+    )
+--------------------------------------------konec SELECT-a
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+       ON
+       konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+       JOIN
+       kljucna_beseda
+       ON
+       kljucna_beseda.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+       JOIN programsko_orodje_ali_jezik
+       ON povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika = programsko_orodje_ali_jezik.id
+    
+WHERE naslov_kartice_in_vse_kljucne_in_vsi_jeziki LIKE '% ' || ? || ' %'  --prva iskalna beseda
+OR    naslov_kartice_in_vse_kljucne_in_vsi_jeziki LIKE '% ' || ? || ' %'  --druga iskalna beseda
+
+)
+
+-----------------------------------------------konec SELECTa
+
+GROUP BY konceptna_kartica.id
+
+    '''
+
+    #'OR'-a sta 2, moralo bi jih biti len(sez_iskalnih_besed)   
+
+    return list(conn.execute(sql, sez_iskalnih_besed))
+
 def vrni_tabelo_konceptnih():
     '''Vrne tabelo vseh kartic:
 
@@ -14,6 +209,7 @@ def vrni_tabelo_konceptnih():
         programska orodja oziroma jezike, ki jih kartica uci.
 
         '''
+    
     sql = '''SELECT konceptna_kartica.id AS ID,
        naslov_kartice AS naslov,
        replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,

@@ -58,13 +58,16 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-			<li><a href="#">Jeziki</a></li>
-            <li><a href="#">Ključne besede</a></li>
+			<!--<li><a href="#">Jeziki</a></li>
+            <li><a href="#">Ključne besede</a></li>-->
             <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
-		    <form class="navbar-form navbar-right">
-              <input type="text" class="form-control" placeholder="Išči...">
+		    <form class="navbar-form navbar-right" action="" method="post">
+              <input type="text" class="form-control" name="iskanje" placeholder="Išči...">
+			  <button type="submit" class="btn btn-default">
+			  <span class="glyphicon glyphicon-search"></span>
+			  </button>
             </form>
         </div>
       </div>
@@ -87,8 +90,8 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>Jezik</th>
 				  <th>Naslov</th>
+                  <th>Jeziki</th>
                   <th>Ključne besede</th>
                   <th>Ogled</th>
                 </tr>
@@ -96,10 +99,10 @@
               <tbody>
 					 % for kartica in kartice:
 					 <tr><td>
-					 <i>{{kartica['orodja']}}</i>
+					 <b>{{kartica['naslov']}}</b>
 					 </td>
 					 <td>
-					 <b>{{kartica['naslov']}}</b>
+					 <i>{{kartica['orodja']}}</i>
 					 </td>
 					 <td>
 					 {{kartica['kljucne']}}

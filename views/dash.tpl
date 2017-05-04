@@ -78,14 +78,14 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
 		  % for orodje in orodja:
-		    <li><a href="/{{orodje[1]}}">{{orodje[1]}}</a></li>
+		    <li><a href="/dashboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
 	      % end
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           
 
-          <h2 class="sub-header">Seznam vseh konceptnih kartic</h2>
+          <h2 class="sub-header">Seznam konceptnih kartic</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -93,7 +93,8 @@
 				  <th>Naslov</th>
                   <th>Jeziki</th>
                   <th>Ključne besede</th>
-                  <th>Ogled</th>
+                  <th>Prenos</th>
+				  <th>Popravi</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,8 +108,11 @@
 					 <td>
 					 {{kartica['kljucne']}}
 					 </td>
-					 <td>
-					 <a href="/ogled_kartice/{{kartica['ID']}}">Ogled kartice</a>
+					 <td style="text-align: center; vertical-align: middle;">
+					 <a href="/#"><span class="glyphicon glyphicon-download-alt"></span></a>
+					 </td>
+					 <td style="text-align: center; vertical-align: middle;">
+					 <a href="/#"><span class="glyphicon glyphicon-cog"></span></a>
 					 </td></tr>
 					 % end
               </tbody>

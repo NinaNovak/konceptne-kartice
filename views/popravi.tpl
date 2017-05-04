@@ -20,7 +20,7 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="ie10-viewport-bug-workaround.js"></script>	
 	
-    <title>O strani</title>
+    <title>Dodajanje nove kartice v bazo</title>
 
     <!-- Bootstrap core CSS -->
     <link type="text/css" href="bootstrap.min.css" rel="stylesheet">
@@ -63,7 +63,12 @@
             <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
-		    
+		    <form class="navbar-form navbar-right" action="" method="post">
+              <input type="text" class="form-control" name="iskanje" placeholder="Išči...">
+			  <button type="submit" class="btn btn-default">
+			  <span class="glyphicon glyphicon-search"></span>
+			  </button>
+            </form>
         </div>
       </div>
     </nav>
@@ -73,26 +78,62 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
 		  % for orodje in orodja:
-		    <li><a href="/dashboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
+		    <li><a href="/{{orodje[1]}}">{{orodje[1]}}</a></li>
 	      % end
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-        <div align="center">
-		<h3>O strani</h3>
-		<br>
-		Ta stran je arhiv konceptnih kartic, ki jih lahko natisnemo in uporabljamo kot<br>
-		učni pripomoček. Stran omogoča dodajanje in popravljanje konceptnih kartic.
-		<br>
-		<br>
-		Konceptne kartice so odličen pripomoček pri učenju, tako za usvajanje nove snovi<br>
-		kot pri ponavljanju, dobro pa se izkažejo tudi pri preverjanju znanja tipa kviz.
-        </div>
+<form action="/nalozi_novo_kartico" method="post" enctype="multipart/form-data">
+  <h3>Nalaganje nove kartice</h3>
+  Prosimo, da namesto črk "čšž" pri vnašanju imena kartice, ključnih besed in morebitnih novih orodij uporabite črke "csz".</br>Primer: znacka namesto značka.</br></br>
+  Ime kartice: <input type="text" name="ime_kartice" /><br><br>
+  <input type="file" name="upload" value="Naloži datoteko" />
+  <h3>Orodje / programski jezik, ki ga uči kartica</h3>
+  Najprej so našteta imena orodij, ki se začnejo z veliko začetnico,
+  nato pa še imena, ki se začnejo z malo začetnico.<br><br>
+  Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolniti polje 'Drugo'.<br><br><!-- Kaj če 2 novi orodji? -->
+    %for orod in orodja:
+       <input type="checkbox" name="orodje" value={{orod[0]}}>{{orod[1]}}
+    %end
+	   <!-- Dodatni checkbox za novo orodje -->
+	   <input type="checkbox" class="oznaci">Drugo:<input type="text" name="novo" class="novo_orodje" /><br>
+  <h3>Ključne besede, po katerih se kartica lahko najde</h3>
+  <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosim, ločite ključne besede z vejicami.">
+  <input type="text" name="kljucne" placeholder="Ključne besede ločite z vejico" />
+  </a>
+  <br>
+  <br>
+  <input type="submit" value="Vnesi kartico v bazo" />
+</form>
 
         </div>
       </div>
     </div>
-	  
-  </body>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/check_novo_orodje.js"></script>
+	<!-- Spodaj: check_novo_orodje.js, ker samo z zgornjim src-jem ne deluje ... -->
+	<script type="text/javascript">
+    	$(".novo_orodje").on("keyup", function(e){
+            if(this.value!=""){
+                $(".oznaci").prop("checked", "checked");
+            }else{
+                $(".oznaci").prop("checked", ""); 
+            }
+        });
+    </script>
+	<!-- Spodaj: za pop-over okence -->
+	<script>
+    $(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+    });
+    </script>
+
+
+
+	</body>
 </html>

@@ -63,7 +63,12 @@
             <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
-		    
+		    <form class="navbar-form navbar-right" action="" method="post">
+              <input type="text" class="form-control" name="iskanje" placeholder="Išči...">
+			  <button type="submit" class="btn btn-default">
+			  <span class="glyphicon glyphicon-search"></span>
+			  </button>
+            </form>
         </div>
       </div>
     </nav>
@@ -73,26 +78,24 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
 		  % for orodje in orodja:
-		    <li><a href="/dashboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
+		    <li><a href="/{{orodje[1]}}">{{orodje[1]}}</a></li>
 	      % end
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-        <div align="center">
-		<h3>O strani</h3>
-		<br>
-		Ta stran je arhiv konceptnih kartic, ki jih lahko natisnemo in uporabljamo kot<br>
-		učni pripomoček. Stran omogoča dodajanje in popravljanje konceptnih kartic.
-		<br>
-		<br>
-		Konceptne kartice so odličen pripomoček pri učenju, tako za usvajanje nove snovi<br>
-		kot pri ponavljanju, dobro pa se izkažejo tudi pri preverjanju znanja tipa kviz.
-        </div>
-
+		
+Rezultat za eno orodje<br>
+Rezultat za eno orodje<br>
+Rezultat za eno orodje<br>
+Rezultat za eno orodje<br>
+Rezultat za eno orodje<br>
+Rezultat za eno orodje<br>
+Rezultat za eno orodje<br>
+Rezultat za eno orodje<br>		
+		
         </div>
       </div>
     </div>
-	  
+   
   </body>
 </html>

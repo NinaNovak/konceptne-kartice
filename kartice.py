@@ -26,6 +26,16 @@ def shranjevanje_datoteke_na_disk(dat, ime_mape):
 
     '''
 
+@route('/popravi')
+def popravi():
+    id_kartice = request.query.id_kartice
+    return template('popravi')
+
+@get('/popravi_kartico/<id_kartice>')#STARO
+def popravljanje(id_kartice):
+    return template('popravi_obstojeco',
+                    kartica=modeli.vrni_kartico(id_kartice))
+
 ##@route('/static/<filepath:path>')
 ##def server_static(filepath):
 ##    return static_file(filepath, root='/')
@@ -36,23 +46,31 @@ def send_static(filename):
 
 @route('/dashboard')
 def dash():
-    return template('dash',
-                    orodja=modeli.nastej_orodja(),
-                    kartice=modeli.vrni_tabelo_konceptnih())
+    id_jezika = request.query.id_jezika
+    if id_jezika == '':
+        #vrni vse konceptne
+        return template('dash',
+                        orodja=modeli.nastej_orodja(),
+                        kartice=modeli.vrni_tabelo_konceptnih())
+    else:
+        #vrni samo konceptne za 1 izbrani jezik
+        return template('dash',
+                        orodja=modeli.nastej_orodja(),
+                        kartice=modeli.vrni_konceptne_po_jezikih(id_jezika))
 
 #UPORABNIK IŠČE
 @post('/dashboard')
 def iskanje():
     niz_iskanje = request.forms.get('iskanje')
+    print(niz_iskanje)
     seznam_besed = re.findall(r"[\w']+", niz_iskanje)
+    try:
+        kartice = modeli.vrni_konceptne_rezultat_iskanja(seznam_besed)
+    except:
+        kartice = modeli.vrni_tabelo_konceptnih_izjema()
     return template('dash',
                     orodja=modeli.nastej_orodja(),
-                    kartice=modeli.vrni_konceptne_rezultat_iskanja(seznam_besed))
-
-@get('/popravi_kartico/<id_kartice>')
-def popravljanje(id_kartice):
-    return template('popravi_obstojeco',
-                    kartica=modeli.vrni_kartico(id_kartice))
+                    kartice=kartice)
 
 @route('/datoteka')
 def pdf_datoteka():
@@ -90,6 +108,13 @@ def kljucne_niz(kart='vse'):
 def vse():
     return template('vse',
                     kartice=modeli.vrni_tabelo_konceptnih())
+
+@route('/<ime_orodja>')
+def konceptne_za_jezik(ime_orodja):
+    return template('eno_orodje',
+                    orodja=modeli.nastej_orodja(),
+                    kartice=modeli.vrni_konceptne_po_jezikih(ime_orodja)
+                    )
 
 @route('/nalozi_novo_kartico')
 def upload():

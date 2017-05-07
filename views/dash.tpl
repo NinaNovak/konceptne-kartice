@@ -109,10 +109,18 @@
 					 {{kartica['kljucne']}}
 					 </td>
 					 <td style="text-align: center; vertical-align: middle;">
-					 <a href="/#"><span class="glyphicon glyphicon-download-alt"></span></a>
+					 <!--snemanje kartice-->
+					 <a href="/dashboard?ime_datoteke={{kartica['dat']}}">
+					 <span class="glyphicon glyphicon-download-alt"></span>
+					 </a>
+					 <!---->
 					 </td>
+					 <!--spreminjanje obstojece kartice-->
 					 <td style="text-align: center; vertical-align: middle;">
-					 <a href="/#"><span class="glyphicon glyphicon-cog"></span></a>
+					 <a href="/#">
+					 <span class="glyphicon glyphicon-cog"></span>
+					 </a>
+					 <!---->
 					 </td></tr>
 					 % end
               </tbody>

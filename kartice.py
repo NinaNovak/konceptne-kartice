@@ -2,87 +2,9 @@ from bottle import *
 import os
 import modeli
 import re
-
 ##############################################################################
 # POMOŽNE FUNKCIJE
 ##############################################################################
-def locevanje_kljucnih_besed(niz):
-    '''Iz niza z vejico ločenih besed naredi seznam posameznih besed.'''
-    locimo = niz.split(',')  #razbijemo na posamezne besede
-    for i in range(len(locimo)):  #odstranimo vsem besedam bele znake
-        locimo[i] = locimo[i].strip()
-    return locimo
-
-def shranjevanje_datoteke_na_disk(dat, ime_mape):
-    '''Datoteko, dobljeno z request.files.get(dat), shrani v mapo ime_mape.
-
-    Mapa ime_mape je v isti mapi kot ta .py datoteka.
-    Če mapa ime_mape ne obstaja, je ustvarjena.
-
-    Datoteke dat je tipa bottle.FileUpload:
-    >>> type(dat)
-    <class 'bottle.FileUpload'>
-
-    '''
-
-@route('/popravi')
-def popravi():
-    id_kartice = request.query.id_kartice
-    return template('popravi')
-
-@get('/popravi_kartico/<id_kartice>')#STARO
-def popravljanje(id_kartice):
-    return template('popravi_obstojeco',
-                    kartica=modeli.vrni_kartico(id_kartice))
-
-##@route('/static/<filepath:path>')
-##def server_static(filepath):
-##    return static_file(filepath, root='/')
-
-@route('/<filename:path>')
-def send_static(filename):
-    return static_file(filename, root='views/')
-##############################################################################
-# PRVA STRAN
-##############################################################################
-@route('/dashboard')
-def dash():
-    id_jezika = request.query.id_jezika
-    if id_jezika == '':
-        #vrni vse konceptne
-        return template('dash',
-                        orodja=modeli.nastej_orodja(),
-                        kartice=modeli.vrni_tabelo_konceptnih())
-    else:
-        #vrni samo konceptne za 1 izbrani jezik
-        return template('dash',
-                        orodja=modeli.nastej_orodja(),
-                        kartice=modeli.vrni_konceptne_po_jezikih(id_jezika))
-
-#UPORABNIK IŠČE
-@post('/dashboard')
-def iskanje():
-    niz_iskanje = request.forms.get('iskanje')
-    seznam_besed = re.findall(r"[\w']+", niz_iskanje)
-    try:
-        kartice = modeli.vrni_konceptne_rezultat_iskanja(seznam_besed)
-    except:
-        kartice = modeli.vrni_tabelo_konceptnih_izjema()
-    return template('dash',
-                    orodja=modeli.nastej_orodja(),
-                    kartice=kartice)
-
-@route('/datoteka')
-def pdf_datoteka():
-    ime_dat = request.query.ime
-    return static_file(ime_dat, root='/kartice')
-
-@route('/ogled_kartice')
-def ogled_kartice():
-    id_kartice = request.query.st
-    return template('pdf')#,
-                    #kartica=modeli.vrni_kartico(id_kartice))
-
 def kljucne_niz(kart='vse'):
     '''Dobi objekt=seznam kljucnih, vrne objekt=niz kljucnih.'''
     if kart == 'vse':
@@ -96,15 +18,93 @@ def kljucne_niz(kart='vse'):
         niz += ', '
     niz = niz[:-2]
     return niz
+def locevanje_kljucnih_besed(niz):
+    '''Iz niza z vejico ločenih besed naredi seznam posameznih besed.'''
+    locimo = niz.split(',')  #razbijemo na posamezne besede
+    for i in range(len(locimo)):  #odstranimo vsem besedam bele znake
+        locimo[i] = locimo[i].strip()
+    return locimo
+##############################################################################
+# RAZNO / V DELU
+##############################################################################
+@route('/popravi')
+def popravi():
+    id_kartice = request.query.id_kartice
+    return template('popravi')
+@get('/popravi_kartico/<id_kartice>')#STARO
+def popravljanje(id_kartice):
+    return template('popravi_obstojeco',
+                    kartica=modeli.vrni_kartico(id_kartice))
+@route('/ogled_kartice')
+def ogled_kartice():
+    id_kartice = request.query.st
+    return template('pdf')#,
+                    #kartica=modeli.vrni_kartico(id_kartice))
+##############################################################################
+# PRVA STRAN
+##############################################################################
+@route('/dashboard')
+def dash():
+    ##########################################################################
+    # prikaz kartic v tabeli glede na jezike (vse ali za 1 izbrani jezik
+    ##########################################################################
+    id_jezika = request.query.id_jezika
+    if id_jezika == '':
+        #vrni vse konceptne
+        return template('dash',
+                        orodja=modeli.nastej_orodja(),
+                        kartice=modeli.vrni_tabelo_konceptnih())
+    else:
+        #vrni samo konceptne za 1 izbrani jezik
+        return template('dash',
+                        orodja=modeli.nastej_orodja(),
+                        kartice=modeli.vrni_konceptne_po_jezikih(id_jezika))
+    ##########################################################################
+    # uporabnik sname kartico
+    ##########################################################################
+    ime_datoteke = request.query.ime_datoteke
+    if ime_datoteke == '':
+        None#?
+    else:
+        return static_file(ime_datoteke, root='/kartice')
+##############################################################################
+# ISKALNIK PO ZBIRKI
+##############################################################################
+@post('/dashboard')
+def iskanje():
+    niz_iskanje = request.forms.get('iskanje')
+    seznam_besed = re.findall(r"[\w']+", niz_iskanje)
+    try:
+        kartice = modeli.vrni_konceptne_rezultat_iskanja(seznam_besed)
+    except:
+        kartice = modeli.vrni_tabelo_konceptnih_izjema()
+    return template('dash',
+                    orodja=modeli.nastej_orodja(),
+                    kartice=kartice)
+##############################################################################
+# UPORABNIK SNAME KARTICO S SPLETNE STRANI
+##############################################################################
+'''
+@route('/download/<filename:path>')
+def download(filename):
+    return static_file(filename, root='/path/to/static/files',
+                       download=filename)
+@route('/static/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='/')
+@route('/<filename:path>')
+def send_static(filename):
+    return static_file(filename, root='views/')
 
-##ne rabimo
-##@route('/<ime_orodja>')
-##def konceptne_za_jezik(ime_orodja):
-##    return template('eno_orodje',
-##                    orodja=modeli.nastej_orodja(),
-##                    kartice=modeli.vrni_konceptne_po_jezikih(ime_orodja)
-##                    )
 
+@route('/dashboard')
+def download():
+    pass
+    id_kartice = request.query.id_kartice
+    ime_datoteke = 0
+    return static_file(ime_dat, root='/kartice')
+
+'''
 ##############################################################################
 # NALAGANJE NOVE KARTICE
 ##############################################################################
@@ -224,14 +224,15 @@ def do_upload():  #ni transakcija?
            'Ključne besede za iskanje ' +\
            'konceptne kartice: <b>{0}</b><br>'.format(niz_kljucne) +\
            'Hvala!'
-
 ##############################################################################
-# 
+# O STRANI
 ##############################################################################
-
 @route('/o_strani')
 def o_strani():
     return template('o_strani',
                     orodja=modeli.nastej_orodja())
-
+###############
 run(debug=True)
+##############################################################################
+# THE END
+##############################################################################

@@ -67,6 +67,22 @@ def iskanje():
     return template('dash',
                     orodja=modeli.nastej_orodja(),
                     kartice=kartice)
+
+##############################################################################
+# POPRAVLJANJE OBSTOJECE KARTICE
+##############################################################################
+@route('/uredi_obstojeco/<id_kartice>')
+def obstojeca(id_kartice):
+    return template('uredi_obstojeco',
+                    orodja=modeli.nastej_orodja(),
+                    idkartice=id_kartice,
+                    kartice=modeli.vrni_eno_kartico(id_kartice))
+@route('/uredi_obstojeco/<id_kartice>', method='POST')
+def popravi_obstojeco(id_kartice):
+    return template('uredi_obstojeco',
+                    orodja=modeli.nastej_orodja(),
+                    idkartice=id_kartice,
+                    kartice=modeli.vrni_eno_kartico(id_kartice))
 ##############################################################################
 # NALAGANJE NOVE KARTICE
 ##############################################################################
@@ -186,24 +202,6 @@ def do_upload():  #ni transakcija?
            'Ključne besede za iskanje ' +\
            'konceptne kartice: <b>{0}</b><br>'.format(niz_kljucne) +\
            'Hvala!'
-
-##############################################################################
-# POPRAVLJANJE OBSTOJECE KARTICE
-##############################################################################
-@route('/uredi_obstojeco/<id_kartice>')
-def obstojeca(id_kartice):
-    return template('uredi_obstojeco',
-                    orodja=modeli.nastej_orodja(),
-                    idkartice=id_kartice)
-@route('/uredi_obstojeco/<id_kartice>', method='POST')
-def popravi_obstojeco(id_kartice):
-    return template('uredi_obstojeco',
-                    orodja=modeli.nastej_orodja(),
-                    idkartice=id_kartice)
-@route('/test')
-def test():
-    return template('upload_test',
-                    orodja=modeli.nastej_orodja())
 ##############################################################################
 # O STRANI
 ##############################################################################

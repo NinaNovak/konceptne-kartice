@@ -10,7 +10,8 @@ def vrni_tabelo_konceptnih():
     '''Vrne tabelo VSEH kartic:
 
         njihove ID-je, naslove, kljucne besede in
-        programska orodja oziroma jezike, ki jih kartica uci.
+        programska orodja oziroma jezike, ki jih kartica uci,
+        ter ime datoteke.
 
         '''
     
@@ -148,11 +149,48 @@ def vrni_tabelo_konceptnih_izjema():
           '''
     return list(conn.execute(sql))
 ##############################################################################
+def vrni_eno_kartico(idkartice):
+    '''Vrne tabelo s podatki za kartico z izbranim ID-jem:
+
+        njen naslov, kljucne besede in
+        programska orodja oziroma jezike, ki jih kartica uci
+        ter ime datoteke.
+
+        '''
+
+    sql = '''SELECT naslov_kartice AS naslov,
+       replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
+       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja,
+       ime_datoteke AS dat
+       
+       FROM konceptna_kartica
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+       ON
+       konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+       JOIN
+       kljucna_beseda
+       ON
+       kljucna_beseda.id
+       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+       JOIN
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id
+       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+       JOIN
+       programsko_orodje_ali_jezik
+       ON
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
+       = programsko_orodje_ali_jezik.id
+
+       WHERE konceptna_kartica.id = ?
+       
+       '''
+    kartica = conn.execute(sql, [idkartice]).fetchone()
+    return kartica
+##############################################################################
 # konceptne kartice - razno
 ##############################################################################
-def vrni_kartico(id_kartice):
-    sql = '''SELECT '''
-
 def id_zadnje_dodane_kartice():
     #Za tabele v zvezi s ključnimi besedami in programskimi orodji
     #potrebujemo id ravnokar vnešene kartice. Ker je bil ta id

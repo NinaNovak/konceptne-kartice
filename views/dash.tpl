@@ -110,14 +110,14 @@
 					 </td>
 					 <td style="text-align: center; vertical-align: middle;">
 					 <!--snemanje kartice-->
-					 <a href="/dashboard?ime_datoteke={{kartica['dat']}}">
+					 <a href="/kartice/{{kartica['dat']}}">
 					 <span class="glyphicon glyphicon-download-alt"></span>
 					 </a>
 					 <!---->
 					 </td>
 					 <!--spreminjanje obstojece kartice-->
 					 <td style="text-align: center; vertical-align: middle;">
-					 <a href="/#">
+					 <a href="/uredi_obstojeco/{{kartica['id_konceptne']}}">
 					 <span class="glyphicon glyphicon-cog"></span>
 					 </a>
 					 <!---->

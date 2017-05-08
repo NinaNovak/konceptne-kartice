@@ -78,7 +78,6 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
         <div align="center">
 		<h3>O strani</h3>
 		<br>
@@ -89,7 +88,6 @@
 		Konceptne kartice so odličen pripomoček pri učenju, tako za usvajanje nove snovi<br>
 		kot pri ponavljanju, dobro pa se izkažejo tudi pri preverjanju znanja tipa kviz.
         </div>
-
         </div>
       </div>
     </div>

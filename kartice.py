@@ -67,18 +67,25 @@ def iskanje():
     return template('dash',
                     orodja=modeli.nastej_orodja(),
                     kartice=kartice)
-
 ##############################################################################
 # POPRAVLJANJE OBSTOJECE KARTICE
 ##############################################################################
-@route('/uredi_obstojeco/<id_kartice>')
-def obstojeca(id_kartice):
+@route('/uredi_obstojeco')
+def obstojeca():
+    try:
+        id_kartice = request.query.id_kartice
+    except:
+        id_kartice = ''
     return template('uredi_obstojeco',
                     orodja=modeli.nastej_orodja(),
                     idkartice=id_kartice,
                     kartice=modeli.vrni_eno_kartico(id_kartice))
-@route('/uredi_obstojeco/<id_kartice>', method='POST')
-def popravi_obstojeco(id_kartice):
+@route('/uredi_obstojeco')#, method='POST')
+def popravi_obstojeco():
+    try:
+        id_kartice = request.query.id_kartice
+    except:
+        id_kartice = ''
     return template('uredi_obstojeco',
                     orodja=modeli.nastej_orodja(),
                     idkartice=id_kartice,

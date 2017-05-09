@@ -100,7 +100,9 @@
               <tbody>
 					 % for kartica in kartice:
 					 <tr><td>
+					 <a href="/kartice/{{kartica['dat']}}">
 					 <b>{{kartica['naslov']}}</b>
+					 </a>
 					 </td>
 					 <td>
 					 <i>{{kartica['orodja']}}</i>
@@ -112,12 +114,13 @@
 					 <!--snemanje kartice-->
 					 <a href="/kartice/{{kartica['dat']}}">
 					 <span class="glyphicon glyphicon-download-alt"></span>
+					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
 					 </a>
 					 <!---->
 					 </td>
 					 <!--spreminjanje obstojece kartice-->
 					 <td style="text-align: center; vertical-align: middle;">
-					 <a href="/uredi_obstojeco/{{kartica['id_konceptne']}}">
+					 <a href="/uredi_obstojeco?id_kartice={{kartica[0]}}">
 					 <span class="glyphicon glyphicon-cog"></span>
 					 </a>
 					 <!---->

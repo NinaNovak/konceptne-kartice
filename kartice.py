@@ -24,6 +24,9 @@ def locevanje_kljucnih_besed(niz):
     for i in range(len(locimo)):  #odstranimo vsem besedam bele znake
         locimo[i] = locimo[i].strip()
     return locimo
+def vse_kljucne_od_1_kartice(id_kartice):
+    kljucne = modeli.vrni_sez_kljucnih_za_eno_kartico(id_kartice)
+    return kljucne
 ##############################################################################
 # RAZNO / V DELU
 ##############################################################################
@@ -78,9 +81,10 @@ def obstojeca():
         id_kartice = ''
     return template('uredi_obstojeco',
                     orodja=modeli.nastej_orodja(),
+                    orodj=modeli.orodja_od_1_kartice(id_kartice),
                     idkartice=id_kartice,
-                    kartice=modeli.vrni_eno_kartico(id_kartice))
-
+                    kartice=modeli.vrni_eno_kartico(id_kartice),
+                    kljucne=modeli.vrni_sez_kljucnih_za_eno_kartico(id_kartice))
 @route('/uredi_obstojeco', method='POST')
 def popravi_obstojeco():
     pass

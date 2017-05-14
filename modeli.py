@@ -257,7 +257,8 @@ def id_zadnje_kljucne_besede():
     return id_kljucne
 
 def kartica_ima_kljucne(id_kartice, seznam_besed):
-    ''''''
+    '''Ob dodajanju nove kartice vnese v povezovalno tabelo vse ključne besede,
+        vse ključne besede, ki pripadajo tej kartici.'''
     vse = vrni_vse_kljucne_besede()  #vse kljucne v bazi
     sez_idjev = []  #seznam id-jev kljucnih besed
     sql = '''INSERT INTO povezovalna_tabela_konceptna_kartica_x_kljucna_beseda (id_konceptne_kartice, id_kljucne_besede)
@@ -298,6 +299,20 @@ def vrni_sez_kljucnih_za_eno_kartico(id_kartice):
 ##############################################################################
 # programsko orodje/jezik
 ##############################################################################
+def orodja_od_1_kartice(id_kartice):
+    '''Vrne seznam orodij (id, ime) za 1 kartico.'''
+    sql = '''
+        SELECT povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika AS id_o,
+        programsko_orodje_ali_jezik.ime_orodja
+        FROM povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik
+        JOIN programsko_orodje_ali_jezik
+        ON id_o =
+        programsko_orodje_ali_jezik.id
+        WHERE id_konceptne_kartice = ?
+
+        '''
+    orodja = list(conn.execute(sql, [id_kartice]))
+    return orodja
 def nastej_orodja():
     '''Vrne vsa orodja (id, ime_orodja) iz baze podatkov.'''
     sql = '''

@@ -82,41 +82,39 @@
   
   
 <form action="/uredi_obstojeco" method="post" enctype="multipart/form-data">
-  <h2>Posodabljanje kartice "<font color="red"><i>{{kartice['naslov']}}</i></font>"</h2>
+  <h2>Posodabljanje kartice "<font color="CornflowerBlue "><i>{{kartice['naslov']}}</i></font>"</h2>
   
-  Prosimo, da pri vnašanju novega imena kartice, ključnih besed in orodij / jezikov namesto črk "čšž" uporabite črke "csz". Namesto <i>značka</i>: <i>znacka</i>.</br>
+  <h4>Naslov</h4>
+  Obstoječi naslov kartice: <b>{{kartice['naslov']}}</b><br>
+  Novi naslov kartice: <input type="text" name="ime_kartice"  /> Predlagan slog poimenovanja kartice je <i>Ime jezika: Naslov kartice</i>.
   
-  Če razdelka ni potrebno spreminjati, pustite vnosno polje prazno.
-  
-  <h3>Naslov</h3>
-  Predlagan slog poimenovanja kartice: <i>Ime jezika: Naslov kartice</i><br>
-  Stari naslov kartice: <b>{{kartice['naslov']}}</b><br>
-  Novi naslov kartice: <input type="text" name="ime_kartice"  />
-  
-  <h3>Datoteki</h3>
+  <h4>Datoteki</h4>
   
   <h5><i>Naloži PDF</i></h5>
   <input type="file" name="upload" value="Naloži DOCX" />
   <h5><i>Naloži DOCX</i></h5>
   <input type="file" name="upload" value="Naloži PDF" />
   
-  <h3>Jeziki / orodja</h3>
+  <h4>Jeziki / orodja</h4>
   <h5><i>Obstoječi</i></h5>
-  Po potrebi odznačite jezike, ki jih ne želite več imeti:  
-    %for orod in orodja:
-       <input type="checkbox" name="orodje" value={{orod[0]}}>{{orod[1]}}  
+  Po potrebi odznačite jezike, ki jih ne želite več imeti:  <br>
+    %for orod in orodj:
+       <input type="checkbox" name="orodje" checked value={{orod[0]}}>{{orod[1]}}<br>  
     %end
   <h5><i>Novi</i></h5>
-  Po potrebi dodajte nove jezike / orodja. Ločite jih z vejico: 
-  <input type="text" name="jeziki" placeholder="Jezike / orodja ločite z vejico" /><!-- Kaj če 2 novi orodji? -->
+  Po potrebi dodajte nove jezike / orodja. Ločite jih z vejico: <br>
+  Novi jeziki: 
+  <input type="text" name="jeziki" /><!-- Kaj če 2 novi orodji? -->
   
-  <h3>Ključne besede</h3>
+  <h4>Ključne besede</h4>
   <h5><i>Obstoječe</i></h5>
-  Odznačite ključne besede, ki jih ne želite več imeti.
-  <input type="checkbox" name="orodje" value={{orod[0]}}>{{orod[1]}}
+  Odznačite ključne besede, ki jih ne želite več imeti. <br>
+  %for klj in kljucne:
+       <input type="checkbox" name="klju" checked value={{klj}}>{{klj}}<br>
+  %end
   <h5><i>Nove</i></h5>
-  Naštejte nove ključne besede, ločene z vejicami.
-  Nove ključne besede: <input type="text" name="kljucne" placeholder="Ključne besede ločite z vejico" />
+  Naštejte nove ključne besede, ločene z vejicami. <br>
+  Nove ključne besede: <input type="text" name="kljucne" />
   </a><br><br>
   
   <input type="submit" value="Oddaj popravke" disabled />

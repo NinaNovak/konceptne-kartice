@@ -22,8 +22,11 @@
 	
     <title>Zbirka konceptnih kartic</title>
 
+	<!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
     <!-- Bootstrap core CSS -->
-    <link type="text/css" href="bootstrap.min.css" rel="stylesheet">
+    <!--<link type="text/css" href="bootstrap.min.css" rel="stylesheet">-->
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link type="text/css" href="ie10-viewport-bug-workaround.css" rel="stylesheet">
@@ -94,7 +97,7 @@
                   <th>Jeziki</th>
                   <th>Ključne besede</th>
                   <th>Prenos</th>
-				  <th>Popravi</th>
+				  <th>Posodobi</th>
                 </tr>
               </thead>
               <tbody>

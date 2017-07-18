@@ -10,7 +10,7 @@ def kljucne_niz(kart='vse'):
     if kart == 'vse':
         kljucne = modeli.vrni_vse_kljucne_besede()
     else:
-        kljucne = modeli.vrni_sez_kljucnih_za_eno_kartico(kart)
+        kljucne = modeli.vrni_sez_kljucnih_za_eno_kartico(kart) 
     niz = ''
     for k in kljucne:
         klj = str(k)
@@ -89,7 +89,7 @@ def obstojeca():
 def popravi_obstojeco():
     pass
 ##############################################################################
-# NALAGANJE NOVE KARTICE
+# NALAGANJE NOVE KARTICE = TRANSAKCIJA
 ##############################################################################
 @route('/nalozi_novo_kartico')
 def upload():
@@ -97,8 +97,13 @@ def upload():
                     orodja=modeli.nastej_orodja())
 
 @route('/nalozi_novo_kartico', method='POST')
-def do_upload():  #ni transakcija?
-    ''''''
+def do_upload():
+    '''TRANSAKCIJA'''
+    #modeli.transakcija(...)'''TRY-CATCH blok:
+                                             TRY - dobimo sporočilo z vnešenimi podatki
+                                             CATCH - dobimo sporočilo 'nepričakovana napaka'
+
+                              '''
     ##########################################################################
     #1. shrani datoteko na disk
     ##########################################################################
@@ -107,14 +112,17 @@ def do_upload():  #ni transakcija?
     if ext != '.pdf':
         return 'Nedovoljena vrsta datoteke.\nDovoljena vrsta datoteke je PDF.'
     save_path = os.getcwd() + '/kartice'
-    ##kot za pdf naredi tudi za docx in ostale wordove koncnice
-    ##zato, da se konceptno kartico lahko popravlja/spreminja
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     file_path = "{path}/{file}".format(path=save_path,
                                        file=nalozena_datoteka.filename)
+    ##TODO: SE ZA DOCX
+
+    
     #ujemi napako IOError('File exists.') oziroma OSError: File exists.
     #vrni 'Datoteka s tem imenom že obstaja. Ali jo želite zamenjati?'
+
+    
     if not os.path.exists(file_path):
         nalozena_datoteka.save(file_path)
     else:

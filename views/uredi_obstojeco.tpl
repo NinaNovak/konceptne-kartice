@@ -20,10 +20,13 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="ie10-viewport-bug-workaround.js"></script>	
 	
-    <title>Posodabljanje kartice {{kartice['naslov']}}</title>
+    <title>Zbirka konceptnih kartic</title>
 
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
     <!-- Bootstrap core CSS -->
-    <link type="text/css" href="bootstrap.min.css" rel="stylesheet">
+    <!--<link type="text/css" href="bootstrap.min.css" rel="stylesheet">-->
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link type="text/css" href="ie10-viewport-bug-workaround.css" rel="stylesheet">
@@ -77,16 +80,21 @@
 	      % end
           </ul>
         </div>
+		
+		
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
   
-  
+
 <form action="/uredi_obstojeco" method="post" enctype="multipart/form-data">
-  <h2>Posodabljanje kartice "<font color="CornflowerBlue "><i>{{kartice['naslov']}}</i></font>"</h2>
+<div class="container-fluid">
+  <h2>Posodabljanje kartice</h2>
   
   <h4>Naslov</h4>
-  Obstoječi naslov kartice: <b>{{kartice['naslov']}}</b><br>
-  Novi naslov kartice: <input type="text" name="ime_kartice"  /> Predlagan slog poimenovanja kartice je <i>Ime jezika: Naslov kartice</i>.
+  Obstoječi naslov kartice: <b><font color="CornflowerBlue ">{{kartice['naslov']}}</font></b><br>
+  <a href="#" data-toggle="popover" data-trigger="hover" data-content="Predlagan slog poimenovanja kartice je Ime jezika: Naslov kartice.">
+  Novi naslov kartice: <input type="text" name="ime_kartice"  />
+  </a>
   
   <h4>Datoteki</h4>
   
@@ -108,17 +116,19 @@
   
   <h4>Ključne besede</h4>
   <h5><i>Obstoječe</i></h5>
-  Odznačite ključne besede, ki jih ne želite več imeti. <br>
+  Po potrebi odznačite ključne besede, ki jih ne želite več imeti. <br>
   %for klj in kljucne:
        <input type="checkbox" name="klju" checked value={{klj}}>{{klj}}<br>
   %end
   <h5><i>Nove</i></h5>
-  Naštejte nove ključne besede, ločene z vejicami. <br>
+  Po potrebi dodajte nove ključne besede. Ločite jih z vejico: <br>
   Nove ključne besede: <input type="text" name="kljucne" />
   </a><br><br>
   
   <input type="submit" value="Oddaj popravke" disabled />
-</form>
+</div>
+  </form>
+</div>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

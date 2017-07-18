@@ -22,8 +22,11 @@
 	
     <title>Dodajanje nove kartice v bazo</title>
 
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
     <!-- Bootstrap core CSS -->
-    <link type="text/css" href="bootstrap.min.css" rel="stylesheet">
+    <!--<link type="text/css" href="bootstrap.min.css" rel="stylesheet">-->
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link type="text/css" href="ie10-viewport-bug-workaround.css" rel="stylesheet">
@@ -80,25 +83,28 @@
 
 <form action="/nalozi_novo_kartico" method="post" enctype="multipart/form-data">
   <h2>Nalaganje nove kartice</h2>
-  Prosimo, namesto črk "čšž" pri vnašanju imena kartice, ključnih besed in morebitnih novih orodij uporabite črke "csz".</br>Primer: znacka namesto značka.</br></br>
-  Ime kartice: <input type="text" name="ime_kartice" /><br><br>
+  Naslov kartice: <input type="text" name="ime_kartice" /><br><br>
+  <h5><i>Naložite PDF</i></h5>
+  <input type="file" name="nalozi_docx" value="Naloži DOCX" />
+  <h5><i>Naložite DOCX</i></h5>
+  <input type="file" name="nalozi_pdf" value="Naloži PDF" />
   <input type="file" name="upload" value="Naloži datoteko" />
-  <h3>Orodje / programski jezik, ki ga uči kartica</h3>
-  Najprej so našteta imena orodij, ki se začnejo z veliko začetnico,
-  nato pa še imena, ki se začnejo z malo začetnico.<br><br>
-  Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolniti polje 'Drugo'.<br><br><!-- Kaj če 2 novi orodji? -->
+  <h4>Orodje / programski jezik, ki ga uči kartica</h4>
+  Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolnite polje 'Drugo'.<br><br><!-- Kaj če 2 novi orodji? -->
     %for orod in orodja:
        <input type="checkbox" name="orodje" value={{orod[0]}}>{{orod[1]}}
     %end
 	   <!-- Dodatni checkbox za novo orodje -->
-	   <input type="checkbox" class="oznaci">Drugo:<input type="text" name="novo" class="novo_orodje" /><br>
-  <h3>Ključne besede, po katerih se kartica lahko najde</h3>
-  <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosim, ločite ključne besede z vejicami.">
-  <input type="text" name="kljucne" placeholder="Ključne besede ločite z vejico" />
+	   <br><input type="checkbox" class="oznaci">Drugo: 
+	   <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite orodja z vejicami.">
+	   <input type="text" name="novo" class="novo_orodje" /><br>
+  <h4>Ključne besede, po katerih se kartica lahko najde</h4>
+  <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite ključne besede z vejicami.">
+  <input type="text" name="kljucne" size="50" />
   </a>
   <br>
   <br>
-  <input type="submit" value="Vnesi kartico v bazo" />
+  <input type="submit" value="Vnesite kartico v bazo" />
 </form>
 
         </div>

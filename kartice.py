@@ -99,11 +99,12 @@ def upload():
 @route('/nalozi_novo_kartico', method='POST')
 def do_upload():
     '''TRANSAKCIJA'''
-    #modeli.transakcija(...)'''TRY-CATCH blok:
-                                             TRY - dobimo sporočilo z vnešenimi podatki
-                                             CATCH - dobimo sporočilo 'nepričakovana napaka'
+    #modeli.transakcija(...)
+    '''TRY-CATCH blok:
+TRY - dobimo sporočilo z vnešenimi podatki
+CATCH - dobimo sporočilo 'nepričakovana napaka'
 
-                              '''
+    '''
     ##########################################################################
     #1. shrani datoteko na disk
     ##########################################################################

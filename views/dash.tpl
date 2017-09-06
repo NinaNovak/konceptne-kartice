@@ -57,7 +57,7 @@
             <span class="icon-bar"></span>
           </button>
 		  <!--kasneje naj spodnji href kaze na to (zacetno) stran-->
-          <a class="navbar-brand" href="/dashboard">Zbirka konceptnih kartic</a>
+          <a class="navbar-brand" href="dasboard">Zbirka konceptnih kartic</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -81,12 +81,35 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
 		  % for orodje in orodja:
-		    <li><a href="/dashboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
+		    <li><a href="dasboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
 	      % end
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          
+          <h1 class="page-header">Dashboard</h1>
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="testna_slika_najbolj_priljubljen_jezik.png" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+          </div>
 
           <h2 class="sub-header">Seznam konceptnih kartic</h2>
           <div class="table-responsive">
@@ -96,7 +119,8 @@
 				  <th>Naslov</th>
                   <th>Jeziki</th>
                   <th>Ključne besede</th>
-                  <th>Prenos</th>
+                  <th>Prenesi<br>PDF</th>
+				  <th>Prenesi<br>DOCX</th>
 				  <th>Posodobi</th>
                 </tr>
               </thead>
@@ -121,6 +145,15 @@
 					 </a>
 					 <!---->
 					 </td>
+					 <td style="text-align: center; vertical-align: middle;">
+					 <!--snemanje kartice-->
+					 <a href="/kartice/{{kartica['dat']}}">
+					 <span class="glyphicon glyphicon-download-alt"></span>
+					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
+					 </a>
+					 <!---->
+					 </td>
+					 
 					 <!--spreminjanje obstojece kartice-->
 					 <td style="text-align: center; vertical-align: middle;">
 					 <a href="/uredi_obstojeco?id_kartice={{kartica[0]}}">

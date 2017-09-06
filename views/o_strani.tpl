@@ -54,7 +54,7 @@
             <span class="icon-bar"></span>
           </button>
 		  <!--kasneje naj spodnji href kaze na to (zacetno) stran-->
-          <a class="navbar-brand" href="/dashboard">Zbirka konceptnih kartic</a>
+          <a class="navbar-brand" href="dasboard">Zbirka konceptnih kartic</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -73,7 +73,7 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
 		  % for orodje in orodja:
-		    <li><a href="/dashboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
+		    <li><a href="dasboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
 	      % end
           </ul>
         </div>

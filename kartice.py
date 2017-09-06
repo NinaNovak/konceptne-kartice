@@ -108,7 +108,8 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
     ##########################################################################
     #1. shrani datoteko na disk
     ##########################################################################
-    nalozena_datoteka = request.files.get('upload')
+    ##PDF
+    nalozena_datoteka = request.files.get('nalozi_pdf')
     name, ext = os.path.splitext(nalozena_datoteka.filename)
     if ext != '.pdf':
         return 'Nedovoljena vrsta datoteke.\nDovoljena vrsta datoteke je PDF.'
@@ -117,13 +118,23 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
         os.makedirs(save_path)
     file_path = "{path}/{file}".format(path=save_path,
                                        file=nalozena_datoteka.filename)
-    ##TODO: SE ZA DOCX
-
+    ##DOCX
+    nalozena_datoteka_docx = request.files.get('nalozi_docx')
+    name, ext = os.path.splitext(nalozena_datoteka_docx.filename)
+    if ext not in ('.docx', '.doc'):
+        return 'Nedovoljena vrsta datoteke.\nDovoljena vrsta datoteke je DOCX.'
+    save_path = os.getcwd() + '/kartice'
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    file_path = "{path}/{file}".format(path=save_path,
+                                       file=nalozena_datoteka_docx.filename)
+    ##
     
     #ujemi napako IOError('File exists.') oziroma OSError: File exists.
     #vrni 'Datoteka s tem imenom že obstaja. Ali jo želite zamenjati?'
 
-    
+
+
     if not os.path.exists(file_path):
         nalozena_datoteka.save(file_path)
     else:
@@ -210,7 +221,8 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
     return 'Dodajanje nove kartice je bilo uspešno.<br><br>' +\
            '<b>Vnešeni podatki</b><br><br>' +\
            'Ime kartice: <b>{0}</b><br>'.format(ime_kartice) +\
-           'Ime datoteke: <b>{0}</b><br>'.format(nalozena_datoteka.filename) +\
+           'Ime PDF datoteke: <b>{0}</b><br>'.format(nalozena_datoteka.filename) +\
+           'Ime DOCX/DOC datoteke: <b>{0}</b><br>'.format(nalozena_datoteka_docx.filename) +\
            'Orodja/programski jeziki, ' +\
            'ki jih uči kartica: <b>{0}</b><br>'.format(niz_orodje) +\
            'Ključne besede za iskanje ' +\

@@ -57,7 +57,7 @@
             <span class="icon-bar"></span>
           </button>
 		  <!--kasneje naj spodnji href kaze na to (zacetno) stran-->
-          <a class="navbar-brand" href="/dashboard">Zbirka konceptnih kartic</a>
+          <a class="navbar-brand" href="dasboard">Zbirka konceptnih kartic</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -75,7 +75,7 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
 		  % for orodje in orodja:
-		    <li><a href="/dashboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
+		    <li><a href="dasboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
 	      % end
           </ul>
         </div>
@@ -84,11 +84,7 @@
 <form action="/nalozi_novo_kartico" method="post" enctype="multipart/form-data">
   <h2>Nalaganje nove kartice</h2>
   Naslov kartice: <input type="text" name="ime_kartice" /><br><br>
-  <h5><i>Naložite PDF</i></h5>
-  <input type="file" name="nalozi_docx" value="Naloži DOCX" />
-  <h5><i>Naložite DOCX</i></h5>
-  <input type="file" name="nalozi_pdf" value="Naloži PDF" />
-  <input type="file" name="upload" value="Naloži datoteko" />
+  
   <h4>Orodje / programski jezik, ki ga uči kartica</h4>
   Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolnite polje 'Drugo'.<br><br><!-- Kaj če 2 novi orodji? -->
     %for orod in orodja:
@@ -102,11 +98,19 @@
   <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite ključne besede z vejicami.">
   <input type="text" name="kljucne" size="50" />
   </a>
+  <h5><i>Naložite PDF</i></h5>
+  <input type="file" name="nalozi_pdf" value="Naloži PDF" />
+  <h5><i>Naložite DOCX</i></h5>
+  <input type="file" name="nalozi_docx" value="Naloži DOCX" />
   <br>
   <br>
   <input type="submit" value="Vnesite kartico v bazo" />
 </form>
-
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
         </div>
       </div>
     </div>

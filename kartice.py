@@ -40,16 +40,37 @@ def dash():
     # prikaz kartic v tabeli glede na jezike (vse ali za 1 izbrani jezik)
     ##########################################################################
     id_jezika = request.query.id_jezika
+
+    naj_kartica = 'glas_ljudstva.png'
+    naj_jezik = 'najbolj_priljubljen_jezik.png'
+    kljucne = 'oblak_kljucnih.png'
+    kliknasreco = 'klik_na_sreco.png'
+
     if id_jezika == '':
         #vrni vse konceptne
         return template('dash',
                         orodja=modeli.nastej_orodja(),
-                        kartice=modeli.vrni_tabelo_konceptnih())
+                        kartice=modeli.vrni_tabelo_konceptnih(),
+                        
+                        naj_kartica=naj_kartica,
+                        naj_jezik=naj_jezik,
+                        kljucne=kljucne,
+                        kliknasreco=kliknasreco)
     else:
         #vrni samo konceptne za 1 izbrani jezik
         return template('dash',
                         orodja=modeli.nastej_orodja(),
-                        kartice=modeli.vrni_konceptne_po_jezikih(id_jezika))
+                        kartice=modeli.vrni_konceptne_po_jezikih(id_jezika),
+                        
+                        naj_kartica=naj_kartica,
+                        naj_jezik=naj_jezik,
+                        kljucne=kljucne,
+                        kliknasreco=kliknasreco)
+
+@route('/ikone/<ikona>')
+def serve_icons(ikona):
+    return static_file(ikona, root='ikone')
+
 ##############################################################################
 # DOWNLOAD KARTICE (oziroma ogled PDF-ja)
 ##############################################################################d
@@ -118,11 +139,8 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
         os.makedirs(save_path)
     file_path = "{path}/{file}".format(path=save_path,
                                        file=nalozena_datoteka.filename)
-    ##DOCX
+    ##DOCX oziroma katerakoli datoteka za popravljanje (AI, TEX, ...)
     nalozena_datoteka_docx = request.files.get('nalozi_docx')
-    name, ext = os.path.splitext(nalozena_datoteka_docx.filename)
-    if ext not in ('.docx', '.doc'):
-        return 'Nedovoljena vrsta datoteke.\nDovoljena vrsta datoteke je DOCX.'
     save_path = os.getcwd() + '/kartice'
     if not os.path.exists(save_path):
         os.makedirs(save_path)

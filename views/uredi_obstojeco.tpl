@@ -20,7 +20,7 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="ie10-viewport-bug-workaround.js"></script>	
 	
-    <title>Zbirka konceptnih kartic</title>
+    <title>Posodobi kartico</title>
 
 	<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -93,7 +93,7 @@
   <h4>Naslov</h4>
   Obstoječi naslov kartice: <b><font color="CornflowerBlue ">{{kartice['naslov']}}</font></b><br>
   <a href="#" data-toggle="popover" data-trigger="hover" data-content="Predlagan slog poimenovanja kartice je Ime jezika: Naslov kartice.">
-  Novi naslov kartice: <input type="text" name="ime_kartice"  />
+  Novi naslov kartice: <input type="text" name="ime_kartice" size="50" />
   </a>
   
   <h4>Datoteki</h4>
@@ -112,17 +112,17 @@
   <h5><i>Novi</i></h5>
   Po potrebi dodajte nove jezike / orodja. Ločite jih z vejico: <br>
   Novi jeziki: 
-  <input type="text" name="jeziki" /><!-- Kaj če 2 novi orodji? -->
+  <input type="text" name="jeziki" size="50" /><!-- Kaj če 2 novi orodji? -->
   
   <h4>Ključne besede</h4>
   <h5><i>Obstoječe</i></h5>
   Po potrebi odznačite ključne besede, ki jih ne želite več imeti. <br>
   %for klj in kljucne:
-       <input type="checkbox" name="klju" checked value={{klj}}>{{klj}}<br>
+       <input type="checkbox" name="klju" checked value={{klj}} />{{klj}}<br>
   %end
   <h5><i>Nove</i></h5>
   Po potrebi dodajte nove ključne besede. Ločite jih z vejico: <br>
-  Nove ključne besede: <input type="text" name="kljucne" />
+  Nove ključne besede: <input type="text" name="kljucne" size="50" />
   </a><br><br>
   
   <input type="submit" value="Oddaj popravke" disabled />

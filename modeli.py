@@ -19,7 +19,8 @@ def vrni_tabelo_konceptnih():
        naslov_kartice AS naslov,
        replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
        replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja,
-       ime_datoteke AS dat
+       ime_datoteke AS dat,
+       kratek_opis AS opis
        FROM konceptna_kartica
        JOIN
        povezovalna_tabela_konceptna_kartica_x_kljucna_beseda

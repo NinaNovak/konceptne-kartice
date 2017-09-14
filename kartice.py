@@ -47,7 +47,7 @@ def dash():
     kliknasreco = 'klik_na_sreco.png'
 
     if id_jezika == '':
-        #vrni vse konceptne
+        #vrni vse konceptne (SKORAJ ISTA KODA 1/2)
         return template('dash',
                         orodja=modeli.nastej_orodja(),
                         kartice=modeli.vrni_tabelo_konceptnih(),
@@ -57,7 +57,7 @@ def dash():
                         kljucne=kljucne,
                         kliknasreco=kliknasreco)
     else:
-        #vrni samo konceptne za 1 izbrani jezik
+        #vrni samo konceptne za 1 izbrani jezik (SKORAJ ISTA KODA 2/2)
         return template('dash',
                         orodja=modeli.nastej_orodja(),
                         kartice=modeli.vrni_konceptne_po_jezikih(id_jezika),
@@ -245,7 +245,8 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
            'ki jih uči kartica: <b>{0}</b><br>'.format(niz_orodje) +\
            'Ključne besede za iskanje ' +\
            'konceptne kartice: <b>{0}</b><br>'.format(niz_kljucne) +\
-           'Hvala!'
+           'Hvala!</br></br>' +\
+           '<a href="dashboard">Nazaj na prvo stran</a>'
 ##############################################################################
 # O STRANI
 ##############################################################################

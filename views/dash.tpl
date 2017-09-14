@@ -119,22 +119,22 @@
 
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
+              <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Slika naj kartice">
               <h4>Glas ljudstva</h4>
               <span class="text-muted">Največkrat ogledana kartica</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
+              <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika oblak ključnih besed">
               <h4>Oblak ključnih besed</h4>
               <span class="text-muted">Katere vsebine so v bazi?</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
+              <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika jeziki / orodja">
               <h4>Najbolj priljubljen jezik</h4>
               <span class="text-muted">Največkrat iskani jezik ali orodje</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
+              <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika klik na srečo">
               <h4>Klik na srečo</h4>
               <span class="text-muted">Izberi naključno kartico</span>
             </div>
@@ -146,10 +146,10 @@
               <thead>
                 <tr>
 				  <th>Naslov</th>
-                  <th>Jeziki</th>
+                  <th>Jezik</th>
                   <th>Ključne besede</th>
-                  <th>Prenesi<br>PDF</th>
-				  <th>Prenesi<br>izvorno<br>datoteko</th>
+                  <th>PDF</th>
+				  <th>Izvorna<br>datoteka</th>
 				  <th>Posodobi</th>
                 </tr>
               </thead>
@@ -158,32 +158,40 @@
 					 <tr><td>
 					 
 					 <a href="/kartice/{{kartica['dat']}}">
-					 <b>{{kartica['naslov']}}</b>
+					 <b>
+					 <div title="{{kartica['opis']}}">
+					 {{kartica['naslov']}}
+					 </div>
+					 </b>
 					 </a>
-					 
 					 </td>
 					 <td>
-					 <div class="tooltip">
 					 <i>{{kartica['orodja']}}</i>
-					 <span class="tooltiptext">Tooltip text</span>
-					 </div>
 					 </td>
 					 <td>
 					 {{kartica['kljucne']}}
 					 </td>
 					 <td style="text-align: center; vertical-align: middle;">
-					 <!--snemanje kartice-->
+					 
+					 
+					 <!--snemanje kartice PDF-->
 					 <a href="/kartice/{{kartica['dat']}}">
+					 <div title="Prenesi PDF">
 					 <span class="glyphicon glyphicon-download-alt"></span>
 					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
+					 </div>
 					 </a>
 					 <!---->
 					 </td>
 					 <td style="text-align: center; vertical-align: middle;">
-					 <!--snemanje kartice-->
+					 
+					 
+					 <!--snemanje kartice DOCX, AI, TEX, ...-->
 					 <a href="/kartice/{{kartica['dat']}}">
+					 <div title="Prenesi datoteko za urejanje kartice">
 					 <span class="glyphicon glyphicon-download-alt"></span>
 					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
+					 </div>
 					 </a>
 					 <!---->
 					 </td>
@@ -191,7 +199,9 @@
 					 <!--spreminjanje obstojece kartice-->
 					 <td style="text-align: center; vertical-align: middle;">
 					 <a href="/uredi_obstojeco?id_kartice={{kartica[0]}}">
+					 <div title="Posodobi kartico">
 					 <span class="glyphicon glyphicon-cog"></span>
+					 </div>
 					 </a>
 					 <!---->
 					 </td></tr>

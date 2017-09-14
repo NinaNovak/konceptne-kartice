@@ -20,7 +20,7 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="ie10-viewport-bug-workaround.js"></script>	
 	
-    <title>Dodajanje nove kartice v bazo</title>
+    <title>Dodaj kartico</title>
 
     <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -83,7 +83,7 @@
 
 <form action="/nalozi_novo_kartico" method="post" enctype="multipart/form-data">
   <h2>Nalaganje nove kartice</h2>
-  Naslov kartice: <input type="text" name="ime_kartice" /><br><br>
+  Naslov kartice: <input type="text" name="ime_kartice" size="50" /><br><br>
   
   <h4>Orodje / programski jezik, ki ga uči kartica</h4>
   Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolnite polje 'Drugo'.<br><br><!-- Kaj če 2 novi orodji? -->
@@ -93,7 +93,7 @@
 	   <!-- Dodatni checkbox za novo orodje -->
 	   <br><input type="checkbox" class="oznaci">Drugo: 
 	   <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite orodja z vejicami.">
-	   <input type="text" name="novo" class="novo_orodje" /><br>
+	   <input type="text" name="novo" class="novo_orodje" size="50" /><br>
   <h4>Ključne besede, po katerih se kartica lahko najde</h4>
   <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite ključne besede z vejicami.">
   <input type="text" name="kljucne" size="50" />

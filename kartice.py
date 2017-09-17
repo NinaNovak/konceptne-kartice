@@ -31,6 +31,23 @@ def vse_kljucne_od_1_kartice(id_kartice):
 # RAZNO / V DELU
 ##############################################################################
 
+
+
+##############################################################################
+# ZBRIŠI
+##############################################################################
+@route('/index')
+def index():
+    naj_kartica = 'glas_ljudstva.png'
+    naj_jezik = 'najbolj_priljubljen_jezik.png'
+    kljucne = 'oblak_kljucnih.png'
+    kliknasreco = 'klik_na_sreco.png'
+
+    return template('index',
+                        naj_kartica=naj_kartica,
+                        naj_jezik=naj_jezik,
+                        kljucne=kljucne,
+                        kliknasreco=kliknasreco)
 ##############################################################################
 # PRVA STRAN
 ##############################################################################

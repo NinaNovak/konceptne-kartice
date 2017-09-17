@@ -32,7 +32,7 @@
     <link type="text/css" href="ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link type="text/css" href="dashboard.css" rel="stylesheet">
+    <link type="text/css" href="/dashboard.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -106,41 +106,38 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-		    <li class="active"><a href="#"> </a></li>
-			<li class="active"><a href="#"> </a></li>
-			<li class="active"><a href="#"> </a></li>
 		  % for orodje in orodja:
 		    <li><a href="dashboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
 	      % end
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Začni</h1>
 
+		  <h2 class="sub-header" align="center">Orientacija</h2>
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Slika naj kartice">
+              <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Slika">
               <h4>Glas ljudstva</h4>
-              <span class="text-muted">Največkrat ogledana kartica</span>
+			  <span class="text-muted">Največkrat ogledana kartica</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika oblak ključnih besed">
+              <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika">
+		      <span class="text-muted">Katere vsebine so v bazi?</span>
               <h4>Oblak ključnih besed</h4>
-              <span class="text-muted">Katere vsebine so v bazi?</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika jeziki / orodja">
+              <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika">
               <h4>Najbolj priljubljen jezik</h4>
-              <span class="text-muted">Največkrat iskani jezik ali orodje</span>
+			  <span class="text-muted">Največkrat iskani jezik ali orodje</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika klik na srečo">
+			  <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika">
               <h4>Klik na srečo</h4>
               <span class="text-muted">Izberi naključno kartico</span>
             </div>
           </div>
 
-          <h2 class="sub-header">Kartice</h2>
+          <h2 class="sub-header" align="center">Vse kartice</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>

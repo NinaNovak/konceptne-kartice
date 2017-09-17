@@ -20,10 +20,10 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="ie10-viewport-bug-workaround.js"></script>	
 	
-    <title>Zbirka konceptnih kartic</title>
+    <title>Dodaj kartico</title>
 
-	<!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	
     <!-- Bootstrap core CSS -->
     <!--<link type="text/css" href="bootstrap.min.css" rel="stylesheet">-->
@@ -32,7 +32,7 @@
     <link type="text/css" href="ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link type="text/css" href="/dashboard.css" rel="stylesheet">
+    <link type="text/css" href="dashboard.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -43,33 +43,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  <style>
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
-}
-
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-}
-</style>
-	</head>
-
+  </head>
 
   <body>
 
@@ -92,35 +66,78 @@
             <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
-		    <form class="navbar-form navbar-right" action="" method="post">
-              <input type="text" class="form-control" name="iskanje" placeholder="Išči...">
-			  <button type="submit" class="btn btn-default">
-			  <span class="glyphicon glyphicon-search"></span>
-			  </button>
-            </form>
         </div>
       </div>
     </nav>
 
     <div class="container-fluid">
       <div class="row">
-	  
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-		    <li class="active"><a href="#"> </a></li>
-			<li class="active"><a href="#"> </a></li>
-			<li class="active"><a href="#"> </a></li>
 		  % for orodje in orodja:
 		    <li><a href="dashboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
 	      % end
           </ul>
         </div>
-		
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-hello
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+<form action="/nalozi_novo_kartico" method="post" enctype="multipart/form-data">
+  <h2>Nalaganje nove kartice</h2>
+  Naslov kartice: <input type="text" name="ime_kartice" size="50" /><br><br>
+  
+  <h4>Orodje / programski jezik, ki ga uči kartica</h4>
+  Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolnite polje 'Drugo'.<br><br><!-- Kaj če 2 novi orodji? -->
+    %for orod in orodja:
+       <input type="checkbox" name="orodje" value={{orod[0]}}>{{orod[1]}}
+    %end
+	   <!-- Dodatni checkbox za novo orodje -->
+	   <br><input type="checkbox" class="oznaci">Drugo: 
+	   <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite orodja z vejicami.">
+	   <input type="text" name="novo" class="novo_orodje" size="50" /><br>
+  <h4>Ključne besede, po katerih se kartica lahko najde</h4>
+  <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite ključne besede z vejicami.">
+  <input type="text" name="kljucne" size="50" />
+  </a>
+  <h5><i>Naložite PDF</i></h5>
+  <input type="file" name="nalozi_pdf" value="Naloži PDF" accept="application/pdf" />
+  <h5><i>Naložite datoteko za popravljanje kartice (DOCX/DOC/AI/TEX/...)</i></h5>
+  <input type="file" name="nalozi_docx" value="Naloži DOCX" />
+  <br>
+  <br>
+  <input type="submit" value="Vnesite kartico v bazo" />
+</form>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
         </div>
       </div>
     </div>
-   
-  </body>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/check_novo_orodje.js"></script>
+	<!-- Spodaj: check_novo_orodje.js, ker samo z zgornjim src-jem ne deluje ... -->
+	<script type="text/javascript">
+    	$(".novo_orodje").on("keyup", function(e){
+            if(this.value!=""){
+                $(".oznaci").prop("checked", "checked");
+            }else{
+                $(".oznaci").prop("checked", ""); 
+            }
+        });
+    </script>
+	<!-- Spodaj: za pop-over okence -->
+	<script>
+    $(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+    });
+    </script>
+
+
+
+	</body>
 </html>

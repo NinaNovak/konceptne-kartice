@@ -32,7 +32,7 @@
     <link type="text/css" href="ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link type="text/css" href="/dashboard.css" rel="stylesheet">
+    <link type="text/css" href="dashboard.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -104,7 +104,6 @@
 
     <div class="container-fluid">
       <div class="row">
-	  
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
 		    <li class="active"><a href="#"> </a></li>
@@ -115,9 +114,102 @@
 	      % end
           </ul>
         </div>
-		
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-hello
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+			  <span class="text-muted">Največkrat ogledana kartica</span>
+              <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Slika">
+              <h4>Glas ljudstva</h4>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+			  <span class="text-muted">Katere vsebine so v bazi?</span>
+              <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika">
+              <h4>Oblak ključnih besed</h4>
+              
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <span class="text-muted">Največkrat iskani jezik ali orodje</span>
+              <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika">
+              <h4>Najbolj priljubljen jezik</h4>
+
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <span class="text-muted">Izberi naključno kartico</span>
+			  <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika">
+              <h4>Klik na srečo</h4>
+            </div>
+          </div>
+
+          <h2 class="sub-header">Kartice</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+				  <th>Naslov</th>
+                  <th>Jezik</th>
+                  <th>Ključne besede</th>
+                  <th>PDF</th>
+				  <th>Izvorna<br>datoteka</th>
+				  <th>Posodobi</th>
+                </tr>
+              </thead>
+              <tbody>
+					 % for kartica in kartice:
+					 <tr><td>
+					 
+					 <a href="/kartice/{{kartica['dat']}}">
+					 <b>
+					 <div title="{{kartica['opis']}}">
+					 {{kartica['naslov']}}
+					 </div>
+					 </b>
+					 </a>
+					 </td>
+					 <td>
+					 <i>{{kartica['orodja']}}</i>
+					 </td>
+					 <td>
+					 {{kartica['kljucne']}}
+					 </td>
+					 <td style="text-align: center; vertical-align: middle;">
+					 
+					 
+					 <!--snemanje kartice PDF-->
+					 <a href="/kartice/{{kartica['dat']}}">
+					 <div title="Prenesi PDF">
+					 <span class="glyphicon glyphicon-download-alt"></span>
+					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
+					 </div>
+					 </a>
+					 <!---->
+					 </td>
+					 <td style="text-align: center; vertical-align: middle;">
+					 
+					 
+					 <!--snemanje kartice DOCX, AI, TEX, ...-->
+					 <a href="/kartice/{{kartica['dat']}}">
+					 <div title="Prenesi datoteko za urejanje kartice">
+					 <span class="glyphicon glyphicon-download-alt"></span>
+					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
+					 </div>
+					 </a>
+					 <!---->
+					 </td>
+					 
+					 <!--spreminjanje obstojece kartice-->
+					 <td style="text-align: center; vertical-align: middle;">
+					 <a href="/uredi_obstojeco?id_kartice={{kartica[0]}}">
+					 <div title="Posodobi kartico">
+					 <span class="glyphicon glyphicon-cog"></span>
+					 </div>
+					 </a>
+					 <!---->
+					 </td></tr>
+					 % end
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

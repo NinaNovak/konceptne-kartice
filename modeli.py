@@ -74,7 +74,8 @@ SELECT id_konceptne, naslov, kljucne, orodja, dat FROM
            || ' ' || replace(group_concat(distinct beseda), ",", " ")
            || ' ' || replace(group_concat(distinct ime_orodja), ",", " ")
            || ' '
-           AS naslov_kartice_in_vse_kljucne_in_vsi_jeziki
+           AS naslov_kartice_in_vse_kljucne_in_vsi_jeziki,
+       kratek_opis AS opis
     FROM konceptna_kartica
        JOIN povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
        ON konceptna_kartica.id
@@ -102,7 +103,8 @@ def vrni_konceptne_po_jezikih(jezik):
        naslov_kartice AS naslov,
        replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
        replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja,
-       ime_datoteke AS dat
+       ime_datoteke AS dat,
+       kratek_opis AS opis
 FROM konceptna_kartica
        JOIN povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
        ON konceptna_kartica.id

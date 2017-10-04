@@ -131,9 +131,11 @@
 			  <span class="text-muted">Največkrat iskani jezik ali orodje</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
+			  <a href="{{orodje[0]}}"><!--python vrne PDF random kartice-->
 			  <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika">
               <h4>Klik na srečo</h4>
               <span class="text-muted">Izberi naključno kartico</span>
+			  </a>
             </div>
           </div>
 
@@ -152,56 +154,56 @@
               </thead>
               <tbody>
 					 % for kartica in kartice:
-					 <tr><td>
+					 <tr>
 					 
-					 <a href="/kartice/{{kartica['dat']}}">
-					 <b>
-					 <div title="{{kartica['opis']}}">
-					 {{kartica['naslov']}}
-					 </div>
-					 </b>
-					 </a>
-					 </td>
 					 <td>
-					 <i>{{kartica['orodja']}}</i>
+					   <a href="kartice/{{kartica['dat']}}">
+					     <b>
+					       <div title="{{kartica['opis']}}">
+					         {{kartica['naslov']}}
+					       </div>
+					     </b>
+					   </a>
 					 </td>
-					 <td>
-					 {{kartica['kljucne']}}
-					 </td>
-					 <td style="text-align: center; vertical-align: middle;">
 					 
+					 <td>
+					   <i>{{kartica['orodja']}}</i>
+					 </td>
+					 
+					 <td>
+					   {{kartica['kljucne']}}
+					 </td>
 					 
 					 <!--snemanje kartice PDF-->
-					 <a href="/kartice/{{kartica['dat']}}">
-					 <div title="Prenesi PDF">
-					 <span class="glyphicon glyphicon-download-alt"></span>
-					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
-					 </div>
-					 </a>
-					 <!---->
-					 </td>
 					 <td style="text-align: center; vertical-align: middle;">
-					 
+					   <a href="kartice/{{kartica['dat']}}">
+   			             <div title="Prenesi PDF">
+			               <span class="glyphicon glyphicon-download-alt"></span>
+				           <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
+					     </div>
+					   </a>
+					 </td>
 					 
 					 <!--snemanje kartice DOCX, AI, TEX, ...-->
-					 <a href="/kartice/{{kartica['dat']}}">
-					 <div title="Prenesi datoteko za urejanje kartice">
-					 <span class="glyphicon glyphicon-download-alt"></span>
-					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
-					 </div>
-					 </a>
-					 <!---->
+					 <td style="text-align: center; vertical-align: middle;">
+					   <a href="kartice/{{kartica['dat']}}">
+					     <div title="Prenesi datoteko za urejanje kartice">
+					       <span class="glyphicon glyphicon-download-alt"></span>
+					       <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
+					     </div>
+					   </a>
 					 </td>
 					 
 					 <!--spreminjanje obstojece kartice-->
 					 <td style="text-align: center; vertical-align: middle;">
-					 <a href="/uredi_obstojeco?id_kartice={{kartica[0]}}">
-					 <div title="Posodobi kartico">
-					 <span class="glyphicon glyphicon-cog"></span>
-					 </div>
-					 </a>
-					 <!---->
-					 </td></tr>
+					   <a href="/uredi_obstojeco?id_kartice={{kartica[0]}}">
+					      <div title="Posodobi kartico">
+					        <span class="glyphicon glyphicon-cog"></span>
+					      </div>
+					   </a>
+					 </td>
+					 
+					 </tr>
 					 % end
               </tbody>
             </table>

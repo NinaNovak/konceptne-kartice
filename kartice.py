@@ -182,7 +182,9 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
     #dobi ime kartice
     ime_kartice = request.forms.get('ime_kartice')
     #dodaj kartico, dobi njen id
-    modeli.dodaj_kartico(ime_kartice, nalozena_datoteka.filename)
+    modeli.dodaj_kartico(ime_kartice,
+                         nalozena_datoteka_docx.filename,#dat za popravljanje
+                         nalozena_datoteka.filename)#pdf datoteka
     id_kartice = modeli.id_zadnje_dodane_kartice()[0]
 
     ##########################################################################

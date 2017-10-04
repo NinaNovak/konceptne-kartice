@@ -207,15 +207,17 @@ def id_zadnje_dodane_kartice():
     id_kartice = conn.execute(sql0).fetchone()
     return id_kartice
 
-def dodaj_kartico(naslov_kartice, ime_datoteke):
+def dodaj_kartico(naslov_kartice, ime_datoteke, ime_PDF_datoteke):
     '''Doda kartico v bazo.'''
     #naslov_kartice, ime_datoteke - niza
     #vnašanje v tabelo konceptne_kartice
     sql = '''
-        INSERT INTO konceptna_kartica (naslov_kartice, ime_datoteke)
-        VALUES (?, ?)
+        INSERT INTO konceptna_kartica (naslov_kartice,
+                                         ime_datoteke,
+                                         ime_PDF_datoteke)
+        VALUES (?, ?, ?)
         '''
-    conn.execute(sql, [naslov_kartice, ime_datoteke])
+    conn.execute(sql, [naslov_kartice, ime_datoteke, ime_PDF_datoteke])
     conn.commit()
 ##############################################################################
 # kljucne besede

@@ -89,7 +89,7 @@
           <ul class="nav navbar-nav navbar-right">
 			<!--<li><a href="#">Jeziki</a></li>
             <li><a href="#">Ključne besede</a></li>-->
-            <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
+            <li><a href="www.google.si">Dodaj kartico</a></li><!--a href="/nalozi_novo_kartico"-->
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
 		    <form class="navbar-form navbar-right" action="" method="post">
@@ -130,13 +130,24 @@
               <h4>Najbolj priljubljen jezik</h4>
 			  <span class="text-muted">Največkrat iskani jezik ali orodje</span>
             </div>
+			
             <div class="col-xs-6 col-sm-3 placeholder">
-			  <a href="{{orodje[0]}}"><!--python vrne PDF random kartice-->
-			  <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika">
-              <h4>Klik na srečo</h4>
-              <span class="text-muted">Izberi naključno kartico</span>
+			  <a href="google.si"><!--"kartice/{{nakljucna}}"><!--nakljucna-python izbere ime PDF datoteke nakljucne kartice-->
+			    <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika">
+                 <h4>Klik na srečo</h4>
+                <span class="text-muted">Izberi naključno kartico</span>
 			  </a>
-            </div>
+			  
+<!-- 			  <!--snemanje kartice PDF
+					   <a href="kartice/{{kartica['dat']}}">
+   			             <div title="Prenesi PDF">
+			               <span class="glyphicon glyphicon-download-alt"></span>
+				           <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne
+					     </div>
+						 </a>-->
+
+			</div>
+			
           </div>
 
           <h2 class="sub-header" align="center">Vse kartice</h2>
@@ -186,7 +197,7 @@
 					 
 					 <!--snemanje kartice DOCX, AI, TEX, ...-->
 					 <td style="text-align: center; vertical-align: middle;">
-					   <a href="kartice/{{kartica['dat']}}">
+					   <a href="kartice/{{kartica['dat_orig']}}">
 					     <div title="Prenesi datoteko za urejanje kartice">
 					       <span class="glyphicon glyphicon-download-alt"></span>
 					       <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->

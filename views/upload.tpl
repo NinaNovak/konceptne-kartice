@@ -95,7 +95,7 @@
 	   <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite orodja z vejicami.">
 	   <input type="text" name="novo" class="novo_orodje" size="50" /><br>
   <h4>Ključne besede, po katerih se kartica lahko najde</h4>
-  <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite ključne besede z vejicami.">
+  <a data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite ključne besede z vejicami.">
   <input type="text" name="kljucne" size="50" />
   </a>
   <h5><i>Naložite PDF</i></h5>

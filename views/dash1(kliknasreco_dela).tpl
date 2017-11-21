@@ -112,8 +112,6 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-		  <h2 class="sub-header" align="center">Orientacija</h2>
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Slika">
@@ -122,8 +120,8 @@
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika">
+			  <h4>Oblak ključnih besed</h4>
 		      <span class="text-muted">Katere vsebine so v bazi?</span>
-              <h4>Oblak ključnih besed</h4>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika">
@@ -132,19 +130,11 @@
             </div>
 			
             <div class="col-xs-6 col-sm-3 placeholder">
-			  <a href="google.si"><!--"kartice/{{nakljucna}}"><!--nakljucna-python izbere ime PDF datoteke nakljucne kartice-->
+			  <a href="kartice/{{nakljucna}}"><!--nakljucna-python izbere ime PDF datoteke nakljucne kartice-->
 			    <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika">
                  <h4>Klik na srečo</h4>
                 <span class="text-muted">Izberi naključno kartico</span>
 			  </a>
-			  
-<!-- 			  <!--snemanje kartice PDF
-					   <a href="kartice/{{kartica['dat']}}">
-   			             <div title="Prenesi PDF">
-			               <span class="glyphicon glyphicon-download-alt"></span>
-				           <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne
-					     </div>
-						 </a>-->
 
 			</div>
 			

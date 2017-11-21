@@ -72,7 +72,7 @@ def dash():
 
     if id_jezika == '':
         #vrni vse konceptne (SKORAJ ISTA KODA 1/2)
-        return template('dash',
+        return template('dash1(kliknasreco_dela)',
                         orodja=modeli.nastej_orodja(),
                         kartice=modeli.vrni_tabelo_konceptnih(),
                         

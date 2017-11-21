@@ -383,7 +383,7 @@ def vrni_imena_datotek_vseh_kartic():
     vse_vrstice = list(conn.execute(sql))
     vsa_imena = []
     for kartica in vse_vrstice:
-        vsa_imena.append(vse_vrstice[0])
+        vsa_imena.append(kartica[0])
     return vsa_imena
 ##############################################################################
 # THE END

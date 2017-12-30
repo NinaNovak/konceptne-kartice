@@ -31,13 +31,60 @@ def vse_kljucne_od_1_kartice(id_kartice):
 ##############################################################################
 # RAZNO / V DELU
 ##############################################################################
+def oblak_kljucnih_besed():
+    #dobi vse ključne besede iz baze
+    
+    #jih uredi glede na število pojavitev - ali lahko to naredimo v modeli.py?
+
+    #JA:napiše jih kot tekst v vrsti
+    #posamezne ključne besede loči z " . "
+    #za vsakih 10 pojavitev več je font teksta besede za n pikslov večji -
+    #omejitev - največji font je npr 60 pikslov
+    #da ne bojo ključne besede v ful dolgi vrsti, širino vrstice omejiti na n znakov
+    
+    #NE:jih razporedi v krogu...naredi prej jpg?...
+    pass
+
 def izberi_nakljucno_kartico():
     '''Vrne ime datoteke naključno izbrane kartice'''
     seznam_imen_datotek = modeli.vrni_imena_datotek_vseh_kartic()
     ime_PDF_datoteke = random.choice(seznam_imen_datotek)
     return ime_PDF_datoteke
 
+#NAJBOLJ PRILJUBLJEN JEZIK = najveckrat iskano geslo
+#ta izbira vrne: 1) podatek: najveckrat iskano geslo in
+#                2) tabelo konceptnih, ki vsebujejo to geslo
+#                basically: rezultat search-a za najbolj iskano geslo + na
+#        vrhu izpis: Največkrat iskano geslo na tej spletni strani je: "xxxxx"
+#-----------------------------------------------------------------------------
+#Vsako iskano geslo, ki ga kdo vnese v search, zabeležim v tekstovno datoteko
+#najveckrat_iskano_geslo.txt. Če je geslo že v datoteki, povečam števec.
+def najbolj_iskano_geslo():
+    '''Prebere tekstovno datoteko najveckrat_iskano_geslo.txt,
+
+    ki se nahaja v trenutni mapi. Vrne najveckrat iskano geslo, to je niz
+    iz prve vrstice te datoteke.
+
+    '''
+    #če tekstovna datoteka najveckrat_iskano_geslo.txt ne obstaja
+    if ...:
+        return 'Na tej strani ni še nihče uporabil storitve \'Išči...\'.'
     
+    pass
+
+#OBLAK KLJUČNIH BESED = katere vsebine so v bazi?
+#ta izbira vrne: v oblak tag-ov oblikovane vse ključne besede, vključno z
+#                jeziki!, na tag-e lahko klikneš in dobiš rezultat search-a
+#                za ta tag. Glede na pogostost pojavitve tag-a je velikost
+#                pisave primerno večja.
+#-----------------------------------------------------------------------------
+#Iz baze s pomočjo ukaza "PREŠTEJ ŠTEVILO POJAVITEV" (funkcija XXXX iz
+#modeli.py) dobim po velikosti urejen seznam vseh ključnih besed in jezikov z
+#številom pojavitev.
+#-----------------------------------------------------------------------------
+#
+#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 
 ##############################################################################
@@ -45,8 +92,8 @@ def izberi_nakljucno_kartico():
 ##############################################################################
 @route('/index')
 def index():
-    naj_kartica = 'glas_ljudstva.png'
-    naj_jezik = 'najbolj_priljubljen_jezik.png'
+    naj_kartica = 'najbolj_priljubljen_jezik.png'
+    naj_jezik = 'tiralica.png'
     kljucne = 'oblak_kljucnih.png'
     kliknasreco = 'klik_na_sreco.png'
 
@@ -65,14 +112,14 @@ def dash():
     ##########################################################################
     id_jezika = request.query.id_jezika
 
-    naj_kartica = 'glas_ljudstva.png'
-    naj_jezik = 'najbolj_priljubljen_jezik.png'
+    naj_kartica = 'najbolj_priljubljen_jezik.png'
+    naj_jezik = 'tiralica.png'
     kljucne = 'oblak_kljucnih.png'
     kliknasreco = 'klik_na_sreco.png'
 
     if id_jezika == '':
         #vrni vse konceptne (SKORAJ ISTA KODA 1/2)
-        return template('dash1(kliknasreco_dela)',
+        return template('dash',
                         orodja=modeli.nastej_orodja(),
                         kartice=modeli.vrni_tabelo_konceptnih(),
                         
@@ -81,7 +128,10 @@ def dash():
                         kljucne=kljucne,
                         kliknasreco=kliknasreco,
                         
-                        nakljucna=izberi_nakljucno_kartico())
+                        nakljucna=izberi_nakljucno_kartico(),
+                        najbolj_iskano=najbolj_iskano_geslo(),
+
+                        katere="")
     else:
         #vrni samo konceptne za 1 izbrani jezik (SKORAJ ISTA KODA 2/2)
         return template('dash',
@@ -93,7 +143,9 @@ def dash():
                         kljucne=kljucne,
                         kliknasreco=kliknasreco,
 
-                        nakljucna=izberi_nakljucno_kartico())
+                        nakljucna=izberi_nakljucno_kartico(),
+
+                        katere=" za " + modeli.vrni_ime_orodja(id_jezika))
 
 @route('/ikone/<ikona>')
 def serve_icons(ikona):

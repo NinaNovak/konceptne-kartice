@@ -32,7 +32,7 @@
     <link type="text/css" href="ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link type="text/css" href="dashboard.css" rel="stylesheet">
+    <link type="text/css" href="/dashboard.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -89,7 +89,7 @@
           <ul class="nav navbar-nav navbar-right">
 			<!--<li><a href="#">Jeziki</a></li>
             <li><a href="#">Ključne besede</a></li>-->
-            <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
+            <li><a href="www.google.si">Dodaj kartico</a></li><!--a href="/nalozi_novo_kartico"-->
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
 		    <form class="navbar-form navbar-right" action="" method="post">
@@ -106,42 +106,41 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-		    <li class="active"><a href="#"> </a></li>
-			<li class="active"><a href="#"> </a></li>
-			<li class="active"><a href="#"> </a></li>
 		  % for orodje in orodja:
 		    <li><a href="dashboard?id_jezika={{orodje[0]}}">{{orodje[1]}}</a></li>
 	      % end
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
+		<h2 class="page-header">Novi obiskovalci lahko začnejo tukaj</h2>
           <div class="row placeholders">
+		  
             <div class="col-xs-6 col-sm-3 placeholder">
-			  <span class="text-muted">Največkrat ogledana kartica</span>
-              <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Slika">
+			  <a href="kartice/{{nakljucna}}"><!--nakljucna-python izbere ime PDF datoteke nakljucne kartice-->
+			    <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika4">
+                 <h4>Klik na srečo</h4>
+                <span class="text-muted">Izberi naključno kartico</span>
+			  </a>
+			</div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Slika1">
               <h4>Glas ljudstva</h4>
+			  <span class="text-muted">Največkrat ogledana kartica</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-			  <span class="text-muted">Katere vsebine so v bazi?</span>
-              <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika">
-              <h4>Oblak ključnih besed</h4>
-              
+              <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika2">
+			  <h4>Oblak ključnih besed</h4>
+		      <span class="text-muted">Katere vsebine so v bazi?</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <span class="text-muted">Največkrat iskani jezik ali orodje</span>
-              <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika">
-              <h4>Najbolj priljubljen jezik</h4>
-
+              <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika3">
+              <h4>Tiralica</h4>
+			  <span class="text-muted">Največkrat iskani jezik ali orodje</span>
             </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <span class="text-muted">Izberi naključno kartico</span>
-			  <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika">
-              <h4>Klik na srečo</h4>
-            </div>
+			
           </div>
 
-          <h2 class="sub-header">Kartice</h2>
+          <h1 class="page-header">Baza kartic{{katere}}</h1>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -156,56 +155,56 @@
               </thead>
               <tbody>
 					 % for kartica in kartice:
-					 <tr><td>
+					 <tr>
 					 
-					 <a href="/kartice/{{kartica['dat']}}">
-					 <b>
-					 <div title="{{kartica['opis']}}">
-					 {{kartica['naslov']}}
-					 </div>
-					 </b>
-					 </a>
-					 </td>
 					 <td>
-					 <i>{{kartica['orodja']}}</i>
+					   <a href="kartice/{{kartica['dat']}}">
+					     <b>
+					       <div title="{{kartica['opis']}}">
+					         {{kartica['naslov']}}
+					       </div>
+					     </b>
+					   </a>
 					 </td>
-					 <td>
-					 {{kartica['kljucne']}}
-					 </td>
-					 <td style="text-align: center; vertical-align: middle;">
 					 
+					 <td>
+					   <i>{{kartica['orodja']}}</i>
+					 </td>
+					 
+					 <td>
+					   {{kartica['kljucne']}}
+					 </td>
 					 
 					 <!--snemanje kartice PDF-->
-					 <a href="/kartice/{{kartica['dat']}}">
-					 <div title="Prenesi PDF">
-					 <span class="glyphicon glyphicon-download-alt"></span>
-					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
-					 </div>
-					 </a>
-					 <!---->
-					 </td>
 					 <td style="text-align: center; vertical-align: middle;">
-					 
+					   <a href="kartice/{{kartica['dat']}}">
+   			             <div title="Prenesi PDF">
+			               <span class="glyphicon glyphicon-download-alt"></span>
+				           <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
+					     </div>
+					   </a>
+					 </td>
 					 
 					 <!--snemanje kartice DOCX, AI, TEX, ...-->
-					 <a href="/kartice/{{kartica['dat']}}">
-					 <div title="Prenesi datoteko za urejanje kartice">
-					 <span class="glyphicon glyphicon-download-alt"></span>
-					 <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
-					 </div>
-					 </a>
-					 <!---->
+					 <td style="text-align: center; vertical-align: middle;">
+					   <a href="kartice/{{kartica['dat_orig']}}">
+					     <div title="Prenesi datoteko za urejanje kartice">
+					       <span class="glyphicon glyphicon-download-alt"></span>
+					       <!--alt="HTML tutorial" za Edge, če CSS dela, ikonce za DL in popravi pa ne-->
+					     </div>
+					   </a>
 					 </td>
 					 
 					 <!--spreminjanje obstojece kartice-->
 					 <td style="text-align: center; vertical-align: middle;">
-					 <a href="/uredi_obstojeco?id_kartice={{kartica[0]}}">
-					 <div title="Posodobi kartico">
-					 <span class="glyphicon glyphicon-cog"></span>
-					 </div>
-					 </a>
-					 <!---->
-					 </td></tr>
+					   <a href="/uredi_obstojeco?id_kartice={{kartica[0]}}">
+					      <div title="Posodobi kartico">
+					        <span class="glyphicon glyphicon-cog"></span>
+					      </div>
+					   </a>
+					 </td>
+					 
+					 </tr>
 					 % end
               </tbody>
             </table>

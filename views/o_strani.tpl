@@ -20,10 +20,13 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="ie10-viewport-bug-workaround.js"></script>	
 	
-    <title>O strani</title>
+    <title>Dodaj kartico</title>
 
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
     <!-- Bootstrap core CSS -->
-    <link type="text/css" href="bootstrap.min.css" rel="stylesheet">
+    <!--<link type="text/css" href="bootstrap.min.css" rel="stylesheet">-->
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link type="text/css" href="ie10-viewport-bug-workaround.css" rel="stylesheet">
@@ -63,7 +66,6 @@
             <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
-		    
         </div>
       </div>
     </nav>
@@ -77,7 +79,8 @@
 	      % end
           </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
         <div align="center">
 		<h3>O strani</h3>
 		<br>
@@ -88,9 +91,34 @@
 		Konceptne kartice so odličen pripomoček pri učenju, tako za usvajanje nove snovi<br>
 		kot pri ponavljanju, dobro pa se izkažejo tudi pri preverjanju znanja tipa kviz.
         </div>
-        </div>
+        
+	  </div>
       </div>
     </div>
-	  
-  </body>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/check_novo_orodje.js"></script>
+	<!-- Spodaj: check_novo_orodje.js, ker samo z zgornjim src-jem ne deluje ... -->
+	<script type="text/javascript">
+    	$(".novo_orodje").on("keyup", function(e){
+            if(this.value!=""){
+                $(".oznaci").prop("checked", "checked");
+            }else{
+                $(".oznaci").prop("checked", ""); 
+            }
+        });
+    </script>
+	<!-- Spodaj: za pop-over okence -->
+	<script>
+    $(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+    });
+    </script>
+
+
+
+	</body>
 </html>

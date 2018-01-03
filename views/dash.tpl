@@ -89,7 +89,7 @@
           <ul class="nav navbar-nav navbar-right">
 			<!--<li><a href="#">Jeziki</a></li>
             <li><a href="#">Ključne besede</a></li>-->
-            <li><a href="www.google.si">Dodaj kartico</a></li><!--a href="/nalozi_novo_kartico"-->
+            <li><a href="/nalozi_novo_kartico">Dodaj kartico</a></li>
 			<li><a href="/o_strani">O strani</a></li>
           </ul>
 		    <form class="navbar-form navbar-right" action="" method="post">
@@ -123,10 +123,12 @@
 			  </a>
 			</div>
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Slika1">
-              <h4>Glas ljudstva</h4>
-			  <span class="text-muted">Največkrat ogledana kartica</span>
-            </div>
+			  <a href="kartice/{{max_ogledov}}">
+                <img src="ikone/{{naj_kartica}}" width="100" height="100" class="img-responsive" alt="Slika1">
+                <h4>Glas ljudstva</h4>
+			    <span class="text-muted">Največkrat ogledana kartica</span>
+              </a>
+			</div>
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika2">
 			  <h4>Oblak ključnih besed</h4>

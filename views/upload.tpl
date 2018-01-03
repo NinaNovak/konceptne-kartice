@@ -83,34 +83,38 @@
 
 <form action="/nalozi_novo_kartico" method="post" enctype="multipart/form-data">
   <h2>Nalaganje nove kartice</h2>
-  Naslov kartice: <input type="text" name="ime_kartice" size="50" /><br><br>
+  
+  <h4>Naslov kartice<h4>
+  <input type="text" name="ime_kartice" size="50" />
   
   <h4>Orodje / programski jezik, ki ga uči kartica</h4>
-  Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolnite polje 'Drugo'.<br><br><!-- Kaj če 2 novi orodji? -->
+  Možno je obkljukati več orodij. Če orodja ni med naštetimi, izpolnite polje 'Drugo'.
+  <br>
+  <!-- Kaj če 2 novi orodji? -->
     %for orod in orodja:
        <input type="checkbox" name="orodje" value={{orod[0]}}>{{orod[1]}}
     %end
 	   <!-- Dodatni checkbox za novo orodje -->
-	   <br><input type="checkbox" class="oznaci">Drugo: 
-	   <a href="#" data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite orodja z vejicami.">
-	   <input type="text" name="novo" class="novo_orodje" size="50" /><br>
+	   <br>
+	   <input type="checkbox" class="oznaci">
+	   Drugo: 
+	   <input type="text" name="novo" title="Prosimo, ločite orodja z vejicami." class="novo_orodje" size="50" />
+  
   <h4>Ključne besede, po katerih se kartica lahko najde</h4>
-  <a data-toggle="popover" data-trigger="hover" data-content="Prosimo, ločite ključne besede z vejicami.">
-  <input type="text" name="kljucne" size="50" />
-  </a>
-  <h5><i>Naložite PDF</i></h5>
+  <input type="text" name="kljucne" title="Prosimo, ločite ključne besede z vejicami." size="50" />
+  
+  <h4>Datoteka PDF</h4>
   <input type="file" name="nalozi_pdf" value="Naloži PDF" accept="application/pdf" />
-  <h5><i>Naložite datoteko za popravljanje kartice (DOCX/DOC/AI/TEX/...)</i></h5>
+  
+  <h4>Datoteka za popravljanje (DOCX/DOC/AI/TEX/...)</h4>
   <input type="file" name="nalozi_docx" value="Naloži DOCX" />
-  <br>
+  
+  <h4>Povzetek vsebine kartice (do 100 znakov)</h4>
+  <textarea name="opis" cols="50" rows="2"></textarea>
+  
   <br>
   <input type="submit" value="Vnesite kartico v bazo" />
 </form>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
         </div>
       </div>
     </div>

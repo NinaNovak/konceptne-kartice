@@ -199,6 +199,28 @@ def vrni_eno_kartico(idkartice):
 ##############################################################################
 # konceptne kartice - razno
 ##############################################################################
+def ogled(ime_datoteke):
+    """Poveča število ogledov kartice za 1."""
+    sql = '''
+        UPDATE konceptna_kartica
+        SET ogledov = ogledov + 1
+        WHERE konceptna_kartica.ime_PDF_datoteke = ?
+        '''
+    conn.execute(sql, [ime_datoteke])
+    conn.commit()
+def max_ogledov():
+    '''Vrne ime PDF datoteke največkrat ogledane kartice.'''
+    sql = '''
+        SELECT ime_PDF_datoteke
+        FROM konceptna_kartica
+        WHERE ogledov = (
+            SELECT MAX(ogledov)
+            FROM konceptna_kartica
+            )
+        '''
+    ime_PDF_datoteke = conn.execute(sql).fetchone()
+    ime_PDF_datoteke = ime_PDF_datoteke[0]
+    return ime_PDF_datoteke
 def id_zadnje_dodane_kartice():
     #Za tabele v zvezi s ključnimi besedami in programskimi orodji
     #potrebujemo id ravnokar vnešene kartice. Ker je bil ta id

@@ -130,6 +130,7 @@ def dash():
                         
                         nakljucna=izberi_nakljucno_kartico(),
                         najbolj_iskano=najbolj_iskano_geslo(),
+                        max_ogledov=modeli.max_ogledov(),
 
                         katere="")
     else:
@@ -144,6 +145,8 @@ def dash():
                         kliknasreco=kliknasreco,
 
                         nakljucna=izberi_nakljucno_kartico(),
+                        najbolj_iskano=najbolj_iskano_geslo(),
+                        max_ogledov=modeli.max_ogledov(),
 
                         katere=" za " + modeli.vrni_ime_orodja(id_jezika))
 
@@ -156,6 +159,8 @@ def serve_icons(ikona):
 ##############################################################################
 @route('/kartice/<ime_datoteke>')
 def snemanje_kartice(ime_datoteke):
+    if (ime_datoteke[-4:] == '.pdf' or ime_datoteke[-4:] == '.PDF'):
+        modeli.ogled(ime_datoteke) #poveča število ogledov kartice za 1
     return static_file(ime_datoteke, root='./kartice')
 ##############################################################################
 # ISKALNIK PO ZBIRKI
@@ -361,7 +366,8 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
     ##########################################################################
     #1. shrani datoteko na disk
     ##########################################################################
-    ##PDF
+
+    ##PDF  
     nalozena_datoteka = request.files.get('nalozi_pdf')
     name, ext = os.path.splitext(nalozena_datoteka.filename)
     if ext != '.pdf':
@@ -371,25 +377,28 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
         os.makedirs(save_path)
     file_path = "{path}/{file}".format(path=save_path,
                                        file=nalozena_datoteka.filename)
-    ##DOCX oziroma katerakoli datoteka za popravljanje (AI, TEX, ...)
-    nalozena_datoteka_docx = request.files.get('nalozi_docx')
-    save_path = os.getcwd() + '/kartice'
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    file_path = "{path}/{file}".format(path=save_path,
-                                       file=nalozena_datoteka_docx.filename)
-    ##
-    
-    #ujemi napako IOError('File exists.') oziroma OSError: File exists.
-    #vrni 'Datoteka s tem imenom že obstaja. Ali jo želite zamenjati?'
-
-
-
     if not os.path.exists(file_path):
         nalozena_datoteka.save(file_path)
     else:
         return 'Datoteka s tem imenom že obstaja.'
+    
+    ##DOCX oziroma katerakoli datoteka za popravljanje (AI, TEX, ...)
+    nalozena_datoteka_docx = request.files.get('nalozi_docx')
+    save_path_docx = os.getcwd() + '/kartice'
+    if not os.path.exists(save_path_docx):
+        os.makedirs(save_path_docx)
+    file_path_docx = "{path}/{file}".format(path=save_path_docx,
+                                            file=nalozena_datoteka_docx.filename)
+    if not os.path.exists(file_path_docx):
+        nalozena_datoteka.save(file_path_docx)
+    else:
+        return 'Datoteka s tem imenom že obstaja.'
+
+
     #return "Datoteka je bila uspešno shranjena v mapo '{0}'.".format(save_path)
+
+    #ujemi napako IOError('File exists.') oziroma OSError: File exists.
+    #vrni 'Datoteka s tem imenom že obstaja. Ali jo želite zamenjati?'
 
     ##########################################################################
     #2. dodaj kartico v bazo
@@ -451,7 +460,7 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
                                                            [id_orodja])
             
     ##########################################################################
-    #5. pripravimo orodja in ključne besede za izpis uporabniku
+    #5. pripravimo besedilo za izpis uporabniku
     ##########################################################################
     niz_orodje = ''
     #sez_ID_orodij hrani id-je izbranih orodij, mi potrebujemo imena

@@ -92,7 +92,6 @@
   
   <h4>Naslov</h4>
   Obstoječi naslov kartice: <b><font color="CornflowerBlue ">{{kartice['naslov']}}</font></b><br>
-  <a href="#" data-toggle="popover" data-trigger="hover" data-content="Predlagan slog poimenovanja kartice je Ime jezika: Naslov kartice.">
   Novi naslov kartice: <input type="text" name="ime_kartice" size="50" />
   </a>
   

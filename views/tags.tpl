@@ -20,7 +20,7 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="ie10-viewport-bug-workaround.js"></script>	
 	
-    <title>Dodaj kartico</title>
+    <title>Oblak ključnih besed (tag cloud)</title>
 
     <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -81,24 +81,13 @@
         </div>
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-        <div align="center">
-		<h3>O strani</h3>
-		<br>
-		Ta stran je arhiv konceptnih kartic, ki jih lahko natisnemo in uporabljamo kot<br>
-		učni pripomoček. Stran omogoča dodajanje in popravljanje konceptnih kartic.
-		<br>
-		<br>
-		Konceptne kartice so odličen pripomoček pri učenju, tako za usvajanje nove snovi<br>
-		kot pri ponavljanju, dobro pa se izkažejo tudi pri preverjanju znanja tipa kviz.
-        </div>
-		
-		<h1 class="page-header">Baza kartic{{katere}}</h1>
+		<h1 class="page-header">Oznake (tags)</h1>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
                 <tr>
 				  <th>Oznaka</th>
-                  <th>pogostost</th>
+                  <th>Pogostost</th>
                 </tr>
               </thead>
               <tbody>
@@ -106,12 +95,12 @@
 					 <tr>
 					 
 					 <td>
-					   {{oznake['tag']}}
+					   {{oznaka['tag']}}
 					 </td>
 					 
 					 <td>
-					   {{oznake['pogostost']}}
-					 </td>
+					   {{oznaka['pogostost']}}
+					 </td
 					 
 					 </tr>
 					 % end

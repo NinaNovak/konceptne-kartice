@@ -130,11 +130,13 @@
               </a>
 			</div>
             <div class="col-xs-6 col-sm-3 placeholder">
+			  <a href="oblak">
               <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika2">
 			  <h4>Oblak ključnih besed</h4>
 		      <span class="text-muted">Katere vsebine so v bazi?</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
+			  <a href="tiralica">
               <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika3">
               <h4>Tiralica</h4>
 			  <span class="text-muted">Največkrat iskani jezik ali orodje</span>

@@ -52,27 +52,6 @@ def tabela_v_seznam():
         i+=1
     return sez
 
-def oblak_kljucnih_besed():
-    """Ključne besede so napisane kot tekst. Urejene so po abecedi. Ločene so
-    s presledki.
-
-    Velikost teksta je odvisna od pogostosti uporabe ključne besede. 1-krat
-    uporabljena ključna beseda ima velikost 12, 2-krat uporabljena ključna
-    beseda ima velikost 13, itd. Največa velikost teksta je 60.
-
-    """
-    #Dobi tabelo vseh ključnih besed in števila njihovih pojavitev.
-    oblak = modeli.oblak()
-    sez = []#tabelo oblak pretvorimo v seznam seznamov
-    for oblak[0], oblak[1] in oblak:
-        bp = [oblak[0], oblak[1]]#=[beseda, pogostost]
-        sez.append(bp)
-    print(sez)
-        
-
-
-    
-    pass
 
 
 
@@ -100,6 +79,31 @@ def najbolj_iskano_geslo():
 ##############################################################################
 # ZBRIŠI
 ##############################################################################
+
+##def oblak_kljucnih_besed():
+##    """Ključne besede so napisane kot tekst. Urejene so po abecedi. Ločene so
+##    s presledki.
+##
+##    Velikost teksta je odvisna od pogostosti uporabe ključne besede. 1-krat
+##    uporabljena ključna beseda ima velikost 12, 2-krat uporabljena ključna
+##    beseda ima velikost 13, itd. Največa velikost teksta je 60.
+##
+##    """
+##    #Dobi tabelo vseh ključnih besed in števila njihovih pojavitev.
+##    oblak = modeli.oblak()
+##    sez = []#tabelo oblak pretvorimo v seznam seznamov
+##    for oblak[0], oblak[1] in oblak:
+##        bp = [oblak[0], oblak[1]]#=[beseda, pogostost]
+##        sez.append(bp)
+##    print(sez)
+##        
+##
+##
+##    
+##    pass
+
+
+
 ##############################################################################
 # PRVA STRAN
 ##############################################################################
@@ -131,7 +135,6 @@ def dash():
                         nakljucna=izberi_nakljucno_kartico(),
                         najbolj_iskano=najbolj_iskano_geslo(),
                         max_ogledov=modeli.max_ogledov(),
-                        oblak=oblak_kljucnih_besed(),
 
                         katere="")#ali tabela za vse jezike ali samo za enega
     else:
@@ -150,7 +153,6 @@ def dash():
                         nakljucna=izberi_nakljucno_kartico(),
                         najbolj_iskano=najbolj_iskano_geslo(),
                         max_ogledov=modeli.max_ogledov(),
-                        oblak=oblak_kljucnih_besed(),
 
                         #ali tabela za vse jezike ali samo za enega:
                         katere=" za " + modeli.vrni_ime_orodja(id_jezika))
@@ -171,13 +173,19 @@ def snemanje_kartice(ime_datoteke):
 
 
 ##############################################################################
-# TAG CLOUD
+# TAG CLOUD in NAJBOLJ ISKANI JEZIK-ORODJE
 ##############################################################################
 @route('/oblak')
 def oblak():
     return template('tags',
                     orodja=modeli.nastej_orodja(),#za levi menu
                     oznake=modeli.oblak()#tabela tagov
+                    )
+
+@route('/tiralica')
+def tiralica():
+    return template('tiralica',
+                    orodja=modeli.nastej_orodja()#za levi menu
                     )
 ##############################################################################
 # ISKALNIK PO ZBIRKI

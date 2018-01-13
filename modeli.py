@@ -17,31 +17,21 @@ def vrni_tabelo_konceptnih():
     
     sql = '''SELECT konceptna_kartica.id AS id_konceptne,
        naslov_kartice AS naslov,
-       replace(group_concat(distinct kljucna_beseda.beseda), ",", ", ") AS kljucne,
-       replace(group_concat(distinct programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja,
+       [replace](group_concat(DISTINCT kljucna_beseda.beseda), ",", ", ") AS kljucne,
+       [replace](group_concat(DISTINCT programsko_orodje_ali_jezik.ime_orodja), ",", ", ") AS orodja,
        ime_PDF_datoteke AS dat,
        ime_datoteke AS dat_orig,
        kratek_opis AS opis
-       FROM konceptna_kartica
+  FROM konceptna_kartica
        JOIN
-       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
-       ON
-       konceptna_kartica.id
-       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
+       povezovalna_tabela_konceptna_kartica_x_kljucna_beseda ON konceptna_kartica.id = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_konceptne_kartice
        JOIN
-       kljucna_beseda
-       ON
-       kljucna_beseda.id
-       = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+       kljucna_beseda ON kljucna_beseda.id = povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
        JOIN
-       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id
-       = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
+       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik ON konceptna_kartica.id = povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_konceptne_kartice
        JOIN
-       programsko_orodje_ali_jezik
-       ON
-       povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika
-       = programsko_orodje_ali_jezik.id
-       GROUP BY konceptna_kartica.id
+       programsko_orodje_ali_jezik ON povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik.id_programskega_orodja_ali_jezika = programsko_orodje_ali_jezik.id
+ GROUP BY konceptna_kartica.id
           '''
     return list(conn.execute(sql))
 ##############################################################################

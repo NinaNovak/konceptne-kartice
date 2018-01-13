@@ -29,29 +29,54 @@ def vse_kljucne_od_1_kartice(id_kartice):
     kljucne = modeli.vrni_sez_kljucnih_za_eno_kartico(id_kartice)
     return kljucne
 ##############################################################################
-# RAZNO / V DELU
+# FUNKCIJE ZA INTERAKTIVNE BLIŽNJICE
+# - klik na srečo - glas ljudstva - oblak ključnih besed - tiralica -
 ##############################################################################
-def oblak_kljucnih_besed():
-    #dobi vse ključne besede iz baze
-    
-    #jih uredi glede na število pojavitev - ali lahko to naredimo v modeli.py?
-
-    #JA:napiše jih kot tekst v vrsti
-    #posamezne ključne besede loči z " . "
-    #za vsakih 10 pojavitev več je font teksta besede za n pikslov večji -
-    #omejitev - največji font je npr 60 pikslov
-    #da ne bojo ključne besede v ful dolgi vrsti, širino vrstice omejiti na n znakov
-    
-    #NE:jih razporedi v krogu...naredi prej jpg?...
-    pass
-
 def izberi_nakljucno_kartico():
     '''Vrne ime datoteke naključno izbrane kartice'''
     seznam_imen_datotek = modeli.vrni_imena_datotek_vseh_kartic()
     ime_PDF_datoteke = random.choice(seznam_imen_datotek)
     return ime_PDF_datoteke
 
-#NAJBOLJ PRILJUBLJEN JEZIK = najveckrat iskano geslo
+def tabela_v_seznam():
+    """Tabelo ključnih besed in števila njihovih pojavitev spremeni v seznam
+        seznamov-dvojic.
+
+    """
+    #Dobi tabelo vseh ključnih besed in števila njihovih pojavitev.
+    oblak = modeli.oblak()
+    i = 0
+    sez=[]
+    for vrstica in oblak:
+        sez.append([oblak[i][0], oblak[i][1]])
+        i+=1
+    return sez
+
+def oblak_kljucnih_besed():
+    """Ključne besede so napisane kot tekst. Urejene so po abecedi. Ločene so
+    s presledki.
+
+    Velikost teksta je odvisna od pogostosti uporabe ključne besede. 1-krat
+    uporabljena ključna beseda ima velikost 12, 2-krat uporabljena ključna
+    beseda ima velikost 13, itd. Največa velikost teksta je 60.
+
+    """
+    #Dobi tabelo vseh ključnih besed in števila njihovih pojavitev.
+    oblak = modeli.oblak()
+    sez = []#tabelo oblak pretvorimo v seznam seznamov
+    for oblak[0], oblak[1] in oblak:
+        bp = [oblak[0], oblak[1]]#=[beseda, pogostost]
+        sez.append(bp)
+    print(sez)
+        
+
+
+    
+    pass
+
+
+
+#TIRALICA = najveckrat iskano geslo
 #ta izbira vrne: 1) podatek: najveckrat iskano geslo in
 #                2) tabelo konceptnih, ki vsebujejo to geslo
 #                basically: rezultat search-a za najbolj iskano geslo + na
@@ -72,36 +97,9 @@ def najbolj_iskano_geslo():
     
     pass
 
-#OBLAK KLJUČNIH BESED = katere vsebine so v bazi?
-#ta izbira vrne: v oblak tag-ov oblikovane vse ključne besede, vključno z
-#                jeziki!, na tag-e lahko klikneš in dobiš rezultat search-a
-#                za ta tag. Glede na pogostost pojavitve tag-a je velikost
-#                pisave primerno večja.
-#-----------------------------------------------------------------------------
-#Iz baze s pomočjo ukaza "PREŠTEJ ŠTEVILO POJAVITEV" (funkcija XXXX iz
-#modeli.py) dobim po velikosti urejen seznam vseh ključnih besed in jezikov z
-#številom pojavitev.
-#-----------------------------------------------------------------------------
-#
-#-----------------------------------------------------------------------------
-#-----------------------------------------------------------------------------
-
-
 ##############################################################################
 # ZBRIŠI
 ##############################################################################
-@route('/index')
-def index():
-    naj_kartica = 'najbolj_priljubljen_jezik.png'
-    naj_jezik = 'tiralica.png'
-    kljucne = 'oblak_kljucnih.png'
-    kliknasreco = 'klik_na_sreco.png'
-
-    return template('index',
-                        naj_kartica=naj_kartica,
-                        naj_jezik=naj_jezik,
-                        kljucne=kljucne,
-                        kliknasreco=kliknasreco)
 ##############################################################################
 # PRVA STRAN
 ##############################################################################
@@ -120,34 +118,41 @@ def dash():
     if id_jezika == '':
         #vrni vse konceptne (SKORAJ ISTA KODA 1/2)
         return template('dash',
-                        orodja=modeli.nastej_orodja(),
-                        kartice=modeli.vrni_tabelo_konceptnih(),
+                        orodja=modeli.nastej_orodja(),#za levi menu
+                        kartice=modeli.vrni_tabelo_konceptnih(),#baza kartic
                         
+                        #ikone:
                         naj_kartica=naj_kartica,
                         naj_jezik=naj_jezik,
                         kljucne=kljucne,
                         kliknasreco=kliknasreco,
                         
+                        #interaktivne bližnjice
                         nakljucna=izberi_nakljucno_kartico(),
                         najbolj_iskano=najbolj_iskano_geslo(),
                         max_ogledov=modeli.max_ogledov(),
+                        oblak=oblak_kljucnih_besed(),
 
-                        katere="")
+                        katere="")#ali tabela za vse jezike ali samo za enega
     else:
         #vrni samo konceptne za 1 izbrani jezik (SKORAJ ISTA KODA 2/2)
         return template('dash',
-                        orodja=modeli.nastej_orodja(),
-                        kartice=modeli.vrni_konceptne_po_jezikih(id_jezika),
+                        orodja=modeli.nastej_orodja(),#za levi menu
+                        kartice=modeli.vrni_tabelo_konceptnih(),#baza kartic
                         
+                        #ikone:
                         naj_kartica=naj_kartica,
                         naj_jezik=naj_jezik,
                         kljucne=kljucne,
                         kliknasreco=kliknasreco,
-
+                        
+                        #interaktivne bližnjice
                         nakljucna=izberi_nakljucno_kartico(),
                         najbolj_iskano=najbolj_iskano_geslo(),
                         max_ogledov=modeli.max_ogledov(),
+                        oblak=oblak_kljucnih_besed(),
 
+                        #ali tabela za vse jezike ali samo za enega:
                         katere=" za " + modeli.vrni_ime_orodja(id_jezika))
 
 @route('/ikone/<ikona>')
@@ -162,6 +167,18 @@ def snemanje_kartice(ime_datoteke):
     if (ime_datoteke[-4:] == '.pdf' or ime_datoteke[-4:] == '.PDF'):
         modeli.ogled(ime_datoteke) #poveča število ogledov kartice za 1
     return static_file(ime_datoteke, root='./kartice')
+
+
+
+##############################################################################
+# TAG CLOUD
+##############################################################################
+@route('/oblak')
+def oblak():
+    return template('tags',
+                    orodja=modeli.nastej_orodja(),#za levi menu
+                    oznake=modeli.oblak()#tabela tagov
+                    )
 ##############################################################################
 # ISKALNIK PO ZBIRKI
 ##############################################################################

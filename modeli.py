@@ -197,7 +197,7 @@ def vrni_eno_kartico(idkartice):
     kartica = conn.execute(sql, [idkartice]).fetchone()
     return kartica
 ##############################################################################
-# konceptne kartice - razno
+# interaktivne bližnjice
 ##############################################################################
 def ogled(ime_datoteke):
     """Poveča število ogledov kartice za 1."""
@@ -221,6 +221,24 @@ def max_ogledov():
     ime_PDF_datoteke = conn.execute(sql).fetchone()
     ime_PDF_datoteke = ime_PDF_datoteke[0]
     return ime_PDF_datoteke
+
+def oblak():
+    '''...'''
+    sql = '''SELECT kljucna_beseda.beseda AS tag,
+            COUNT(id_kljucne_besede) AS pogostost
+        FROM kljucna_beseda
+           JOIN
+           povezovalna_tabela_konceptna_kartica_x_kljucna_beseda
+           ON povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede =
+           kljucna_beseda.id
+        GROUP BY povezovalna_tabela_konceptna_kartica_x_kljucna_beseda.id_kljucne_besede
+        ORDER BY kljucna_beseda.beseda
+
+        '''
+    return list(conn.execute(sql))
+##############################################################################
+# konceptne kartice - razno
+##############################################################################
 def id_zadnje_dodane_kartice():
     #Za tabele v zvezi s ključnimi besedami in programskimi orodji
     #potrebujemo id ravnokar vnešene kartice. Ker je bil ta id

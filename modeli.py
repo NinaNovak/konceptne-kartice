@@ -215,7 +215,7 @@ def max_ogledov():
 def oblak():
     '''...'''
     sql = '''SELECT kljucna_beseda.beseda AS tag,
-            COUNT(id_kljucne_besede) AS pogostost
+            COUNT(id_kljucne_besede) + 11 AS pogostost
         FROM kljucna_beseda
            JOIN
            povezovalna_tabela_konceptna_kartica_x_kljucna_beseda

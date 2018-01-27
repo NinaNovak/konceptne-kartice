@@ -1,0 +1,17 @@
+views - mapa s TPL (HTML) datotekami
+
+kartice - mapa s karticami (tako PDF kot originali DOCX, AI idr.), ki so shranjene v bazi konceptnekartice.db (v bazi so shranjena samo imena datotek kartic)
+
+ikone - mapa z ikonami za interaktivne bližnjice na domaèi strani dash.TPL
+
+screenshots - posnetki spletne aplikacije v uporabi
+
+bottle.py - neodvisna pythonova knjižnica za mikro spletno ogrodje
+
+kartice.py - spletni vmesnik
+
+modeli.py - SQL poizvedbe
+
+konceptnekartice.db - baza > glej ER diagram
+
+najveckrat_iskano_geslo.txt - v to datoteko se zabeleži vsak vnos v iskalnik spletne strani ter kolikokrat je bilo posamezno geslo iskano (te podatke potrebuje interaktivna bližnjica 'tiralica')

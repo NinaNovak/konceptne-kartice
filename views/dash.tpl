@@ -139,7 +139,7 @@
 			  <a href="tiralica">
               <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika3">
               <h4>Tiralica</h4>
-			  <span class="text-muted">Največkrat iskani jezik ali orodje</span>
+			  <span class="text-muted">Največkrat iskano geslo</span>
             </div>
 			
           </div>

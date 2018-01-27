@@ -52,58 +52,9 @@ def tabela_v_seznam():
         i+=1
     return sez
 
-
-
-
-#TIRALICA = najveckrat iskano geslo
-#ta izbira vrne: 1) podatek: najveckrat iskano geslo in
-#                2) tabelo konceptnih, ki vsebujejo to geslo
-#                basically: rezultat search-a za najbolj iskano geslo + na
-#        vrhu izpis: Največkrat iskano geslo na tej spletni strani je: "xxxxx"
-#-----------------------------------------------------------------------------
-#Vsako iskano geslo, ki ga kdo vnese v search, zabeležim v tekstovno datoteko
-#najveckrat_iskano_geslo.txt. Če je geslo že v datoteki, povečam števec.
-def najbolj_iskano_geslo():
-    '''Prebere tekstovno datoteko najveckrat_iskano_geslo.txt,
-
-    ki se nahaja v trenutni mapi. Vrne najveckrat iskano geslo, to je niz
-    iz prve vrstice te datoteke.
-
-    '''
-    #če tekstovna datoteka najveckrat_iskano_geslo.txt ne obstaja
-    if ...:
-        return 'Na tej strani ni še nihče uporabil storitve \'Išči...\'.'
-    
-    pass
-
 ##############################################################################
 # ZBRIŠI
 ##############################################################################
-
-##def oblak_kljucnih_besed():
-##    """Ključne besede so napisane kot tekst. Urejene so po abecedi. Ločene so
-##    s presledki.
-##
-##    Velikost teksta je odvisna od pogostosti uporabe ključne besede. 1-krat
-##    uporabljena ključna beseda ima velikost 12, 2-krat uporabljena ključna
-##    beseda ima velikost 13, itd. Največa velikost teksta je 60.
-##
-##    """
-##    #Dobi tabelo vseh ključnih besed in števila njihovih pojavitev.
-##    oblak = modeli.oblak()
-##    sez = []#tabelo oblak pretvorimo v seznam seznamov
-##    for oblak[0], oblak[1] in oblak:
-##        bp = [oblak[0], oblak[1]]#=[beseda, pogostost]
-##        sez.append(bp)
-##    print(sez)
-##        
-##
-##
-##    
-##    pass
-
-
-
 ##############################################################################
 # PRVA STRAN
 ##############################################################################
@@ -179,20 +130,91 @@ def snemanje_kartice(ime_datoteke):
 def oblak():
     return template('tags',
                     orodja=modeli.nastej_orodja(),#za levi menu
-                    oznake=modeli.oblak()#tabela tagov
+                    oznake=modeli.oblak()
                     )
 
+#TIRALICA = najveckrat iskano geslo
+#ta izbira vrne: 1) podatek: najveckrat iskano geslo in
+#                2) tabelo konceptnih, ki vsebujejo to geslo
+#                basically: rezultat search-a za najbolj iskano geslo + na
+#        vrhu izpis: Največkrat iskano geslo na tej spletni strani je: "xxxxx"
+#-----------------------------------------------------------------------------
+#Vsako iskano geslo, ki ga kdo vnese v search, zabeležim v tekstovno datoteko
+#najveckrat_iskano_geslo.txt. Če je geslo že v datoteki, povečam števec.
 @route('/tiralica')
 def tiralica():
+    maks = 2#največje število iskanj
+            #začetna vrednost maks je 2, ker nas zanimajo samo besede, ki so bile iskane vsaj 2-krat
+    geslo = []#maks-krat iskanih je bilo lahko več gesel
+    
+    dat = open('najveckrat_iskano_geslo.txt', 'r')
+    a = dat.readlines()#seznam vrstic
+    #do tuki dela
+    #dat.close()
+    
+    if len(a) == 0:#če je datoteka prazna?
+        rezultat="Nobeno geslo ni bilo iskano več kot enkrat."
+        return template('tiralica',
+                            orodja=modeli.nastej_orodja(),#za levi menu
+                            rezultat=rezultat
+                            )
+    for i in range(len(a) - 1):#zadnja vrstica ne vsebuje \n
+        a[i] = a[i][:-1]#[:-1] odreže \n
+        #if i == -1:#moramo shraniti a[-2], ker drugače ob preverjanju zadnjega elementa ni dostopen?
+            
+        try:
+            a[i] = int(a[i])
+            st_iskanj=int(a[i])
+            if st_iskanj == maks:
+                geslo = geslo.append(a[i - 1])#vsaka druga vrstica je število iskanj. geslo, za katerega velja število iskanj, je zapisano v vrstici pred njo.
+            elif st_iskanj > maks:
+                maks = st_iskanj
+                geslo = [a[i - 1]]
+        except:
+            continue
+
+    ###zadnji element seznama posebej, ker nima \n
+    try:
+        print(a[-1])
+        a[-1] = int(a[-1])
+        print(a[-1])
+        st_iskanj=a[-1]
+        print(st_iskanj + maks)
+        if st_iskanj == maks:
+            print(str(geslo) + str(a[-2]))
+            geslo = geslo.append(a[-2])#vsaka druga vrstica je število iskanj. geslo, za katerega velja število iskanj, je zapisano v vrstici pred njo.
+            print('geslo = geslo.append(a[-2])')
+        elif st_iskanj > maks:
+            maks = st_iskanj
+            geslo = [a[-2]]
+            print('geslo = [a[-2]]')
+        m = 'zadnji try do konca izveden'
+    except:
+        m = 'zadnji try je bil except'
+    ###
+
+    print('tuki')
+    print('geslo je ' + str(geslo))#['jutri', 'sam']
+    if geslo == []:
+        rezultat="Nobeno geslo ni bilo iskano več kot enkrat."
+    elif len(geslo) == 1:
+        rezultat="Največkrat iskano geslo je " + geslo[0] + ". Iskano je bilo " + str(maks) + "-krat."
+    else:
+        gesla = ", ".join(geslo)
+        rezultat = "Največkrat iskana gesla so: " + gesla + ". Vsakega so iskali " + str(maks) + "-krat."
+            
     return template('tiralica',
-                    orodja=modeli.nastej_orodja()#za levi menu
+                    orodja=modeli.nastej_orodja(),#za levi menu
+                    rezultat=rezultat
                     )
+
 ##############################################################################
 # ISKALNIK PO ZBIRKI
 ##############################################################################
 @post('/dashboard')
 def iskanje():
     niz_iskanje = request.forms.get('iskanje')
+    #dodaj iskalni niz v datoteko  oziroma povečaj njegovo število iskanj
     seznam_besed = re.findall(r"[\w']+", niz_iskanje)
     try:
         kartice = modeli.vrni_konceptne_rezultat_iskanja(seznam_besed)

@@ -20,7 +20,7 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="ie10-viewport-bug-workaround.js"></script>	
 	
-    <title>Oblak ključnih besed (tag cloud)</title>
+    <title>Oblak ključnih besed</title>
 
     <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -43,6 +43,21 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>	
+mala {
+    font-size:small;
+}
+
+srednja {
+    font-size:medium;
+}
+velika {
+    font-size:x-large;
+}
+najvecja {
+    font-size:xx-large;
+}
+    </style>
   </head>
 
   <body>
@@ -80,34 +95,13 @@
           </ul>
         </div>
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-		<h1 class="page-header">Oznake (tags)</h1>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-				  <th>Oznaka</th>
-                  <th>Pogostost</th>
-                </tr>
-              </thead>
-              <tbody>
+		
+		<div align="center">		
 					 % for oznaka in oznake:
-					 <tr>
-					 
-					 <td>
-					   {{oznaka['tag']}}
-					 </td>
-					 
-					 <td>
-					   {{oznaka['pogostost']}}
-					 </td
-					 
-					 </tr>
+					   <span style="font-size:{{oznaka['pogostost']}}px"> {{oznaka['tag']}} </span>
 					 % end
-              </tbody>
-            </table>
-          </div>
-        
+		</div>
+					 
 	  </div>
       </div>
     </div>

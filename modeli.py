@@ -240,17 +240,19 @@ def id_zadnje_dodane_kartice():
     id_kartice = conn.execute(sql0).fetchone()
     return id_kartice
 
-def dodaj_kartico(naslov_kartice, ime_datoteke, ime_PDF_datoteke):
+def dodaj_kartico(naslov_kartice, ime_datoteke, ime_PDF_datoteke, kratek_opis):
     '''Doda kartico v bazo.'''
     #naslov_kartice, ime_datoteke - niza
     #vnašanje v tabelo konceptne_kartice
     sql = '''
         INSERT INTO konceptna_kartica (naslov_kartice,
                                          ime_datoteke,
-                                         ime_PDF_datoteke)
-        VALUES (?, ?, ?)
+                                         ime_PDF_datoteke,
+                                         kratek_opis)
+        VALUES (?, ?, ?, ?)
         '''
-    conn.execute(sql, [naslov_kartice, ime_datoteke, ime_PDF_datoteke])
+    conn.execute(sql, [naslov_kartice, ime_datoteke, ime_PDF_datoteke,
+                       kratek_opis])
     conn.commit()
 ##############################################################################
 # kljucne besede
@@ -336,6 +338,14 @@ def vrni_sez_kljucnih_za_eno_kartico(id_kartice):
         beseda = conn.execute(sql_beseda, [id_besede]).fetchone()[0]
         seznam_besed.append(beseda)
     return seznam_besed
+
+def vrni_opis_kartice(id_kartice):
+    sql = '''SELECT kratek_opis
+                FROM konceptna_kartica
+                WHERE id = ?'''
+    opis = conn.execute(sql, [id_kartice]).fetchone()
+    opis = opis[0]
+    return opis
 ##############################################################################
 # programsko orodje/jezik
 ##############################################################################

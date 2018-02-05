@@ -69,6 +69,10 @@ def dash():
     naj_jezik = 'tiralica.png'
     kljucne = 'oblak_kljucnih.png'
     kliknasreco = 'klik_na_sreco.png'
+    
+    ico_ikona = 'klik_na_sreco_09r_icon.ico'
+
+    dashboard_css = 'dashboard.css'
 
     if id_jezika == '':
         #vrni vse konceptne (SKORAJ ISTA KODA 1/2)
@@ -82,9 +86,13 @@ def dash():
                         kljucne=kljucne,
                         kliknasreco=kliknasreco,
                         
+                        ico_ikona = ico_ikona,
+
+                        dashboard_css = dashboard_css,
+                        
                         #interaktivne bližnjice
                         nakljucna=izberi_nakljucno_kartico(),
-                        najbolj_iskano=najbolj_iskano_geslo(),
+                        najbolj_iskano=tiralica(),
                         max_ogledov=modeli.max_ogledov(),
 
                         katere="")#ali tabela za vse jezike ali samo za enega
@@ -99,10 +107,12 @@ def dash():
                         naj_jezik=naj_jezik,
                         kljucne=kljucne,
                         kliknasreco=kliknasreco,
+
+                        ico_ikona = ico_ikona,
                         
                         #interaktivne bližnjice
                         nakljucna=izberi_nakljucno_kartico(),
-                        najbolj_iskano=najbolj_iskano_geslo(),
+                        najbolj_iskano=tiralica(),
                         max_ogledov=modeli.max_ogledov(),
 
                         #ali tabela za vse jezike ali samo za enega:
@@ -128,7 +138,13 @@ def snemanje_kartice(ime_datoteke):
 ##############################################################################
 @route('/oblak')
 def oblak():
+
+    ico_ikona = 'klik_na_sreco_09r_icon.ico'
+    
     return template('tags',
+
+                    ico_ikona = ico_ikona,
+                    
                     orodja=modeli.nastej_orodja(),#za levi menu
                     oznake=modeli.oblak()
                     )
@@ -175,35 +191,32 @@ def tiralica():
 
     ###zadnji element seznama posebej, ker nima \n
     try:
-        print(a[-1])
         a[-1] = int(a[-1])
-        print(a[-1])
         st_iskanj=a[-1]
-        print(st_iskanj + maks)
         if st_iskanj == maks:
-            print(str(geslo) + str(a[-2]))
-            geslo = geslo.append(a[-2])#vsaka druga vrstica je število iskanj. geslo, za katerega velja število iskanj, je zapisano v vrstici pred njo.
-            print('geslo = geslo.append(a[-2])')
+            geslo.append(a[-2])#vsaka druga vrstica je število iskanj. geslo, za katerega velja število iskanj, je zapisano v vrstici pred njo.
         elif st_iskanj > maks:
             maks = st_iskanj
             geslo = [a[-2]]
-            print('geslo = [a[-2]]')
         m = 'zadnji try do konca izveden'
     except:
         m = 'zadnji try je bil except'
     ###
 
-    print('tuki')
-    print('geslo je ' + str(geslo))#['jutri', 'sam']
     if geslo == []:
         rezultat="Nobeno geslo ni bilo iskano več kot enkrat."
     elif len(geslo) == 1:
         rezultat="Največkrat iskano geslo je " + geslo[0] + ". Iskano je bilo " + str(maks) + "-krat."
+    elif len(geslo) == 2:#dvojina:)
+        gesla = ", ".join(geslo)
+        rezultat = "Največkrat iskani gesli sta: " + gesla + ". Vsakega so iskali " + str(maks) + "-krat."
     else:
         gesla = ", ".join(geslo)
         rezultat = "Največkrat iskana gesla so: " + gesla + ". Vsakega so iskali " + str(maks) + "-krat."
-            
+
+    ico_ikona = 'klik_na_sreco_09r_icon.ico'
     return template('tiralica',
+                    ico_ikona = ico_ikona,
                     orodja=modeli.nastej_orodja(),#za levi menu
                     rezultat=rezultat
                     )
@@ -230,16 +243,23 @@ def iskanje():
 ##############################################################################
 @route('/uredi_obstojeco')
 def obstojeca():
+
+    ico_ikona = 'klik_na_sreco_09r_icon.ico'
+    
     try:
         id_kartice = request.query.id_kartice
     except:
         id_kartice = ''
     return template('uredi_obstojeco',
+
+                    ico_ikona = ico_ikona,
+                    
                     orodja=modeli.nastej_orodja(),
                     orodj=modeli.orodja_od_1_kartice(id_kartice),
                     idkartice=id_kartice,
                     kartice=modeli.vrni_eno_kartico(id_kartice),
-                    kljucne=modeli.vrni_sez_kljucnih_za_eno_kartico(id_kartice))
+                    kljucne=modeli.vrni_sez_kljucnih_za_eno_kartico(id_kartice),
+                    opis=modeli.vrni_opis_kartice(id_kartice))
 
 
 
@@ -247,138 +267,141 @@ def obstojeca():
 
 
 
-@route('/uredi_obstojeco', method='POST')
-def popravi_obstojeco():
-    '''TRANSAKCIJA'''
-    #modeli.transakcija(...)
-    '''TRY-CATCH blok:
-TRY - dobimo sporočilo z vnešenimi podatki
-CATCH - dobimo sporočilo 'nepričakovana napaka'
-
-    '''
-    ##########################################################################
-    #1. shrani datoteko na disk
-    ##########################################################################
-    ##PDF
-    nalozena_datoteka = request.files.get('nalozi_pdf')
-    name, ext = os.path.splitext(nalozena_datoteka.filename)
-    if ext != '.pdf':
-        return 'Nedovoljena vrsta datoteke.\nDovoljena vrsta datoteke je PDF.'
-    save_path = os.getcwd() + '/kartice'
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    file_path = "{path}/{file}".format(path=save_path,
-                                       file=nalozena_datoteka.filename)
-    ##DOCX oziroma katerakoli datoteka za popravljanje (AI, TEX, ...)
-    nalozena_datoteka_docx = request.files.get('nalozi_docx')
-    save_path = os.getcwd() + '/kartice'
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    file_path = "{path}/{file}".format(path=save_path,
-                                       file=nalozena_datoteka_docx.filename)
-    ##
-    
-    #ujemi napako IOError('File exists.') oziroma OSError: File exists.
-    #vrni 'Datoteka s tem imenom že obstaja. Ali jo želite zamenjati?'
-
-
-
-    if not os.path.exists(file_path):
-        nalozena_datoteka.save(file_path)
-    else:
-        return 'Datoteka s tem imenom že obstaja.'
-    #return "Datoteka je bila uspešno shranjena v mapo '{0}'.".format(save_path)
-
-    ##########################################################################
-    #2. dodaj kartico v bazo
-    ##########################################################################
-    #dobi ime kartice
-    ime_kartice = request.forms.get('ime_kartice')
-    #dodaj kartico, dobi njen id
-    modeli.dodaj_kartico(ime_kartice,
-                         nalozena_datoteka_docx.filename,#dat za popravljanje
-                         nalozena_datoteka.filename)#pdf datoteka
-    id_kartice = modeli.id_zadnje_dodane_kartice()[0]
-
-    ##########################################################################
-    #3. kljucne besede
-    ##########################################################################
-    #dobi ~niz kljucnih, naredi ~seznam kljucnih
-    kljucne_skupaj = request.forms.get('kljucne')
-    kljucne = locevanje_kljucnih_besed(kljucne_skupaj)
-    #preveri ponavljanje vnesenih besed
-    sez = []
-    for beseda in kljucne:
-        if beseda not in sez:
-            sez.append(beseda)
-    kljucne = sez  #shranimo nov seznam, v katerem preverjeno ni ponavljanja
-    #dodaj kljucne v bazo, povezi kartico s temi kljucnimi
-    modeli.kartica_ima_kljucne(id_kartice, kljucne)
-    
-    ##########################################################################
-    #4. orodje ali programski jezik
-    ##########################################################################
-    #dobi seznam orodij, ki jih uci kartica:
-    sez_ID_orodij = request.forms.getlist('orodje')
-    #vnesi v povezovalno tabelo:
-    modeli.kartica_uci_programsko_orodje_jezik(id_kartice, sez_ID_orodij)
-    
-    #novo orodje:
-    novo_orodje = request.forms.get('novo')
-    #ali je uporabnik vnesel novo orodje:
-    if novo_orodje != '':
-        #najprej preveri, ali tega orodja ni v bazi:
-        orodja = modeli.nastej_orodja()
-        seznam_imen_orodij = []
-        for o in orodja:#o...each row
-            seznam_imen_orodij.append(o[1])
-        #orodja ni v bazi
-        if novo_orodje not in seznam_imen_orodij:
-            modeli.dodaj_orodje(novo_orodje)
-            id_novega = modeli.id_zadnjega_dodanega_orodja()
-            modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
-                                                       [id_novega])
-        #orodje je v bazi
-        else:
-            #poiscemo ID orodja
-            pos = seznam_imen_vseh_orodij.index(novo_orodje)
-            id_orodja = orodja[pos][0]
-            #uporabnik ga ni odkljukal
-            if id_orodja not in sez_ID_orodij:
-                modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
-                                                           [id_orodja])
-            
-    ##########################################################################
-    #5. pripravimo orodja in ključne besede za izpis uporabniku
-    ##########################################################################
-    niz_orodje = ''
-    #sez_ID_orodij hrani id-je izbranih orodij, mi potrebujemo imena
-    for id_orodja in sez_ID_orodij:
-        ime = modeli.vrni_ime_orodja(id_orodja)
-        niz_orodje += ime
-        niz_orodje += ', '
-    if novo_orodje != '':
-        niz_orodje += novo_orodje
-    else:
-        niz_orodje = niz_orodje[:-2]
-        
-    niz_kljucne = ''
-    for k in kljucne:
-        niz_kljucne += k
-        niz_kljucne += ', '
-    niz_kljucne = niz_kljucne[:-2]
-    
-    return 'Dodajanje nove kartice je bilo uspešno.<br><br>' +\
-           '<b>Vnešeni podatki</b><br><br>' +\
-           'Ime kartice: <b>{0}</b><br>'.format(ime_kartice) +\
-           'Ime PDF datoteke: <b>{0}</b><br>'.format(nalozena_datoteka.filename) +\
-           'Ime DOCX/DOC datoteke: <b>{0}</b><br>'.format(nalozena_datoteka_docx.filename) +\
-           'Orodja/programski jeziki, ' +\
-           'ki jih uči kartica: <b>{0}</b><br>'.format(niz_orodje) +\
-           'Ključne besede za iskanje ' +\
-           'konceptne kartice: <b>{0}</b><br>'.format(niz_kljucne) +\
-           'Hvala!</br></br>' +\
-           '<a href="dashboard">Nazaj na prvo stran</a>'
+##@route('/uredi_obstojeco', method='POST')
+##def popravi_obstojeco():
+##    '''TRANSAKCIJA'''
+##    #modeli.transakcija(...)
+##    '''TRY-CATCH blok:
+##TRY - dobimo sporočilo z vnešenimi podatki
+##CATCH - dobimo sporočilo 'nepričakovana napaka'
+##
+##    '''
+##    ##########################################################################
+##    #1. shrani datoteko na disk
+##    ##########################################################################
+##    ##PDF
+##    nalozena_datoteka = request.files.get('nalozi_pdf')
+##    name, ext = os.path.splitext(nalozena_datoteka.filename)
+##    if ext != '.pdf':
+##        return 'Nedovoljena vrsta datoteke.\nDovoljena vrsta datoteke je PDF.'
+##    save_path = os.getcwd() + '/kartice'
+##    if not os.path.exists(save_path):
+##        os.makedirs(save_path)
+##    file_path = "{path}/{file}".format(path=save_path,
+##                                       file=nalozena_datoteka.filename)
+##    ##DOCX oziroma katerakoli datoteka za popravljanje (AI, TEX, ...)
+##    nalozena_datoteka_docx = request.files.get('nalozi_docx')
+##    save_path = os.getcwd() + '/kartice'
+##    if not os.path.exists(save_path):
+##        os.makedirs(save_path)
+##    file_path = "{path}/{file}".format(path=save_path,
+##                                       file=nalozena_datoteka_docx.filename)
+##    ##
+##    
+##    #ujemi napako IOError('File exists.') oziroma OSError: File exists.
+##    #vrni 'Datoteka s tem imenom že obstaja. Ali jo želite zamenjati?'
+##
+##
+##
+##    if not os.path.exists(file_path):
+##        nalozena_datoteka.save(file_path)
+##    else:
+##        return 'Datoteka s tem imenom že obstaja.'
+##    #return "Datoteka je bila uspešno shranjena v mapo '{0}'.".format(save_path)
+##
+##    ##########################################################################
+##    #2. dodaj kartico v bazo
+##    ##########################################################################
+##    #dobi ime in kratek opis kartice
+##    ime_kartice = request.forms.get('ime_kartice')
+##    kratek_opis = request.forms.get('opis')
+##    #dodaj kartico, dobi njen id
+##    modeli.dodaj_kartico(ime_kartice,
+##                         nalozena_datoteka_docx.filename,#dat za popravljanje
+##                         nalozena_datoteka.filename,#pdf datoteka
+##                         kratek_opis)
+##    id_kartice = modeli.id_zadnje_dodane_kartice()[0]
+##
+##    ##########################################################################
+##    #3. kljucne besede
+##    ##########################################################################
+##    #dobi ~niz kljucnih, naredi ~seznam kljucnih
+##    kljucne_skupaj = request.forms.get('kljucne')
+##    kljucne = locevanje_kljucnih_besed(kljucne_skupaj)
+##    #preveri ponavljanje vnesenih besed
+##    sez = []
+##    for beseda in kljucne:
+##        if beseda not in sez:
+##            sez.append(beseda)
+##    kljucne = sez  #shranimo nov seznam, v katerem preverjeno ni ponavljanja
+##    #dodaj kljucne v bazo, povezi kartico s temi kljucnimi
+##    modeli.kartica_ima_kljucne(id_kartice, kljucne)
+##    
+##    ##########################################################################
+##    #4. orodje ali programski jezik
+##    ##########################################################################
+##    #dobi seznam orodij, ki jih uci kartica:
+##    sez_ID_orodij = request.forms.getlist('orodje')
+##    #vnesi v povezovalno tabelo:
+##    modeli.kartica_uci_programsko_orodje_jezik(id_kartice, sez_ID_orodij)
+##    
+##    #novo orodje:
+##    novo_orodje = request.forms.get('novo')
+##    #ali je uporabnik vnesel novo orodje:
+##    if novo_orodje != '':
+##        #najprej preveri, ali tega orodja ni v bazi:
+##        orodja = modeli.nastej_orodja()
+##        seznam_imen_orodij = []
+##        for o in orodja:#o...each row
+##            seznam_imen_orodij.append(o[1])
+##        #orodja ni v bazi
+##        if novo_orodje not in seznam_imen_orodij:
+##            modeli.dodaj_orodje(novo_orodje)
+##            id_novega = modeli.id_zadnjega_dodanega_orodja()
+##            modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
+##                                                       [id_novega])
+##        #orodje je v bazi
+##        else:
+##            #poiscemo ID orodja
+##            pos = seznam_imen_vseh_orodij.index(novo_orodje)
+##            id_orodja = orodja[pos][0]
+##            #uporabnik ga ni odkljukal
+##            if id_orodja not in sez_ID_orodij:
+##                modeli.kartica_uci_programsko_orodje_jezik(id_kartice,
+##                                                           [id_orodja])
+##            
+##    ##########################################################################
+##    #5. pripravimo orodja in ključne besede za izpis uporabniku
+##    ##########################################################################
+##    niz_orodje = ''
+##    #sez_ID_orodij hrani id-je izbranih orodij, mi potrebujemo imena
+##    for id_orodja in sez_ID_orodij:
+##        ime = modeli.vrni_ime_orodja(id_orodja)
+##        niz_orodje += ime
+##        niz_orodje += ', '
+##    if novo_orodje != '':
+##        niz_orodje += novo_orodje
+##    else:
+##        niz_orodje = niz_orodje[:-2]
+##        
+##    niz_kljucne = ''
+##    for k in kljucne:
+##        niz_kljucne += k
+##        niz_kljucne += ', '
+##    niz_kljucne = niz_kljucne[:-2]
+##    
+##    return 'Dodajanje nove kartice je bilo uspešno.<br><br>' +\
+##           '<b>Vnešeni podatki</b><br><br>' +\
+##           'Ime kartice: <b>{0}</b><br>'.format(ime_kartice) +\
+##           'Ime PDF datoteke: <b>{0}</b><br>'.format(nalozena_datoteka.filename) +\
+##           'Ime DOCX/DOC datoteke: <b>{0}</b><br>'.format(nalozena_datoteka_docx.filename) +\
+##           'Orodja/programski jeziki, ' +\
+##           'ki jih uči kartica: <b>{0}</b><br>'.format(niz_orodje) +\
+##           'Ključne besede za iskanje ' +\
+##           'konceptne kartice: <b>{0}</b><br>'.format(niz_kljucne) +\
+##           'Kratek opis: <b>{0}</b><br>'.format(kratek_opis)+\
+##           'Hvala!</br></br>' +\
+##           '<a href="dashboard">Nazaj na prvo stran</a>'
 
 
 
@@ -398,7 +421,11 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
 ##############################################################################
 @route('/nalozi_novo_kartico')
 def upload():
+    ico_ikona = 'klik_na_sreco_09r_icon.ico'
     return template('upload',
+
+                    ico_ikona = ico_ikona,
+                    
                     orodja=modeli.nastej_orodja())
 
 @route('/nalozi_novo_kartico', method='POST')
@@ -450,12 +477,14 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
     ##########################################################################
     #2. dodaj kartico v bazo
     ##########################################################################
-    #dobi ime kartice
+    #dobi ime in kratek opis kartice
     ime_kartice = request.forms.get('ime_kartice')
+    kratek_opis = request.forms.get('opis')
     #dodaj kartico, dobi njen id
     modeli.dodaj_kartico(ime_kartice,
                          nalozena_datoteka_docx.filename,#dat za popravljanje
-                         nalozena_datoteka.filename)#pdf datoteka
+                         nalozena_datoteka.filename,#pdf datoteka
+                         kratek_opis)
     id_kartice = modeli.id_zadnje_dodane_kartice()[0]
 
     ##########################################################################
@@ -535,6 +564,7 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
            'ki jih uči kartica: <b>{0}</b><br>'.format(niz_orodje) +\
            'Ključne besede za iskanje ' +\
            'konceptne kartice: <b>{0}</b><br>'.format(niz_kljucne) +\
+           'Kratek opis: <b>{0}</b><br>'.format(kratek_opis)+\
            'Hvala!</br></br>' +\
            '<a href="dashboard">Nazaj na prvo stran</a>'
 ##############################################################################
@@ -542,7 +572,37 @@ CATCH - dobimo sporočilo 'nepričakovana napaka'
 ##############################################################################
 @route('/o_strani')
 def o_strani():
+
+    ico_ikona = 'klik_na_sreco_09r_icon.ico'
+    
     return template('o_strani',
+
+                    ico_ikona = ico_ikona,
+                    
+                    orodja=modeli.nastej_orodja())
+##############################################################################
+# IGRIŠČE
+##############################################################################
+@route('/igrisce')
+def igrisce():
+
+    naj_kartica = 'najbolj_priljubljen_jezik.png'
+    naj_jezik = 'tiralica.png'
+    kljucne = 'oblak_kljucnih.png'
+    kliknasreco = 'klik_na_sreco.png'
+
+    ico_ikona = 'klik_na_sreco_09r_icon.ico'
+    
+    return template('igrisce',
+
+                    #ikone:
+                    naj_kartica=naj_kartica,
+                    naj_jezik=naj_jezik,
+                    kljucne=kljucne,
+                    kliknasreco=kliknasreco,
+
+                    ico_ikona = ico_ikona,
+                    
                     orodja=modeli.nastej_orodja())
 ###############
 run(debug=True)

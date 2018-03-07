@@ -198,7 +198,7 @@ body {
   <input type="file" name="nalozi_pdf" value="Naloži PDF" accept="application/pdf" />
   
   <h4>Datoteka za popravljanje (DOCX/DOC/AI/TEX/...)</h4>
-  <input type="file" name="nalozi_docx" value="Naloži DOCX" />
+  <input type="file" name="nalozi_docx" value="Naloži DOCX" accept="application/" />
   
   <h4>Povzetek vsebine kartice (do 100 znakov)</h4>
   <textarea name="opis" cols="50" rows="2"></textarea>

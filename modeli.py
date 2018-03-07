@@ -38,6 +38,8 @@ def vrni_tabelo_konceptnih():
 def vrni_konceptne_rezultat_iskanja(sez_iskalnih_besed):
     """Vrne rezultat za polje IŠČI."""
 
+    #dodaj robni primer, če iskalno geslo c#. sharp-a sploh ne prebere
+
     st_iskalnih_besed = len(sez_iskalnih_besed)
 
     if st_iskalnih_besed == 0:  #1. robni primer
@@ -54,7 +56,7 @@ def vrni_konceptne_rezultat_iskanja(sez_iskalnih_besed):
 
     sql = '''
 
-SELECT id_konceptne, naslov, kljucne, orodja, dat FROM   
+SELECT id_konceptne, naslov, kljucne, orodja, dat, dat_orig, opis FROM   
 (
     SELECT konceptna_kartica.id AS id_konceptne,
        naslov_kartice AS naslov,
@@ -239,6 +241,17 @@ def id_zadnje_dodane_kartice():
         '''
     id_kartice = conn.execute(sql0).fetchone()
     return id_kartice
+
+def ime_pdf_datoteke_zadnje_dodane_kartice():
+    sql = '''
+        SELECT ime_PDF_datoteke
+        FROM konceptna_kartica
+        WHERE id = (
+        SELECT MAX(id) as trenutna_kartica FROM konceptna_kartica
+        )
+        '''
+    ime = conn.execute(sql).fetchone()[0]
+    return ime
 
 def dodaj_kartico(naslov_kartice, ime_datoteke, ime_PDF_datoteke, kratek_opis):
     '''Doda kartico v bazo.'''
@@ -425,6 +438,11 @@ def vrni_imena_datotek_vseh_kartic():
     for kartica in vse_vrstice:
         vsa_imena.append(kartica[0])
     return vsa_imena
+##############################################################################
+# UREJANJE KARTICE
+##############################################################################
+
+
 ##############################################################################
 # THE END
 ##############################################################################

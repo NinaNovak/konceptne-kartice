@@ -21,7 +21,7 @@
 	
     <title>Zbirka konceptnih kartic</title>
 
-    <style><!-- v znački style je dashboard.css -->
+    <style><!-- v znački style je vsebina datotetke dashboard.css -->
 /*
  * Base structure
  */
@@ -97,6 +97,8 @@ body {
 
 .main {
   padding: 20px;
+  padding-top: 50px;
+  
 }
 @media (min-width: 768px) {
   .main {
@@ -105,7 +107,7 @@ body {
   }
 }
 .main .page-header {
-  margin-top: 0;
+  margin-top: 20px;
 }
 
 
@@ -142,7 +144,6 @@ body {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-		  <!--kasneje naj spodnji href kaze na to (zacetno) stran-->
           <a class="navbar-brand" href="dashboard">Zbirka konceptnih kartic</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -177,17 +178,10 @@ body {
           <div class="row placeholders">
 		  
             <div class="col-xs-6 col-sm-3 placeholder">
-			  <a href="kartice/{{nakljucna}}"><!--nakljucna-python izbere ime PDF datoteke nakljucne kartice-->
-			    <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika4">
-                 <h4>Klik na srečo</h4>
-                <span class="text-muted">Naključna kartica</span>
-			  </a>
-			</div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-			  <a href="tiralica">
+			  <a href="kartice/{{zadnja}}">
               <img src="ikone/{{naj_jezik}}" width="100" height="100" class="img-responsive" alt="Slika3">
-              <h4>Tiralica</h4>
-			  <span class="text-muted">Največkrat iskano geslo</span>
+			  <h4>Ravno prišlo</h4>
+		      <span class="text-muted">Zadnja dodana kartica</span>
 			  </a>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
@@ -198,16 +192,23 @@ body {
               </a>
 			</div>
             <div class="col-xs-6 col-sm-3 placeholder">
+			  <a href="kartice/{{nakljucna}}"><!--nakljucna-python izbere ime PDF datoteke nakljucne kartice-->
+			    <img src="ikone/{{kliknasreco}}" width="100" height="100" class="img-responsive" alt="Slika4">
+                 <h4>Klik na srečo</h4>
+                <span class="text-muted">Naključna kartica</span>
+			  </a>
+			</div>
+            <div class="col-xs-6 col-sm-3 placeholder">
 			  <a href="oblak">
               <img src="ikone/{{kljucne}}" width="100" height="100" class="img-responsive" alt="Slika2">
 			  <h4>Oblak ključnih besed</h4>
 		      <span class="text-muted">Katere vsebine so v bazi?</span>
 			  </a>
-            </div>			
-
+            </div>
+			
           </div>
 
-          <h1 class="page-header">Baza kartic{{katere}}</h1>
+          <h2 class="sub-header">Baza kartic{{katere}}</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -279,6 +280,6 @@ body {
         </div>
       </div>
     </div>
-   
+	
   </body>
 </html>

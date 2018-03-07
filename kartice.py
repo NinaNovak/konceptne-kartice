@@ -30,13 +30,18 @@ def vse_kljucne_od_1_kartice(id_kartice):
     return kljucne
 ##############################################################################
 # FUNKCIJE ZA INTERAKTIVNE BLIŽNJICE
-# - klik na srečo - glas ljudstva - oblak ključnih besed - tiralica -
+# - klik na srečo - glas ljudstva - oblak ključnih besed - ravno prišlo -
 ##############################################################################
 def izberi_nakljucno_kartico():
     '''Vrne ime datoteke naključno izbrane kartice'''
     seznam_imen_datotek = modeli.vrni_imena_datotek_vseh_kartic()
     ime_PDF_datoteke = random.choice(seznam_imen_datotek)
     return ime_PDF_datoteke
+
+def zadnja_dodana():
+    '''Vrne ime PDF datoteke naključno izbrane kartice'''
+    ime = modeli.ime_pdf_datoteke_zadnje_dodane_kartice()
+    return ime
 
 def tabela_v_seznam():
     """Tabelo ključnih besed in števila njihovih pojavitev spremeni v seznam
@@ -92,7 +97,7 @@ def dash():
                         
                         #interaktivne bližnjice
                         nakljucna=izberi_nakljucno_kartico(),
-                        najbolj_iskano=tiralica(),
+                        zadnja=zadnja_dodana(),
                         max_ogledov=modeli.max_ogledov(),
 
                         katere="")#ali tabela za vse jezike ali samo za enega
@@ -100,7 +105,7 @@ def dash():
         #vrni samo konceptne za 1 izbrani jezik (SKORAJ ISTA KODA 2/2)
         return template('dash',
                         orodja=modeli.nastej_orodja(),#za levi menu
-                        kartice=modeli.vrni_tabelo_konceptnih(),#baza kartic
+                        kartice=modeli.vrni_konceptne_po_jezikih(id_jezika),#baza kartic
                         
                         #ikone:
                         naj_kartica=naj_kartica,
@@ -112,7 +117,7 @@ def dash():
                         
                         #interaktivne bližnjice
                         nakljucna=izberi_nakljucno_kartico(),
-                        najbolj_iskano=tiralica(),
+                        zadnja=zadnja_dodana(),
                         max_ogledov=modeli.max_ogledov(),
 
                         #ali tabela za vse jezike ali samo za enega:
@@ -226,18 +231,35 @@ def tiralica():
 ##############################################################################
 @post('/dashboard')
 def iskanje():
+    ico_ikona = 'klik_na_sreco_09r_icon.ico'
+    naj_kartica = 'najbolj_priljubljen_jezik.png'
+    naj_jezik = 'tiralica.png'
+    kljucne = 'oblak_kljucnih.png'
+    kliknasreco = 'klik_na_sreco.png'
     niz_iskanje = request.forms.get('iskanje')
-    #dodaj iskalni niz v datoteko  oziroma povečaj njegovo število iskanj
+    #dodaj iskalni niz v datoteko oziroma povečaj njegovo število iskanj
     seznam_besed = re.findall(r"[\w']+", niz_iskanje)
     try:
         kartice = modeli.vrni_konceptne_rezultat_iskanja(seznam_besed)
     except:
         kartice = modeli.vrni_tabelo_konceptnih_izjema()
     return template('dash',
-                    orodja=modeli.nastej_orodja(),
-                    kartice=kartice,
+                    orodja=modeli.nastej_orodja(),#za levi menu
+                    kartice=kartice,#baza kartic - rezultat iskanja
+                    
+                    #ikone
+                    ico_ikona = ico_ikona,
+                    naj_kartica=naj_kartica,
+                    naj_jezik=naj_jezik,
+                    kljucne=kljucne,
+                    kliknasreco=kliknasreco,
 
-                    nakljucna=izberi_nakljucno_kartico())
+                    #interaktivne bližnjice
+                    nakljucna=izberi_nakljucno_kartico(),
+                    zadnja=zadnja_dodana(),
+                    max_ogledov=modeli.max_ogledov(),
+                    
+                    katere=" za iskalni niz: " + niz_iskanje)
 ##############################################################################
 # POPRAVLJANJE OBSTOJECE KARTICE
 ##############################################################################

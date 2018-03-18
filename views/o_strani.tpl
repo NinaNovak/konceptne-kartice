@@ -8,7 +8,7 @@
 
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="ikone/{{ico_ikona}}">
+    <link rel="icon" href="ikone/{{favicon}}">
 
 	<!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -21,7 +21,7 @@
 	
     <title>O strani</title>
 
-    <style><!-- v znački style je dashboard.css -->
+    <style><!-- v znački style je vsebina datotetke dashboard.css -->
 /*
  * Base structure
  */
@@ -97,6 +97,8 @@ body {
 
 .main {
   padding: 20px;
+  padding-top: 50px;
+  
 }
 @media (min-width: 768px) {
   .main {
@@ -105,7 +107,7 @@ body {
   }
 }
 .main .page-header {
-  margin-top: 0;
+  margin-top: 20px;
 }
 
 
@@ -174,12 +176,26 @@ body {
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
         <div align="center">
+		<br>
+		<br>
 		Ta stran je arhiv konceptnih kartic, ki jih lahko natisnemo in uporabljamo kot<br>
 		učni pripomoček. Stran omogoča dodajanje in popravljanje konceptnih kartic.
 		<br>
 		<br>
 		Konceptne kartice so odličen pripomoček pri učenju, tako za usvajanje nove snovi<br>
 		kot pri ponavljanju, dobro pa se izkažejo tudi pri preverjanju znanja tipa kviz.
+		<br>
+		<br>
+		<br>
+		Sorodne strani
+		<br>
+		<br>
+		<br>
+		Kontakt
+		<br>
+		<br>
+		<br>
+		Izgled strani po temi Bootstrap <i>Dashboard</i>.
         </div>
         
 	  </div>

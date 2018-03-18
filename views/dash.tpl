@@ -8,10 +8,10 @@
 
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="ikone/{{ico_ikona}}">
+    <link rel="icon" href="ikone/{{favicon}}">
 
 	<!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">	
 	<!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	
@@ -174,7 +174,7 @@ body {
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-		  <h1 class="page-header">Novi obiskovalci lahko začnejo tukaj</h1>
+		  <h1 class="page-header">Konceptne kartice</h1>
           <div class="row placeholders">
 		  
             <div class="col-xs-6 col-sm-3 placeholder">

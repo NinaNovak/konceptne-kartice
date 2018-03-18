@@ -8,7 +8,7 @@
 
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="ikone/{{ico_ikona}}">
+    <link rel="icon" href="ikone/{{favicon}}">
 
 	<!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -21,21 +21,7 @@
 	
     <title>Oblak ključnih besed</title>
 
-    <style><!-- CSS za razlicne velikosti besed v oblaku -->
-mala {
-    font-size:small;
-}
-srednja {
-    font-size:medium;
-}
-velika {
-    font-size:x-large;
-}
-najvecja {
-    font-size:xx-large;
-}
-    </style>
-    <style><!-- v znački style je dashboard.css -->
+        <style><!-- v znački style je vsebina datotetke dashboard.css -->
 /*
  * Base structure
  */
@@ -111,6 +97,8 @@ body {
 
 .main {
   padding: 20px;
+  padding-top: 50px;
+  
 }
 @media (min-width: 768px) {
   .main {
@@ -119,7 +107,7 @@ body {
   }
 }
 .main .page-header {
-  margin-top: 0;
+  margin-top: 20px;
 }
 
 

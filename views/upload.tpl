@@ -8,7 +8,7 @@
 
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="ikone/{{ico_ikona}}">
+    <link rel="icon" href="ikone/{{favicon}}">
 
 	<!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -21,7 +21,7 @@
 	
     <title>Dodaj kartico</title>
 
-    <style><!-- v znački style je dashboard.css -->
+    <style><!-- v znački style je vsebina datotetke dashboard.css -->
 /*
  * Base structure
  */
@@ -97,6 +97,8 @@ body {
 
 .main {
   padding: 20px;
+  padding-top: 50px;
+  
 }
 @media (min-width: 768px) {
   .main {
@@ -105,7 +107,7 @@ body {
   }
 }
 .main .page-header {
-  margin-top: 0;
+  margin-top: 20px;
 }
 
 
@@ -175,7 +177,7 @@ body {
 <form action="/nalozi_novo_kartico" method="post" enctype="multipart/form-data">
   <h2>Nalaganje nove kartice</h2>
   
-  <h4>Naslov kartice<h4>
+  <h4>Naslov kartice (oblika: Program/jezik: Naslov kartice)<h4>
   <input type="text" name="ime_kartice" size="50" />
   
   <h4>Orodje / programski jezik, ki ga uči kartica</h4>
@@ -191,7 +193,7 @@ body {
 	   Drugo: 
 	   <input type="text" name="novo" title="Prosimo, ločite orodja z vejicami." class="novo_orodje" size="50" />
   
-  <h4>Ključne besede, po katerih se kartica lahko najde</h4>
+  <h4>Ključne besede, po katerih se kartica lahko najde (prosimo, ločite ključne besede z vejicami)</h4>
   <input type="text" name="kljucne" title="Prosimo, ločite ključne besede z vejicami." size="50" />
   
   <h4>Datoteka PDF</h4>

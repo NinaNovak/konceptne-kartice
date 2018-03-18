@@ -8,7 +8,7 @@
 
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="ikone/{{ico_ikona}}">
+    <link rel="icon" href="ikone/{{favicon}}">
 
 	<!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -21,7 +21,7 @@
 	
     <title>Posodobi kartico</title>
 
-    <style><!-- v znački style je dashboard.css -->
+        <style><!-- v znački style je vsebina datotetke dashboard.css -->
 /*
  * Base structure
  */
@@ -97,6 +97,8 @@ body {
 
 .main {
   padding: 20px;
+  padding-top: 50px;
+  
 }
 @media (min-width: 768px) {
   .main {
@@ -105,7 +107,7 @@ body {
   }
 }
 .main .page-header {
-  margin-top: 0;
+  margin-top: 20px;
 }
 
 
@@ -191,30 +193,30 @@ body {
   <h4>Datoteki</h4>
   
   <h5><i>Naloži PDF</i></h5>
-  <input type="file" name="upload" value="Naloži DOCX" />
+  <input type="file" name="nalozi_docx" value="Naloži DOCX" />
   <h5><i>Naloži DOCX</i></h5>
-  <input type="file" name="upload" value="Naloži PDF" />
+  <input type="file" name="nalozi_pdf" value="Naloži PDF" />
   
   <h4>Jeziki / orodja</h4>
   <h5><i>Obstoječi</i></h5>
   Po potrebi odznačite jezike, ki jih ne želite več imeti:  <br>
     %for orod in orodj:
-       <input type="checkbox" name="orodje" checked value={{orod[0]}}>{{orod[1]}}<br>  
+       <input type="checkbox" name="stara_orodja" checked value={{orod[0]}}>{{orod[1]}}<br>  
     %end
   <h5><i>Novi</i></h5>
   Po potrebi dodajte nove jezike / orodja. Ločite jih z vejico: <br>
   Novi jeziki: 
-  <input type="text" name="jeziki" size="50" /><!-- Kaj če 2 novi orodji? -->
+  <input type="text" name="nova_orodja" size="50" /><!-- Kaj če 2 novi orodji? -->
   
   <h4>Ključne besede</h4>
   <h5><i>Obstoječe</i></h5>
   Po potrebi odznačite ključne besede, ki jih ne želite več imeti. <br>
   %for klj in kljucne:
-       <input type="checkbox" name="klju" checked value={{klj}} />{{klj}}<br>
+       <input type="checkbox" name="nov_sez_kljucnih" checked value={{klj}} />{{klj}}<br>
   %end
   <h5><i>Nove</i></h5>
   Po potrebi dodajte nove ključne besede. Ločite jih z vejico: <br>
-  Nove ključne besede: <input type="text" name="kljucne" size="50" />
+  Nove ključne besede: <input type="text" name="nove_kljucne" size="50" />
   </a><br>
   
   <h4>Kratek opis</h4>

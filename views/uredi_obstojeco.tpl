@@ -188,6 +188,7 @@ body {
   <h4>Naslov</h4>
   Obstoječi naslov kartice: <b><font color="CornflowerBlue ">{{kartice['naslov']}}</font></b><br>
   Novi naslov kartice: <input type="text" name="ime_kartice" size="50" />
+  <input type="hidden" name="id_kartice" value={{id_kartice}}>
   </a>
   
   <h4>Datoteki</h4>
@@ -230,7 +231,7 @@ body {
   <br><br>
   </a>
   
-  <input type="submit" value="Oddaj popravke" disabled />
+  <input type="submit" value="Oddaj popravke"  />
   <br><br><br>
 </div>
   </form>

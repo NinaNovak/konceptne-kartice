@@ -443,6 +443,17 @@ WHERE id = ?
     ime = conn.execute(sql, [id_orodja]).fetchone()
     ime = ime[0]
     return ime
+def vrni_id_orodja(ime_orodja):
+    '''Vrne id orodja z danim imenom.'''
+    sql = '''
+SELECT id
+FROM programsko_orodje_ali_jezik
+WHERE ime_orodja = ?
+
+    '''
+    id_o = conn.execute(sql, [ime_orodja]).fetchone()
+    id_o = id_o[0]
+    return id_o
 def dodaj_orodje(novo):
     '''Doda orodje novo v tabelo orodij.'''
     sql = '''
@@ -473,6 +484,16 @@ VALUES (?, ?)
         '''
         conn.execute(sql, [id_kartice, id_orodja])
     conn.commit()
+def kartici_odvzemi_orodje(id_kartice, id_orodja):
+    sql = '''
+DELETE FROM povezovalna_tabela_konceptna_kartica_x_programsko_orodje_ali_jezik
+WHERE id_konceptne_kartice = ?
+        AND id_programskega_orodja_ali_jezika = ?
+
+    '''
+    conn.execute(sql, [id_kartice, id_orodja])
+    conn.commit()
+    
 ##############################################################################
 # ID-JI VSEH KARTIC
 ##############################################################################

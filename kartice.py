@@ -154,7 +154,6 @@ def iskanje():
     kljucne = 'oblak_kljucnih.png'
     kliknasreco = 'klik_na_sreco.png'
     niz_iskanje = request.forms.get('iskanje')
-    #dodaj iskalni niz v datoteko oziroma povečaj njegovo število iskanj
     seznam_besed = re.findall(r"[\w']+", niz_iskanje)
     try:
         kartice = modeli.vrni_konceptne_rezultat_iskanja(seznam_besed)
@@ -200,7 +199,7 @@ def obstojeca():
                     
                     orodja=modeli.nastej_orodja(),
                     orodj=modeli.orodja_od_1_kartice(id_kartice),
-                    idkartice=id_kartice,
+                    id_kartice=id_kartice,
                     kartice=modeli.vrni_eno_kartico(id_kartice),
                     kljucne=modeli.vrni_sez_kljucnih_za_eno_kartico(id_kartice),
                     opis=modeli.vrni_opis_kartice(id_kartice)
@@ -209,10 +208,7 @@ def obstojeca():
 @route('/uredi_obstojeco', method='POST')
 def popravi_obstojeco():
     '''Vsa popravila se nanašajo na kartico z ID-jem id_kartice.'''
-    try:
-        id_kartice = request.query.id_kartice
-    except:
-        id_kartice = ''#če id='' ... kaj potem?
+    id_kartice = request.forms.get('id_kartice')
     ##########################################################################
     #1. spreminjanje naslova kartice
     ##########################################################################
@@ -225,33 +221,35 @@ def popravi_obstojeco():
     novi_opis = request.forms.get('opis')
     if novi_opis != '':
         modeli.spremeni_opis(id_kartice, novi_opis)
+
+
+
+        
     ##########################################################################
     #3. spremeni ključne besede
     ##########################################################################
-    ##request.forms.getlist('nov_sez_kljucnih')
-    ##DA request.forms.get('nove_kljucne')
+    #
     #### dodaj  ##############################################################
     nove_kljucne_niz = request.forms.get('nove_kljucne')
-
-    ##
     kljucne = locevanje_kljucnih_besed(nove_kljucne_niz)
+    
     #preveri ponavljanje vnesenih besed
     sez = []
     for beseda in kljucne:
         if beseda not in sez:
             sez.append(beseda)
     kljucne = sez  #shranimo nov seznam, v katerem preverjeno ni ponavljanja
-    ##
-    
     #dodaj kljucne v bazo, povezi kartico s temi kljucnimi
-    modeli.kartica_ima_kljucne(id_kartice, kljucne)
+    if kljucne != ['']:
+        modeli.kartica_ima_kljucne(id_kartice, kljucne)
+    #
     #### odvzemi #############################################################
     novi_sez = request.forms.getlist('nov_sez_kljucnih')
-    stari_sez = vrni_sez_kljucnih_za_eno_kartico(id_kartice)
+    stari_sez = modeli.vrni_sez_kljucnih_za_eno_kartico(id_kartice)
     odvzete = []
     for kljucna in stari_sez:
         if kljucna not in novi_sez:
-            odvzete.appent(kljucna)
+            odvzete.append(kljucna)
     for kljucna in odvzete:
         id_kljucne = modeli.id_kljucne_besede(kljucna)
         modeli.odvzemi_kljucno(id_kartice, id_kljucne)
@@ -259,25 +257,32 @@ def popravi_obstojeco():
     #4. orodja
     ##########################################################################
     obkljukana_orodja = request.forms.getlist('stara_orodja')
-
+    stara_obkljukana_orodja = modeli.orodja_od_1_kartice(id_kartice)
+    for orodje in stara_obkljukana_orodja:
+        if orodje not in obkljukana_orodja:
+            id_o = modeli.vrni_id_orodja(orodje)
+            modeli.kartici_odvzemi_orodje(id_kartice, id_o)  #BRIŠI POVEZAVO ID_ORODJA <-> ID_KARTICE IZ POVEZOVALNE TABELE
     #### dodaj orodja ################################################
     #popolnoma novo orodje
-    vneseno_or = request.forms.get('nova_orodja')
+    vnesena_orodja = request.forms.get('nova_orodja')
 
     ##
-    kljucne = locevanje_kljucnih_besed(nove_kljucne_niz)
-    #preveri ponavljanje vnesenih besed
+    na_novo_vnesena_orodja = locevanje_kljucnih_besed(vnesena_orodja)  #lahko uporabimo ze napisano funkcijo za locevanje kljucnih besed
+    #preveri ponavljanje vnesenih orodij
     sez = []
-    for beseda in kljucne:
-        if beseda not in sez:
-            sez.append(beseda)
-    kljucne = sez  #shranimo nov seznam, v katerem preverjeno ni ponavljanja
+    for novo_or in na_novo_vnesena_orodja:
+        if novo_or not in sez:
+            sez.append(novo_or)
+    na_novo_vnesena_orodja = sez  #shranimo nov seznam, v katerem preverjeno ni ponavljanja
     ##
     
-    #dodaj kljucne v bazo, povezi kartico s temi kljucnimi
+    #dodaj orodja v bazo, povezi kartico s temi orodji
+    for ime_orodja in na_novo_vnesena_orodja:
+        modeli.dodaj_orodje(ime_orodja)
+    kartica_uci_programsko_orodje_jezik
     modeli.kartica_ima_kljucne(id_kartice, kljucne)
     #### odvzemi orodja ##############################################
-    stara_or = orodja_od_1_kartice(id_kartice)[0][0]
+    stara_or = modeli.orodja_od_1_kartice(id_kartice)
     ##########################################################################
     #5. nova PDF datoteka
     ##########################################################################
@@ -296,10 +301,6 @@ def popravi_obstojeco():
 # NALAGANJE NOVE KARTICE
 ##############################################################################
 
-##############################################################################
-# = TRANSAKCIJA
-##############################################################################
-
 @route('/nalozi_novo_kartico')
 def upload():
     favicon = 'favicon.ico'
@@ -308,7 +309,6 @@ def upload():
                     favicon = favicon,
                     
                     orodja=modeli.nastej_orodja())
-
 def shranjevanje_PDF(dat):
     nalozena_datoteka = request.files.get(dat)
     name, ext = os.path.splitext(nalozena_datoteka.filename)
@@ -321,6 +321,7 @@ def shranjevanje_PDF(dat):
                                        file=nalozena_datoteka.filename)
     if not os.path.exists(file_path):
         nalozena_datoteka.save(file_path)
+        return 1
     else:
         return 'Datoteka s tem imenom že obstaja.'
 def shranjevanje_DOCX(dat):
@@ -332,26 +333,24 @@ def shranjevanje_DOCX(dat):
                                             file=nalozena_datoteka_docx.filename)
     if not os.path.exists(file_path_docx):
         nalozena_datoteka_docx.save(file_path_docx)
+        return 1
     else:
         return 'Datoteka s tem imenom že obstaja.'
 
 
 @route('/nalozi_novo_kartico', method='POST')
 def do_upload():
-    '''TRANSAKCIJA'''
-    #modeli.transakcija(...)
-    '''TRY-CATCH blok:
-TRY - dobimo sporočilo z vnešenimi podatki
-CATCH - dobimo sporočilo 'nepričakovana napaka'
-
-    '''
+    '''Vnašanje nove kartice v bazo.'''
     ##########################################################################
-    #1. shrani datoteko na disk
+    #1. shrani datoteki na disk
     ##########################################################################
     ##PDF
-    shranjevanje_PDF('nalozi_pdf')
+    if not shranjevanje_PDF('nalozi_pdf'): return
     ##DOCX oziroma katerakoli datoteka za popravljanje (AI, TEX, ...)
-    shranjevanje_DOCX('nalozi_docx')
+    if not shranjevanje_DOCX('nalozi_docx'): return
+    #če nalaganje datoteke ni bilo uspešno, smo prekinili z vnašanjem
+    #podatkov o kartici v bazo
+    
     ##########################################################################
     #2. dodaj kartico v bazo
     ##########################################################################

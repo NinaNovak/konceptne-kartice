@@ -9,7 +9,7 @@ Python Standard Library.
 
 Homepage and documentation: http://bottlepy.org/
 
-Copyright (c) 2015, Marcel Hellkamp.
+Copyright (c) 2017, Marcel Hellkamp.
 License: MIT (see LICENSE for details)
 """
 
@@ -30,9 +30,8 @@ __license__ = 'MIT'
 def _cli_parse(args):  # pragma: no coverage
     from argparse import ArgumentParser
 
-    parser = ArgumentParser(usage="usage: %sprog [options] package.module:app")
+    parser = ArgumentParser(prog=args[0], usage="%(prog)s [options] package.module:app")
     opt = parser.add_argument
-    opt('app', help='WSGI app entry point.')
     opt("--version", action="store_true", help="show version number.")
     opt("-b", "--bind", metavar="ADDRESS", help="bind socket to ADDRESS.")
     opt("-s", "--server", default='wsgiref', help="use SERVER as backend.")
@@ -43,8 +42,9 @@ def _cli_parse(args):  # pragma: no coverage
         help="override config values.")
     opt("--debug", action="store_true", help="start server in debug mode.")
     opt("--reload", action="store_true", help="auto-reload on file changes.")
+    opt('app', help='WSGI app entry point.', nargs='?')
 
-    cli_args = parser.parse_args(args)
+    cli_args = parser.parse_args(args[1:])
 
     return cli_args, parser
 
@@ -77,7 +77,11 @@ from datetime import date as datedate, datetime, timedelta
 from tempfile import TemporaryFile
 from traceback import format_exc, print_exc
 from unicodedata import normalize
-from json import dumps as json_dumps, loads as json_lds
+
+try:
+    from ujson import dumps as json_dumps, loads as json_lds
+except ImportError:
+    from json import dumps as json_dumps, loads as json_lds
 
 # inspect.getargspec was removed in Python 3.6, use
 # Signature-based version where we can (Python 3.3+)
@@ -124,7 +128,7 @@ if py3k:
     from urllib.parse import urljoin, SplitResult as UrlSplitResult
     from urllib.parse import urlencode, quote as urlquote, unquote as urlunquote
     urlunquote = functools.partial(urlunquote, encoding='latin1')
-    from http.cookies import SimpleCookie
+    from http.cookies import SimpleCookie, Morsel, CookieError
     from collections import MutableMapping as DictMixin
     import pickle
     from io import BytesIO
@@ -143,7 +147,7 @@ else:  # 2.x
     import thread
     from urlparse import urljoin, SplitResult as UrlSplitResult
     from urllib import urlencode, quote as urlquote, unquote as urlunquote
-    from Cookie import SimpleCookie
+    from Cookie import SimpleCookie, Morsel, CookieError
     from itertools import imap
     import cPickle as pickle
     from StringIO import StringIO as BytesIO
@@ -155,14 +159,15 @@ else:  # 2.x
 
 # Some helpers for string/byte handling
 def tob(s, enc='utf8'):
-    return s.encode(enc) if isinstance(s, unicode) else bytes(s)
+    if isinstance(s, unicode):
+        return s.encode(enc)
+    return b'' if s is None else bytes(s)
 
 
 def touni(s, enc='utf8', err='strict'):
     if isinstance(s, bytes):
         return s.decode(enc, err)
-    else:
-        return unicode(s or ("" if s is None else s))
+    return unicode("" if s is None else s)
 
 
 tonat = touni if py3k else tob
@@ -489,7 +494,7 @@ class Router(object):
         nocheck = set(methods)
         for method in set(self.static) - nocheck:
             if path in self.static[method]:
-                allowed.add(verb)
+                allowed.add(method)
         for method in set(self.dyna_regexes) - allowed - nocheck:
             for combined, rules in self.dyna_regexes[method]:
                 match = combined(path)
@@ -640,7 +645,7 @@ class Bottle(object):
         })
 
         if kwargs.get('catchall') is False:
-            depr(0,13, "Bottle(catchall) keyword argument.",
+            depr(0, 13, "Bottle(catchall) keyword argument.",
                         "The 'catchall' setting is now part of the app "
                         "configuration. Fix: `app.config['catchall'] = False`")
             self.config['catchall'] = False
@@ -946,14 +951,27 @@ class Bottle(object):
         """ Equals :meth:`route` with a ``PATCH`` method parameter. """
         return self.route(path, method, **options)
 
-    def error(self, code=500):
-        """ Decorator: Register an output handler for a HTTP error code"""
+    def error(self, code=500, callback=None):
+        """ Register an output handler for a HTTP error code. Can
+            be used as a decorator or called directly ::
 
-        def wrapper(handler):
-            self.error_handler[int(code)] = handler
-            return handler
+                def error_handler_500(error):
+                    return 'error_handler_500'
 
-        return wrapper
+                app.error(code=500, callback=error_handler_500)
+
+                @app.error(404)
+                def error_handler_404(error):
+                    return 'error_handler_404'
+
+        """
+
+        def decorator(callback):
+            if isinstance(callback, basestring): callback = load(callback)
+            self.error_handler[int(code)] = callback
+            return callback
+
+        return decorator(callback) if callback else decorator
 
     def default_error_handler(self, res):
         return tob(template(ERROR_PAGE_TEMPLATE, e=res, template_settings=dict(name='__ERROR_PAGE_TEMPLATE')))
@@ -1585,28 +1603,30 @@ def _hkey(key):
         raise ValueError("Header names must not contain control characters: %r" % key)
     return key.title().replace('_', '-')
 
+
 def _hval(value):
-    value = value if isinstance(value, unicode) else str(value)
+    value = tonat(value)
     if '\n' in value or '\r' in value or '\0' in value:
         raise ValueError("Header value must not contain control characters: %r" % value)
     return value
 
+
 class HeaderProperty(object):
-    def __init__(self, name, reader=None, writer=str, default=''):
+    def __init__(self, name, reader=None, writer=None, default=''):
         self.name, self.default = name, default
         self.reader, self.writer = reader, writer
         self.__doc__ = 'Current value of the %r header.' % name.title()
 
     def __get__(self, obj, _):
         if obj is None: return self
-        value = obj.headers.get(self.name, self.default)
+        value = obj.get_header(self.name, self.default)
         return self.reader(value) if self.reader else value
 
     def __set__(self, obj, value):
-        obj.headers[self.name] = self.writer(value)
+        obj[self.name] = self.writer(value) if self.writer else value
 
     def __delete__(self, obj):
-        del obj.headers[self.name]
+        del obj[self.name]
 
 
 class BaseResponse(object):
@@ -1723,8 +1743,7 @@ class BaseResponse(object):
         return self._headers[_hkey(name)][-1]
 
     def __setitem__(self, name, value):
-        self._headers[_hkey(name)] = [value if isinstance(value, unicode) else
-                                      str(value)]
+        self._headers[_hkey(name)] = [_hval(value)]
 
     def get_header(self, name, default=None):
         """ Return the value of a previously defined header. If there is no
@@ -1734,13 +1753,11 @@ class BaseResponse(object):
     def set_header(self, name, value):
         """ Create a new response header, replacing any previously defined
             headers with the same name. """
-        self._headers[_hkey(name)] = [value if isinstance(value, unicode)
-                                            else str(value)]
+        self._headers[_hkey(name)] = [_hval(value)]
 
     def add_header(self, name, value):
         """ Add an additional response header, not removing duplicates. """
-        self._headers.setdefault(_hkey(name), []).append(
-            value if isinstance(value, unicode) else str(value))
+        self._headers.setdefault(_hkey(name), []).append(_hval(value))
 
     def iter_headers(self):
         """ Yield (header, value) tuples, skipping headers that are not
@@ -1760,12 +1777,10 @@ class BaseResponse(object):
         out += [(name, val) for (name, vals) in headers for val in vals]
         if self._cookies:
             for c in self._cookies.values():
-                out.append(('Set-Cookie', c.OutputString()))
+                out.append(('Set-Cookie', _hval(c.OutputString())))
         if py3k:
-            return [(k, v.encode('utf8').decode('latin1')) for (k, v) in out]
-        else:
-            return [(k, v.encode('utf8') if isinstance(v, unicode) else v)
-                    for (k, v) in out]
+            out = [(k, v.encode('utf8').decode('latin1')) for (k, v) in out]
+        return out
 
     content_type = HeaderProperty('Content-Type')
     content_length = HeaderProperty('Content-Length', reader=int)
@@ -1800,6 +1815,10 @@ class BaseResponse(object):
             :param secure: limit the cookie to HTTPS connections (default: off).
             :param httponly: prevents client-side javascript to read this cookie
               (default: off, requires Python 2.6 or newer).
+            :param same_site: disables third-party use for a cookie.
+              Allowed attributes: `lax` and `strict`.
+              In strict mode the cookie will never be sent.
+              In lax mode the cookie is only sent with a top-level GET request.
 
             If neither `expires` nor `max_age` is set (default), the cookie will
             expire at the end of the browser session (as soon as the browser
@@ -1821,6 +1840,9 @@ class BaseResponse(object):
         """
         if not self._cookies:
             self._cookies = SimpleCookie()
+
+        # To add "SameSite" cookie support.
+        Morsel._reserved['same-site'] = 'SameSite'
 
         if secret:
             if not isinstance(value, basestring):
@@ -1850,6 +1872,9 @@ class BaseResponse(object):
                 elif isinstance(value, (int, float)):
                     value = time.gmtime(value)
                 value = time.strftime("%a, %d %b %Y %H:%M:%S GMT", value)
+            # check values for SameSite cookie, because it's not natively supported by http.cookies.
+            if key == 'same_site' and value.lower() not in ('lax', 'strict'):
+                raise CookieError("Invalid attribute %r" % (key,))
             if key in ('secure', 'httponly') and not value:
                 continue
             self._cookies[name][key.replace('_', '-')] = value
@@ -2354,7 +2379,7 @@ class ConfigDict(dict):
             Leading and trailing whitespace is removed from keys and values.
             Values can be omitted, in which case the key/value delimiter may
             also be left out. Values can also span multiple lines, as long as
-            they are indented deeper than the first line of the value. Commends
+            they are indented deeper than the first line of the value. Commands
             are prefixed by ``#`` or ``;`` and may only appear on their own on
             an otherwise empty line.
 
@@ -2712,6 +2737,10 @@ class FileUpload(object):
     content_type = HeaderProperty('Content-Type')
     content_length = HeaderProperty('Content-Length', reader=int, default=-1)
 
+    def get_header(self, name, default=None):
+        """ Return the value of a header within the mulripart part. """
+        return self.headers.get(name, default)
+
     @cached_property
     def filename(self):
         """ Name of the file on the client file system, but normalized to ensure
@@ -2781,14 +2810,18 @@ def redirect(url, code=None):
     raise res
 
 
-def _file_iter_range(fp, offset, bytes, maxread=1024 * 1024):
-    """ Yield chunks from a range in a file. No chunk is bigger than maxread."""
+def _file_iter_range(fp, offset, bytes, maxread=1024 * 1024, close=False):
+    """ Yield chunks from a range in a file, optionally closing it at the end.
+        No chunk is bigger than maxread. """
     fp.seek(offset)
     while bytes > 0:
         part = fp.read(min(bytes, maxread))
-        if not part: break
+        if not part:
+            break
         bytes -= len(part)
         yield part
+    if close:
+        fp.close()
 
 
 def static_file(filename, root,
@@ -2857,9 +2890,9 @@ def static_file(filename, root,
 
     stats = os.stat(filename)
     headers['Content-Length'] = clen = stats.st_size
-    lm = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(stats.st_mtime))
-    headers['Last-Modified'] = lm
-    headers['Date'] = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime())
+    headers['Last-Modified'] = email.utils.formatdate(stats.st_mtime,
+                                                      usegmt=True)
+    headers['Date'] = email.utils.formatdate(time.time(), usegmt=True)
 
     getenv = request.environ.get
 
@@ -2891,7 +2924,7 @@ def static_file(filename, root,
         offset, end = ranges[0]
         headers["Content-Range"] = "bytes %d-%d/%d" % (offset, end - 1, clen)
         headers["Content-Length"] = str(end - offset)
-        if body: body = _file_iter_range(body, offset, end - offset)
+        if body: body = _file_iter_range(body, offset, end - offset, close=True)
         return HTTPResponse(body, status=206, **headers)
     return HTTPResponse(body, **headers)
 
@@ -3232,7 +3265,11 @@ class WSGIRefServer(ServerAdapter):
 
 class CherryPyServer(ServerAdapter):
     def run(self, handler):  # pragma: no cover
-        from cherrypy import wsgiserver
+        depr(0, 13, "The wsgi server part of cherrypy was split into a new "
+                    "project called 'cheroot'.", "Use the 'cheroot' server "
+                    "adapter instead of cherrypy.")
+        from cherrypy import wsgiserver # This will fail for CherryPy >= 9
+
         self.options['bind_addr'] = (self.host, self.port)
         self.options['wsgi_app'] = handler
 
@@ -3249,6 +3286,25 @@ class CherryPyServer(ServerAdapter):
         if keyfile:
             server.ssl_private_key = keyfile
 
+        try:
+            server.start()
+        finally:
+            server.stop()
+
+
+class CherootServer(ServerAdapter):
+    def run(self, handler): # pragma: no cover
+        from cheroot import wsgi
+        from cheroot.ssl import builtin
+        self.options['bind_addr'] = (self.host, self.port)
+        self.options['wsgi_app'] = handler
+        certfile = self.options.pop('certfile', None)
+        keyfile = self.options.pop('keyfile', None)
+        chainfile = self.options.pop('chainfile', None)
+        server = wsgi.Server(**self.options)
+        if certfile and keyfile:
+            server.ssl_adapter = builtin.BuiltinSSLAdapter(
+                    certfile, keyfile, chainfile)
         try:
             server.start()
         finally:
@@ -3490,7 +3546,7 @@ class AiohttpUVLoopServer(AiohttpServer):
 class AutoServer(ServerAdapter):
     """ Untested. """
     adapters = [WaitressServer, PasteServer, TwistedServer, CherryPyServer,
-                WSGIRefServer]
+                CherootServer, WSGIRefServer]
 
     def run(self, handler):
         for sa in self.adapters:
@@ -3506,6 +3562,7 @@ server_names = {
     'wsgiref': WSGIRefServer,
     'waitress': WaitressServer,
     'cherrypy': CherryPyServer,
+    'cheroot': CherootServer,
     'paste': PasteServer,
     'fapws3': FapwsServer,
     'tornado': TornadoServer,
@@ -3964,7 +4021,7 @@ class StplParser(object):
     # This huge pile of voodoo magic splits python code into 8 different tokens.
     # We use the verbose (?x) regex mode to make this more manageable
 
-    _re_tok = _re_inl = r'''((?mx)         # verbose and dot-matches-newline mode
+    _re_tok = _re_inl = r'''(?mx)(        # verbose and dot-matches-newline mode
         [urbURB]*
         (?:  ''(?!')
             |""(?!")
@@ -4220,6 +4277,7 @@ HTTP_CODES[418] = "I'm a teapot"  # RFC 2324
 HTTP_CODES[428] = "Precondition Required"
 HTTP_CODES[429] = "Too Many Requests"
 HTTP_CODES[431] = "Request Header Fields Too Large"
+HTTP_CODES[451] = "Unavailable For Legal Reasons" # RFC 7725
 HTTP_CODES[511] = "Network Authentication Required"
 _HTTP_STATUS_LINES = dict((k, '%d %s' % (k, v))
                           for (k, v) in HTTP_CODES.items())

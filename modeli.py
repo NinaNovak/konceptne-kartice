@@ -418,6 +418,7 @@ WHERE id_konceptne_kartice = ?
 
     '''
     orodja = list(conn.execute(sql, [id_kartice]))
+    #orodja = orodja[0], ampak kaj pa če je več vrstic?
     return orodja
 def nastej_orodja():
     '''Vrne vsa orodja (id, ime_orodja) iz baze podatkov.'''

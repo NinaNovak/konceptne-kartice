@@ -202,7 +202,7 @@ body {
   <h5><i>Obstoječi</i></h5>
   Po potrebi odznačite jezike, ki jih ne želite več imeti:  <br>
     %for orod in orodj:
-       <input type="checkbox" name="stara_orodja" checked value={{orod[0]}}>{{orod[1]}}<br>  
+       <input type="checkbox" name="stara_orodja" checked value={{orod[0]}}>{{orod[1]}}<br>
     %end
   <h5><i>Novi</i></h5>
   Po potrebi dodajte nove jezike / orodja. Ločite jih z vejico: <br>

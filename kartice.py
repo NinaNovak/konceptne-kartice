@@ -258,6 +258,8 @@ def popravi_obstojeco():
     ##########################################################################
     obkljukana_orodja = request.forms.getlist('stara_orodja')
     stara_obkljukana_orodja = modeli.orodja_od_1_kartice(id_kartice)
+    print(str(obkljukana_orodja))
+    print(str(stara_obkljukana_orodja))
     for orodje in stara_obkljukana_orodja:
         if orodje not in obkljukana_orodja:
             id_o = modeli.vrni_id_orodja(orodje)
@@ -309,8 +311,15 @@ def upload():
                     favicon = favicon,
                     
                     orodja=modeli.nastej_orodja())
-def shranjevanje_PDF(dat):
-    nalozena_datoteka = request.files.get(dat)
+@route('/nalozi_novo_kartico', method='POST')
+def do_upload():
+    '''Vnašanje nove kartice v bazo.'''
+    ##########################################################################
+    #1. shrani datoteki na disk
+    ##########################################################################
+    ##PDF
+    nalozena_datoteka = request.files.get('nalozi_pdf')
+    print(type(nalozena_datoteka))  #class 'NoneType'
     name, ext = os.path.splitext(nalozena_datoteka.filename)
     if ext != '.pdf':
         return 'Nedovoljena vrsta datoteke.\nDovoljena vrsta datoteke je PDF.'
@@ -324,8 +333,8 @@ def shranjevanje_PDF(dat):
         return 1
     else:
         return 'Datoteka s tem imenom že obstaja.'
-def shranjevanje_DOCX(dat):
-    nalozena_datoteka_docx = request.files.get(dat)
+    ##DOCX oziroma katerakoli datoteka za popravljanje (AI, TEX, ...)
+    nalozena_datoteka_docx = request.files.get('nalozi_docx')
     save_path_docx = os.getcwd() + '/kartice'
     if not os.path.exists(save_path_docx):
         os.makedirs(save_path_docx)
@@ -333,21 +342,8 @@ def shranjevanje_DOCX(dat):
                                             file=nalozena_datoteka_docx.filename)
     if not os.path.exists(file_path_docx):
         nalozena_datoteka_docx.save(file_path_docx)
-        return 1
     else:
         return 'Datoteka s tem imenom že obstaja.'
-
-
-@route('/nalozi_novo_kartico', method='POST')
-def do_upload():
-    '''Vnašanje nove kartice v bazo.'''
-    ##########################################################################
-    #1. shrani datoteki na disk
-    ##########################################################################
-    ##PDF
-    if not shranjevanje_PDF('nalozi_pdf'): return
-    ##DOCX oziroma katerakoli datoteka za popravljanje (AI, TEX, ...)
-    if not shranjevanje_DOCX('nalozi_docx'): return
     #če nalaganje datoteke ni bilo uspešno, smo prekinili z vnašanjem
     #podatkov o kartici v bazo
     

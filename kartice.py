@@ -330,7 +330,6 @@ def do_upload():
                                        file=nalozena_datoteka.filename)
     if not os.path.exists(file_path):
         nalozena_datoteka.save(file_path)
-        return 1
     else:
         return 'Datoteka s tem imenom že obstaja.'
     ##DOCX oziroma katerakoli datoteka za popravljanje (AI, TEX, ...)

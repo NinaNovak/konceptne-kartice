@@ -1,7 +1,7 @@
 # Zbirka konceptnih kartic
 Projektno delo
 
-1. del: izdelati 30 ali več konceptnih kartic.
+1. del: izdelati 30 ali več konceptnih kartic. ~ Opravljeno.
 
 2. del: izdelati spletni vmesnik do baze podatkov s konceptnimi karticami, ki omogoča pregled, iskanje in dodajanje konceptnih kartic.
 
@@ -10,7 +10,7 @@ Opis
 
 Baza podatkov vsebuje zbirko konceptnih kartic za učenje programskih jezikov in orodij (Python, Scratch, C#, ..., Octave, Excel, App Inventor, ...).
 
-Spletna stran ponuja brskanje in iskanje po konceptnih karticah ter dodajanje novih konceptnih kartic v bazo.
+Spletna stran ponuja ogled, iskanje in dodajanje konceptnih kartic v bazo.
 
 ER diagram za bazo podatkov
 ---------------------------

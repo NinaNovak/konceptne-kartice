@@ -3,7 +3,7 @@ Projektno delo
 
 1. del: izdelati 30 ali več konceptnih kartic. ~ Opravljeno.
 
-2. del: izdelati spletni vmesnik do baze podatkov s konceptnimi karticami, ki omogoča pregled, iskanje in dodajanje konceptnih kartic. ~ V delu: polnjenje baze s 105 konceptnim kartcami.
+2. del: izdelati spletni vmesnik do baze podatkov s konceptnimi karticami, ki omogoča pregled, iskanje in dodajanje konceptnih kartic. ~ V delu: polnjenje baze s 105 konceptnim karticami.
 
 Opis
 ----

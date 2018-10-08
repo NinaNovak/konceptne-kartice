@@ -1,3 +1,5 @@
+8.10.2018 Dokončan projekt bo uploadan kot ZIP datoteka, saj novi GitHub Desktop obstaja samo za 64-bit Windows, projekt pa nastaja z 32-bit Windows.
+
 # Zbirka konceptnih kartic
 Projektno delo
 
